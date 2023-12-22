@@ -11,7 +11,7 @@ const { doubleCsrfProtection } = require("../util/index").doubleCsrf
 const router = require("express").Router()
 
 router.get("/", (req, res) => {
-  res.send("Welcome!!")
+  res.send("Welcome and rest fellow traveler!!")
 })
 
 router.use("/nonProtectedRoute", nonProtectedRouter)
