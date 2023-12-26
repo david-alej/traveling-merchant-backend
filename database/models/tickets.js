@@ -20,23 +20,20 @@ module.exports = (sequelize, DataTypes) => {
         as: "client",
         onDelete: "CASCADE",
       })
-
-      Tickets.belongsTo(models.Wares, {
-        foreignKey: "wareId",
-        as: "ware",
+      console.log(models)
+      Tickets.hasMany(models.WaresTickets, {
+        foreignKey: "ticketId",
+        as: "wares bought",
         onDelete: "CASCADE",
       })
     }
   }
   Tickets.init(
     {
-      wareId: DataTypes.INTEGER,
       clientId: DataTypes.INTEGER,
       cost: DataTypes.FLOAT,
-      paidAmount: DataTypes.FLOAT,
       paymentPlan: DataTypes.STRING,
       description: DataTypes.TEXT,
-      date: DataTypes.DATE,
     },
     {
       sequelize,

@@ -8,13 +8,13 @@ const initializeWebServer = () => {
   return new Promise((resolve) => {
     const PORT = process.env.PORT || 0
 
-    const listener = app.listen(PORT, () => {
-      const address = listener.address()
+    server = app.listen(PORT, () => {
+      const address = server.address()
 
-      console.log(`Server is live at https://localhost:${address.port}`)
+      console.log(`Server is live at http://localhost:${address.port}`)
 
       console.log(
-        `Swagger-ui is available on https://localhost:${address.port}/api-docs`
+        `Swagger-ui is available on http://localhost:${address.port}/api-docs`
       )
 
       resolve(address)

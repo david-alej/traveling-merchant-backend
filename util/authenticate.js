@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt")
 const models = require("../database/models")
 
 const authenticate = async (username, password) => {
-  let user = await models.User.findOne({
+  let user = await models.Merchants.findOne({
     where: {
       username,
     },

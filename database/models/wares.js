@@ -9,15 +9,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Wares.hasMany(models.Tickets, {
+      Wares.hasMany(models.WaresTickets, {
         foreignKey: "wareId",
-        as: "wares",
+        as: "wares sold",
         onDelete: "CASCADE",
       })
 
-      Wares.hasMany(models.Orders, {
+      Wares.hasMany(models.OrdersWares, {
         foreignKey: "wareId",
-        as: "wares",
+        as: "wares bought",
         onDelete: "CASCADE",
       })
     }
@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       name: DataTypes.STRING,
       type: DataTypes.STRING,
-      tags: DataTypes.ARRAY,
+      tags: DataTypes.ARRAY(DataTypes.STRING),
       stock: DataTypes.INTEGER,
       cost: DataTypes.FLOAT,
     },

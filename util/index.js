@@ -7,5 +7,4 @@ module.exports = {
   httpStatusCodes: require("./httpStatusCodes"),
   logger: require("./logger"),
   passwordHash: require("./passwordHash"),
-  search: require("./search"),
 }

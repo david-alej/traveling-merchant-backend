@@ -1,13 +1,13 @@
 /* eslint-disable node/no-unpublished-require */
 require("dotenv").config()
-const https = require("node:https")
+const http = require("node:http")
 
 const axiosConfig = {
-  baseURL: "https://localhost:",
+  baseURL: "http://localhost:",
   validateStatus: () => true,
 }
 
-axiosConfig.httpsAgent = new https.Agent({
+axiosConfig.httpsAgent = new http.Agent({
   rejectUnauthorized: false,
 })
 

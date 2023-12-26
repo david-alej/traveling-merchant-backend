@@ -9,10 +9,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      wareId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
       clientId: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -21,21 +17,12 @@ module.exports = {
         type: Sequelize.FLOAT,
         allowNull: false,
       },
-      paidAmount: {
-        type: Sequelize.FLOAT,
-        defaultValue: 0,
-      },
       paymentPlan: {
         type: Sequelize.STRING,
         allowNull: false,
       },
       description: {
         type: Sequelize.TEXT,
-      },
-      date: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: new Date(),
       },
       createdAt: {
         allowNull: false,

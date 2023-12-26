@@ -18,7 +18,7 @@ module.exports = {
         allowNull: false,
       },
       tags: {
-        type: Sequelize.ARRAY,
+        type: Sequelize.ARRAY(Sequelize.STRING),
         allowNull: false,
         defaultValue: [],
       },
