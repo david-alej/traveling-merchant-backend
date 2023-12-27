@@ -31,7 +31,7 @@ describe("Starting page", function () {
       const expected = "Welcome and rest fellow traveler!!"
 
       const { data, status } = await client.get("/")
-      console.log(data, status)
+
       expect(status).to.equal(OK)
       expect(data).to.equal(expected)
     })

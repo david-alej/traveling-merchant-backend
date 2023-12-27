@@ -64,6 +64,11 @@ module.exports = {
   generatePassword,
   httpMocks: require("node-mocks-http"),
   httpStatusCodes: require("../util/index").httpStatusCodes,
-  preUserMsg: "User: ",
+  preMerchantMsg: "Merchant: 1",
   sinon: require("sinon"),
+  merchantCredentials: {
+    username: "missioneros",
+    password: "nissiJire2",
+  },
+  models: require("../database/models"),
 }

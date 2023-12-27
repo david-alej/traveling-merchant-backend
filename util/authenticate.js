@@ -2,19 +2,19 @@ const bcrypt = require("bcrypt")
 const models = require("../database/models")
 
 const authenticate = async (username, password) => {
-  let user = await models.Merchants.findOne({
+  let merchant = await models.Merchant.findOne({
     where: {
       username,
     },
   })
 
-  user = JSON.parse(JSON.stringify(user))
+  merchant = JSON.parse(JSON.stringify(merchant))
 
-  if (!user) return user, false
+  if (!merchant) return merchant, false
 
-  const authorized = await bcrypt.compare(password, user.password)
+  const authorized = await bcrypt.compare(password, merchant.password)
 
-  return { user, authorized }
+  return { merchant, authorized }
 }
 
 exports.authenticate = authenticate

@@ -6,13 +6,13 @@ const cookieParser = require("cookie-parser")
 //const swaggerUi = require("swagger-ui-express")
 
 const routes = require("../routes/index")
-const { httpLogger } = require("../util/index")
+// const { httpLogger } = require("../util/index")
 //const openApiDocumentation = require("../api-documentation/openapi.json")
 
 require("dotenv").config()
 const app = express()
 
-app.use(httpLogger)
+// app.use(httpLogger)
 
 app.use(express.json())
 

@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         as: "client",
         onDelete: "CASCADE",
       })
-      console.log(models)
+
       Tickets.hasMany(models.WaresTickets, {
         foreignKey: "ticketId",
         as: "wares bought",

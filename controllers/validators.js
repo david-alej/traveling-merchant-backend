@@ -1,8 +1,12 @@
 /* eslint-disable quotes */
 const { body, param } = require("express-validator")
 const { Api400Error } = require("../util/index").apiErrors
-const { sentenceCase } = require("../util/index").search
 const { validationResult, matchedData } = require("express-validator")
+
+const sentenceCase = (camelCase) => {
+  const result = camelCase.replace(/([A-Z])/g, " $1")
+  return result[0].toUpperCase() + result.substring(1).toLowerCase()
+}
 
 const basicCredentialValidator = (
   input,
@@ -182,4 +186,15 @@ exports.validationPerusal = (request, preErrorMsg) => {
   }
 
   return matchedData(request)
+}
+
+exports.credentialsValidator = () => {
+  return [usernameValidator(), passwordValidator()]
+}
+
+exports.newCredentialsValidator = () => {
+  return [
+    usernameValidator("newUsername", false, true),
+    passwordValidator("newPassword", false, true),
+  ]
 }
