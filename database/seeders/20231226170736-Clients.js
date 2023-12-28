@@ -9,7 +9,7 @@ module.exports = {
         {
           fullname: "James Moe",
           address: "1823 Steele Street",
-          phoneNumber: "(956)634-7775",
+          phoneNumber: "9566347775",
           workId: 1,
           relationship: 5,
           createdAt: new Date("2024-11-10"),
@@ -18,7 +18,7 @@ module.exports = {
         {
           fullname: "Kellen Paucek",
           address: "1454 Sussex Court",
-          phoneNumber: "(254)386-5553",
+          phoneNumber: "2543865553",
           workId: 2,
           relationship: 5,
           createdAt: new Date("2024-11-14"),
@@ -27,7 +27,7 @@ module.exports = {
         {
           fullname: "Madilyn Langosh",
           address: "1571 Weekly Street",
-          phoneNumber: "(210)342-4367",
+          phoneNumber: "2103424367",
           workId: 3,
           relationship: 5,
           createdAt: new Date("2024-11-22"),

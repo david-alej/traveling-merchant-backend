@@ -2,7 +2,7 @@ const { validationPerusal, integerValidator } = require("./validators")
 const models = require("../database/models")
 const { Api400Error, Api404Error, Api500Error } =
   require("../util/index").apiErrors
-const { findClientQuery, parseInputs } =
+const { findClientQuery, parseClientInputs } =
   require("../services/index").clientsServices
 
 const createSubsetObject = (obj, keys) =>
@@ -18,7 +18,7 @@ exports.paramClientId = async (req, res, next, clientId) => {
   try {
     await integerValidator("clientId", true).run(req)
 
-    validationPerusal(req, merchant.preMsg)
+    validationPerusal(req)
 
     const searched = await models.Clients.findOne({
       where: { id: clientId },
@@ -55,9 +55,7 @@ exports.getClients = async (req, res, next) => {
   try {
     validationPerusal(req)
 
-    const inputs = createSubsetObject(req.body, validInputs)
-
-    const { afterMsg, query } = parseInputs(inputs)
+    const { afterMsg, query } = parseClientInputs(req, validInputs)
 
     const searched = await models.Clients.findAll(query)
 
@@ -121,7 +119,7 @@ exports.putClient = async (req, res, next) => {
       )
     }
 
-    const { afterMsg } = parseInputs(newValues, true)
+    const { afterMsg } = parseClientInputs(newValues, true)
 
     const updated = await models.Clients.update(newValues, {
       where: { id: targetClient.id },

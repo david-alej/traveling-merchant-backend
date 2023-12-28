@@ -46,7 +46,7 @@ describe("Clients Routes", function () {
   }
 
   const clientsSchema = {
-    title: "Clients",
+    title: "Clients Schema",
     type: "array",
     items: {
       ...clientObject,
@@ -102,7 +102,7 @@ describe("Clients Routes", function () {
       expect(data).to.equal("Client not found.")
     })
 
-    it("When client id given is a string, Then the response is not found #integerValidator #paramClientId", async function () {
+    it("When client id given is not an integer, Then the response is not found #integerValidator #paramClientId", async function () {
       const clientId = "string"
 
       const { status, data } = await client.get(
@@ -123,7 +123,7 @@ describe("Clients Routes", function () {
           workId: 1,
           fullname: "James Moe",
           address: "1823 Steele Street",
-          phoneNumber: "(956)634-7775",
+          phoneNumber: "9566347775",
           relationship: 5,
           createdAt: "2024-11-10T00:00:00.000Z",
           updatedAt: "2024-12-12T00:00:00.000Z",
@@ -131,6 +131,7 @@ describe("Clients Routes", function () {
             id: 1,
             name: "Hamill, Denesik and Davis",
             address: "38 Galvin Ave.",
+            phoneNumber: "9075554011",
             createdAt: "2024-11-02T00:00:00.000Z",
             updatedAt: "2024-11-02T00:00:00.000Z",
           },
@@ -151,7 +152,7 @@ describe("Clients Routes", function () {
           workId: 2,
           fullname: "Kellen Paucek",
           address: "1454 Sussex Court",
-          phoneNumber: "(254)386-5553",
+          phoneNumber: "2543865553",
           relationship: 5,
           createdAt: "2024-11-14T00:00:00.000Z",
           updatedAt: "2024-11-29T00:00:00.000Z",
@@ -159,6 +160,7 @@ describe("Clients Routes", function () {
             id: 2,
             name: "Deckow and Sons",
             address: "245 John Drive",
+            phoneNumber: "7644084620",
             createdAt: "2024-11-02T00:00:00.000Z",
             updatedAt: "2024-11-02T00:00:00.000Z",
           },
@@ -179,7 +181,7 @@ describe("Clients Routes", function () {
           workId: 3,
           fullname: "Madilyn Langosh",
           address: "1571 Weekly Street",
-          phoneNumber: "(210)342-4367",
+          phoneNumber: "2103424367",
           relationship: 5,
           createdAt: "2024-11-22T00:00:00.000Z",
           updatedAt: "2024-11-25T00:00:00.000Z",
@@ -187,6 +189,7 @@ describe("Clients Routes", function () {
             id: 3,
             name: "Lynch PLC",
             address: "38 Lafayette St.",
+            phoneNumber: "9103623505",
             createdAt: "2024-11-02T00:00:00.000Z",
             updatedAt: "2024-11-02T00:00:00.000Z",
           },
@@ -208,7 +211,7 @@ describe("Clients Routes", function () {
           workId: 3,
           fullname: "Madilyn Langosh",
           address: "1571 Weekly Street",
-          phoneNumber: "(210)342-4367",
+          phoneNumber: "2103424367",
           relationship: 5,
           createdAt: "2024-11-22T00:00:00.000Z",
           updatedAt: "2024-11-25T00:00:00.000Z",
@@ -216,6 +219,7 @@ describe("Clients Routes", function () {
             id: 3,
             name: "Lynch PLC",
             address: "38 Lafayette St.",
+            phoneNumber: "9103623505",
             createdAt: "2024-11-02T00:00:00.000Z",
             updatedAt: "2024-11-02T00:00:00.000Z",
           },
@@ -239,7 +243,7 @@ describe("Clients Routes", function () {
           workId: 1,
           fullname: "James Moe",
           address: "1823 Steele Street",
-          phoneNumber: "(956)634-7775",
+          phoneNumber: "9566347775",
           relationship: 5,
           createdAt: "2024-11-10T00:00:00.000Z",
           updatedAt: "2024-12-12T00:00:00.000Z",
@@ -247,6 +251,7 @@ describe("Clients Routes", function () {
             id: 1,
             name: "Hamill, Denesik and Davis",
             address: "38 Galvin Ave.",
+            phoneNumber: "9075554011",
             createdAt: "2024-11-02T00:00:00.000Z",
             updatedAt: "2024-11-02T00:00:00.000Z",
           },
@@ -267,7 +272,7 @@ describe("Clients Routes", function () {
           workId: 2,
           fullname: "Kellen Paucek",
           address: "1454 Sussex Court",
-          phoneNumber: "(254)386-5553",
+          phoneNumber: "2543865553",
           relationship: 5,
           createdAt: "2024-11-14T00:00:00.000Z",
           updatedAt: "2024-11-29T00:00:00.000Z",
@@ -275,6 +280,7 @@ describe("Clients Routes", function () {
             id: 2,
             name: "Deckow and Sons",
             address: "245 John Drive",
+            phoneNumber: "7644084620",
             createdAt: "2024-11-02T00:00:00.000Z",
             updatedAt: "2024-11-02T00:00:00.000Z",
           },
@@ -295,7 +301,7 @@ describe("Clients Routes", function () {
           workId: 3,
           fullname: "Madilyn Langosh",
           address: "1571 Weekly Street",
-          phoneNumber: "(210)342-4367",
+          phoneNumber: "2103424367",
           relationship: 5,
           createdAt: "2024-11-22T00:00:00.000Z",
           updatedAt: "2024-11-25T00:00:00.000Z",
@@ -303,6 +309,7 @@ describe("Clients Routes", function () {
             id: 3,
             name: "Lynch PLC",
             address: "38 Lafayette St.",
+            phoneNumber: "9103623505",
             createdAt: "2024-11-02T00:00:00.000Z",
             updatedAt: "2024-11-02T00:00:00.000Z",
           },
@@ -326,7 +333,7 @@ describe("Clients Routes", function () {
           workId: 1,
           fullname: "James Moe",
           address: "1823 Steele Street",
-          phoneNumber: "(956)634-7775",
+          phoneNumber: "9566347775",
           relationship: 5,
           createdAt: "2024-11-10T00:00:00.000Z",
           updatedAt: "2024-12-12T00:00:00.000Z",
@@ -334,6 +341,7 @@ describe("Clients Routes", function () {
             id: 1,
             name: "Hamill, Denesik and Davis",
             address: "38 Galvin Ave.",
+            phoneNumber: "9075554011",
             createdAt: "2024-11-02T00:00:00.000Z",
             updatedAt: "2024-11-02T00:00:00.000Z",
           },
@@ -367,7 +375,7 @@ describe("Clients Routes", function () {
           workId: 3,
           fullname: "Madilyn Langosh",
           address: "1571 Weekly Street",
-          phoneNumber: "(210)342-4367",
+          phoneNumber: "2103424367",
           relationship: 5,
           createdAt: "2024-11-22T00:00:00.000Z",
           updatedAt: "2024-11-25T00:00:00.000Z",
@@ -375,6 +383,7 @@ describe("Clients Routes", function () {
             id: 3,
             name: "Lynch PLC",
             address: "38 Lafayette St.",
+            phoneNumber: "9103623505",
             createdAt: "2024-11-02T00:00:00.000Z",
             updatedAt: "2024-11-02T00:00:00.000Z",
           },
@@ -398,7 +407,7 @@ describe("Clients Routes", function () {
           workId: 1,
           fullname: "James Moe",
           address: "1823 Steele Street",
-          phoneNumber: "(956)634-7775",
+          phoneNumber: "9566347775",
           relationship: 5,
           createdAt: "2024-11-10T00:00:00.000Z",
           updatedAt: "2024-12-12T00:00:00.000Z",
@@ -406,17 +415,18 @@ describe("Clients Routes", function () {
             id: 1,
             name: "Hamill, Denesik and Davis",
             address: "38 Galvin Ave.",
+            phoneNumber: "9075554011",
             createdAt: "2024-11-02T00:00:00.000Z",
             updatedAt: "2024-11-02T00:00:00.000Z",
           },
           tickets: [
             {
+              id: 1,
               clientId: 1,
               cost: 450,
-              createdAt: "2024-11-11T00:00:00.000Z",
-              description: null,
-              id: 1,
               paymentPlan: "biweekly",
+              description: null,
+              createdAt: "2024-11-11T00:00:00.000Z",
               updatedAt: "2024-11-11T00:00:00.000Z",
             },
           ],
@@ -439,7 +449,7 @@ describe("Clients Routes", function () {
           workId: 1,
           fullname: "James Moe",
           address: "1823 Steele Street",
-          phoneNumber: "(956)634-7775",
+          phoneNumber: "9566347775",
           relationship: 5,
           createdAt: "2024-11-10T00:00:00.000Z",
           updatedAt: "2024-12-12T00:00:00.000Z",
@@ -447,17 +457,18 @@ describe("Clients Routes", function () {
             id: 1,
             name: "Hamill, Denesik and Davis",
             address: "38 Galvin Ave.",
+            phoneNumber: "9075554011",
             createdAt: "2024-11-02T00:00:00.000Z",
             updatedAt: "2024-11-02T00:00:00.000Z",
           },
           tickets: [
             {
+              id: 1,
               clientId: 1,
               cost: 450,
-              createdAt: "2024-11-11T00:00:00.000Z",
-              description: null,
-              id: 1,
               paymentPlan: "biweekly",
+              description: null,
+              createdAt: "2024-11-11T00:00:00.000Z",
               updatedAt: "2024-11-11T00:00:00.000Z",
             },
           ],
@@ -494,7 +505,7 @@ describe("Clients Routes", function () {
         requestBody,
         setHeaders
       )
-      console.log(data)
+
       expect(status).to.equal(CREATED)
       expect(data)
         .to.include.string(preMerchantMsg)

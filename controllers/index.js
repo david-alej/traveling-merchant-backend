@@ -6,4 +6,5 @@ module.exports = {
   merchantControllers: require("./merchant"),
   clientsControllers: require("./clients"),
   validators: require("./validators"),
+  worksControllers: require("./works"),
 }

@@ -6,5 +6,6 @@ module.exports = {
   httpLogger: require("./httpLogger"),
   httpStatusCodes: require("./httpStatusCodes"),
   logger: require("./logger"),
+  parseInputs: require("./parseInputs"),
   passwordHash: require("./passwordHash"),
 }
