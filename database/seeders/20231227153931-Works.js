@@ -1,0 +1,35 @@
+"use strict"
+
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.bulkInsert(
+      "Works",
+      [
+        {
+          name: "Hamill, Denesik and Davis",
+          address: "38 Galvin Ave.",
+          createdAt: new Date("2024-11-02"),
+          updatedAt: new Date("2024-11-02"),
+        },
+        {
+          name: "Deckow and Sons",
+          address: "245 John Drive",
+          createdAt: new Date("2024-11-02"),
+          updatedAt: new Date("2024-11-02"),
+        },
+        {
+          name: "Lynch PLC",
+          address: "38 Lafayette St.",
+          createdAt: new Date("2024-11-02"),
+          updatedAt: new Date("2024-11-02"),
+        },
+      ],
+      {}
+    )
+  },
+
+  async down(queryInterface, Sequelize) {
+    await queryInterface.bulkDelete("Works", null, {})
+  },
+}

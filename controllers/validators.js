@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 const { body, param } = require("express-validator")
 const { Api400Error } = require("../util/index").apiErrors
-const { validationResult, matchedData } = require("express-validator")
+const { validationResult } = require("express-validator")
 
 const sentenceCase = (camelCase) => {
   const result = camelCase.replace(/([A-Z])/g, " $1")
@@ -115,77 +115,17 @@ const incrementValidator = (input) => {
 
 exports.incrementValidator = incrementValidator
 
-const captionsMultiInputCheck = (allowedInputsInBody) => {
-  if (
-    !allowedInputsInBody.includes("userId") &&
-    !allowedInputsInBody.includes("photoId")
-  ) {
-    throw Error(
-      'the request body object must include "photoId" and "userId" if two key-value pairs are given.'
-    )
-  }
-
-  return true
-}
-
-const allowedBodyInputsValidator = (
-  allowedInputs,
-  isCaptionsRoute = false,
-  maxAllowedInputs = false
-) => {
-  if (!maxAllowedInputs) {
-    maxAllowedInputs = allowedInputs.length - 1
-  }
-
-  let afterNonUniqueErrorMsg = ""
-
-  for (let i = 0; i < allowedInputs.length; i++) {
-    if (parseInt(i) === allowedInputs.length - 1) {
-      afterNonUniqueErrorMsg += 'or "' + allowedInputs[parseInt(i)] + '."'
-      continue
-    }
-
-    afterNonUniqueErrorMsg += '"' + allowedInputs[parseInt(i)] + '", '
-  }
-
-  return body()
-    .optional()
-    .custom((body) => {
-      const requestBodyKeys = Object.keys(body)
-
-      const allowedInputsInBody = requestBodyKeys.filter((key) => {
-        return allowedInputs.includes(key)
-      })
-
-      const numberOfBodyAllowedInputs = allowedInputsInBody.length
-
-      if (numberOfBodyAllowedInputs <= 1) {
-        return true
-      }
-
-      if (numberOfBodyAllowedInputs > maxAllowedInputs) {
-        throw new Error(
-          `the request body object only allows ${maxAllowedInputs} or less than of the following: ` +
-            afterNonUniqueErrorMsg
-        )
-      }
-
-      if (isCaptionsRoute) return captionsMultiInputCheck(allowedInputsInBody)
-
-      return true
-    })
-}
-
-exports.validationPerusal = (request, preErrorMsg) => {
-  const validationError = validationResult(request).array({
+exports.validationPerusal = (req) => {
+  const validationError = validationResult(req).array({
     onlyFirstError: true,
   })[0]
 
   if (validationError) {
-    throw new Api400Error(preErrorMsg + " " + validationError.msg)
+    throw new Api400Error(
+      req.session.merchant.preMsg + " " + validationError.msg,
+      "Bad input request."
+    )
   }
-
-  return matchedData(request)
 }
 
 exports.credentialsValidator = () => {

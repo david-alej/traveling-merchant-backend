@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
   Providers.init(
     {
       name: DataTypes.STRING,
+      address: DataTypes.STRING,
     },
     {
       sequelize,

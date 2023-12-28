@@ -3,6 +3,7 @@
 const loginRouter = require("./login")
 const logoutRouter = require("./logout")
 const merchantRouter = require("./merchant")
+const clientsRouter = require("./clients")
 
 const { authorizedUser } = require("../controllers/index").authorize
 const { logError, logErrorMiddleware, returnError, isOperationalError } =
@@ -20,6 +21,7 @@ router.use(authorizedUser)
 router.use(doubleCsrfProtection)
 
 router.use("/merchant", merchantRouter)
+router.use("/clients", clientsRouter)
 router.use("/logout", logoutRouter)
 
 router.use(logErrorMiddleware, returnError)

@@ -10,8 +10,8 @@ module.exports = {
           username: "missioneros",
           password:
             "$2b$10$6q.TGL9YFo6rughcema0VOf2bQIcHBjwmG1A9QbSXSMuhaZ7CEQti", //nissiJire2
-          createdAt: "2024-11-11T20:00:00.000Z",
-          updatedAt: "2024-11-11T20:00:00.000Z",
+          createdAt: new Date("2024-11-11"),
+          updatedAt: new Date("2024-11-11"),
         },
       ],
       {}

@@ -8,23 +8,27 @@ module.exports = {
       [
         {
           name: "Amazon",
-          createdAt: "2024-11-11T20:00:00.000Z",
-          updatedAt: "2024-11-11T20:00:00.000Z",
+          address: "0000 online",
+          createdAt: new Date("2024-11-11"),
+          updatedAt: new Date("2024-11-11"),
         },
         {
           name: "Ebay",
-          createdAt: "2024-11-11T20:00:00.000Z",
-          updatedAt: "2024-11-11T20:00:00.000Z",
+          address: "0000 online",
+          createdAt: new Date("2024-11-11"),
+          updatedAt: new Date("2024-11-11"),
         },
         {
           name: "JCPenny",
-          createdAt: "2024-11-11T20:00:00.000Z",
-          updatedAt: "2024-11-11T20:00:00.000Z",
+          address: "84506 Deangelo Cliff",
+          createdAt: new Date("2024-11-11"),
+          updatedAt: new Date("2024-11-11"),
         },
         {
           name: "Marshalls",
-          createdAt: "2024-11-11T20:00:00.000Z",
-          updatedAt: "2024-11-11T20:00:00.000Z",
+          address: "41090 Jaime Springs",
+          createdAt: new Date("2024-11-11"),
+          updatedAt: new Date("2024-11-11"),
         },
       ],
       {}

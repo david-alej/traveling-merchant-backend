@@ -17,7 +17,7 @@ exports.paramMerchantId = async (req, res, next, merchantId) => {
   try {
     await integerValidator("merchantId", true).run(req)
 
-    validationPerusal(req, merchant.preMsg)
+    validationPerusal(req)
 
     const searched = await models.Merchant.findOne({
       where: { id: merchantId },
@@ -26,7 +26,7 @@ exports.paramMerchantId = async (req, res, next, merchantId) => {
 
     if (!searched) {
       throw new Api404Error(
-        merchant.preMsg + " target merchant ${merchantId} not found."
+        merchant.preMsg + ` target merchant ${merchantId} not found.`
       )
     }
 
@@ -55,7 +55,7 @@ exports.putMerchant = async (req, res, next) => {
   const saltRounds = 10
 
   try {
-    validationPerusal(req, merchant.preMsg)
+    validationPerusal(req)
 
     const { username, password, newUsername, newPassword } = req.body
 

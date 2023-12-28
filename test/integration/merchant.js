@@ -50,8 +50,8 @@ describe("Merchant routes", function () {
         {
           id: 1,
           username: "missioneros",
-          createdAt: "2024-11-11T20:00:00.000Z",
-          updatedAt: "2024-11-11T20:00:00.000Z",
+          createdAt: "2024-11-11T00:00:00.000Z",
+          updatedAt: "2024-11-11T00:00:00.000Z",
         },
       ]
 
@@ -65,7 +65,7 @@ describe("Merchant routes", function () {
   describe("Put /", function () {
     const putUserNewCredentials = {}
 
-    beforeEach(async function () {
+    afterEach(async function () {
       putUserNewCredentials.newUsername = generateUsername()
       putUserNewCredentials.newPassword = generatePassword()
 
@@ -84,7 +84,7 @@ describe("Merchant routes", function () {
       const expected = "Bad request."
       const requestBody = merchantCredentials
       const merchantId = 1
-      console.log(requestBody)
+
       const { status, data } = await client.put(
         "/merchant/" + merchantId,
         requestBody,
@@ -216,14 +216,34 @@ describe("Merchant routes", function () {
         setHeaders
       )
 
-      const { status: status1 } = await client.post("/login", {
+      const {
+        status: status1,
+        data: loginData,
+        headers,
+      } = await client.post("/login", {
         username: newUsername,
         password: newPassword,
       })
+      setHeaders.headers.Cookie = headers["set-cookie"]
+      setHeaders.headers["x-csrf-token"] = loginData.csrfToken
+      const hashedPassword = await passwordHash(
+        merchantCredentials.password,
+        10
+      )
+      const updated = await models.Merchant.update(
+        {
+          username: merchantCredentials.username,
+          password: hashedPassword,
+        },
+        {
+          where: { id: merchantId },
+        }
+      )
 
       expect(status).to.equal(OK)
       expect(data).to.include.string(preMerchantMsg).and.string(afterMsg)
       expect(status1).to.equal(OK)
+      expect(updated[0]).to.equal(1)
     })
   })
 })

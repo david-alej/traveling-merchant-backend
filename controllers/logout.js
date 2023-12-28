@@ -10,6 +10,8 @@ exports.postLogout = async (req, res, next) => {
   try {
     req.session.authorized = false
 
+    req.session.merchant = {}
+
     generateToken(req, res, true)
 
     res.send(merchant.preMsg + " is now logged out.")
