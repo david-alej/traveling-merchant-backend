@@ -1,15 +1,46 @@
 const clientsRouter = require("express").Router()
 const { clientsControllers } = require("../controllers/index")
+const { integerValidator, textValidator, dateValidator, phoneNumberValidator } =
+  require("../controllers/index").validators
 
 clientsRouter.param("clientId", clientsControllers.paramClientId)
 
 clientsRouter.get("/:clientId", clientsControllers.getClient)
 
-clientsRouter.get("/", clientsControllers.getClients)
+clientsRouter.get(
+  "/",
+  [
+    integerValidator("workId", false, true),
+    textValidator("fullname", false, true),
+    textValidator("address", false, true),
+    dateValidator("createdAt", false, true),
+    dateValidator("updatedAt", false, true),
+  ],
+  clientsControllers.getClients
+)
 
-clientsRouter.post("/", clientsControllers.postClient)
+clientsRouter.post(
+  "/",
+  [
+    integerValidator("workId"),
+    textValidator("fullname"),
+    textValidator("address"),
+    phoneNumberValidator(),
+  ],
+  clientsControllers.postClient
+)
 
-clientsRouter.put("/:clientId", clientsControllers.putClient)
+clientsRouter.put(
+  "/:clientId",
+  [
+    integerValidator("workId", false, true),
+    textValidator("fullname", false, true),
+    textValidator("address", false, true),
+    phoneNumberValidator("phoneNumber", false, true),
+    integerValidator("relationship", false, true),
+  ],
+  clientsControllers.putClient
+)
 
 clientsRouter.delete("/:clientId", clientsControllers.deleteClient)
 

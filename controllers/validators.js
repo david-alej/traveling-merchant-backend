@@ -115,6 +115,30 @@ const incrementValidator = (input) => {
 
 exports.incrementValidator = incrementValidator
 
+const dateValidator = (input, inputIsParam = false, optional = false) => {
+  const { head, inputName } = basicValidator(input, inputIsParam, optional)
+
+  return head.custom((date) => {
+    if (!isNaN(new Date(date))) return true
+
+    throw new Error(`the given ${inputName} = ${date} is not a date.`)
+  })
+}
+
+exports.dateValidator = dateValidator
+
+const phoneNumberValidator = (
+  input = "phoneNumber",
+  inputIsParam = false,
+  optional = false
+) => {
+  const { head } = basicValidator(input, inputIsParam, optional)
+
+  return head.isMobilePhone()
+}
+
+exports.phoneNumberValidator = phoneNumberValidator
+
 exports.validationPerusal = (req) => {
   const validationError = validationResult(req).array({
     onlyFirstError: true,

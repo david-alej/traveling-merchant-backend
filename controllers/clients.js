@@ -1,7 +1,8 @@
 const { validationPerusal, integerValidator } = require("./validators")
 const models = require("../database/models")
-const { Api404Error } = require("../util/index").apiErrors
-const { findClientQuery, findClientsQuery } =
+const { Api400Error, Api404Error, Api500Error } =
+  require("../util/index").apiErrors
+const { findClientQuery, parseInputs } =
   require("../services/index").clientsServices
 
 const createSubsetObject = (obj, keys) =>
@@ -43,7 +44,6 @@ exports.getClient = async (req, res) => res.json(req.targetClient)
 
 exports.getClients = async (req, res, next) => {
   const merchant = req.session.merchant
-  const afterMsg = "."
   const validInputs = [
     "workId",
     "fullname",
@@ -57,13 +57,14 @@ exports.getClients = async (req, res, next) => {
 
     const inputs = createSubsetObject(req.body, validInputs)
 
-    const query = findClientsQuery(inputs)
+    const { afterMsg, query } = parseInputs(inputs)
 
     const searched = await models.Clients.findAll(query)
 
     if (!searched) {
       throw new Api404Error(
-        merchant.preMsg + " captions were not found" + afterMsg
+        merchant.preMsg + " clients were not found" + afterMsg,
+        "Clients not found."
       )
     }
 
@@ -74,24 +75,95 @@ exports.getClients = async (req, res, next) => {
 }
 
 exports.postClient = async (req, res, next) => {
+  const merchant = req.session.merchant
+  const requiredInputs = ["workId", "fullname", "address", "phoneNumber"]
+
   try {
-    res.send("")
+    validationPerusal(req)
+
+    const newClient = createSubsetObject(req.body, requiredInputs)
+
+    const created = await models.Clients.create(newClient)
+
+    if (!created) {
+      throw new Api500Error(
+        merchant.preMsg + " create client query did not work.",
+        "Internal server query error."
+      )
+    }
+
+    res.status(201).send(merchant.preMsg + " client has been created.")
   } catch (err) {
     next(err)
   }
 }
 
 exports.putClient = async (req, res, next) => {
+  const merchant = req.session.merchant
+  const targetClient = req.targetClient
+  const validInputs = [
+    "workId",
+    "fullname",
+    "address",
+    "phoneNumber",
+    "relationship",
+  ]
+
   try {
-    res.send("")
+    validationPerusal(req)
+
+    const newValues = createSubsetObject(req.body, validInputs)
+
+    if (JSON.stringify(newValues) === "{}") {
+      throw new Api400Error(
+        merchant.preMsg + " did not update any value.",
+        "Bad input request."
+      )
+    }
+
+    const { afterMsg } = parseInputs(newValues, true)
+
+    const updated = await models.Clients.update(newValues, {
+      where: { id: targetClient.id },
+    })
+
+    if (!updated) {
+      throw new Api500Error(
+        merchant.preMsg + " update client query did not work" + afterMsg,
+        "Internal server query error."
+      )
+    }
+
+    res.send(
+      merchant.preMsg +
+        ` client with id = ${targetClient.id} was updated` +
+        afterMsg
+    )
   } catch (err) {
     next(err)
   }
 }
 
 exports.deleteClient = async (req, res, next) => {
+  const merchant = req.session.merchant
+  const targetClient = req.targetClient
+
   try {
-    res.send("")
+    const deleted = await models.Clients.destroy({
+      where: { id: targetClient.id },
+    })
+
+    if (!deleted) {
+      throw new Api500Error(
+        merchant.preMsg + " delete client query did not work.",
+        "Internal server query error."
+      )
+    }
+
+    res.send(
+      merchant.preMsg +
+        ` has deleted a client with id = ${targetClient.id} and fullname = ${targetClient.fullname}.`
+    )
   } catch (err) {
     next(err)
   }

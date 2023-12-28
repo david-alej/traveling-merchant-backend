@@ -12,8 +12,8 @@ module.exports = {
           phoneNumber: "(956)634-7775",
           workId: 1,
           relationship: 5,
-          createdAt: new Date("2024-11-11"),
-          updatedAt: new Date("2024-11-11"),
+          createdAt: new Date("2024-11-10"),
+          updatedAt: new Date("2024-12-12"),
         },
         {
           fullname: "Kellen Paucek",
@@ -21,8 +21,8 @@ module.exports = {
           phoneNumber: "(254)386-5553",
           workId: 2,
           relationship: 5,
-          createdAt: new Date("2024-11-11"),
-          updatedAt: new Date("2024-11-11"),
+          createdAt: new Date("2024-11-14"),
+          updatedAt: new Date("2024-11-29"),
         },
         {
           fullname: "Madilyn Langosh",
@@ -30,8 +30,8 @@ module.exports = {
           phoneNumber: "(210)342-4367",
           workId: 3,
           relationship: 5,
-          createdAt: new Date("2024-11-10"),
-          updatedAt: new Date("2024-11-10"),
+          createdAt: new Date("2024-11-22"),
+          updatedAt: new Date("2024-11-25"),
         },
       ],
       {}
