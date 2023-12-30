@@ -1,6 +1,8 @@
 /* eslint-disable no-useless-escape */
 
 const { Op, Sequelize } = require("sequelize")
+const { matchedData } = require("express-validator")
+const { validationPerusal } = require("./validators")
 
 const createDateQuery = (inputName, input, object) => {
   input = new Date(input)
@@ -48,20 +50,43 @@ const createSubsetObject = (obj, keys) => {
 
 module.exports = {
   createSubsetObject,
-  parseInputs: (req, inputNames, afterMsgOnly = false, includeOptions = []) => {
+  parseInputs: async (
+    req,
+    afterMsgOnly = false,
+    includeOptions = [],
+    orderOptions = []
+  ) => {
+    validationPerusal(req)
+
+    const inputNames = Object.keys(matchedData(req))
+
+    if (Object.keys(req.params).includes(inputNames[0])) {
+      inputNames.shift()
+    }
+
+    if (inputNames.length === 0) {
+      return {
+        query: { include: includeOptions, order: orderOptions },
+        afterMsg: ".",
+        inputsObject: {},
+      }
+    }
+
     const inputsObject = createSubsetObject(req.body, inputNames)
+
+    if (inputsObject.phoneNumber) {
+      inputsObject.phoneNumber = matchedData(req).phoneNumber
+    }
 
     const numberOfInputs = Object.keys(inputsObject).length
 
-    if (numberOfInputs === 0) {
-      return { query: {}, afterMsg: "." }
-    }
-
     let afterMsg = " with given "
+
     let numberOfInputsLeft = numberOfInputs
 
     for (let inputName in inputsObject) {
       const input = inputsObject[String(inputName)]
+
       const lastTwoChar = inputName.slice(-2)
       numberOfInputsLeft--
 
@@ -86,8 +111,10 @@ module.exports = {
       query: {
         where: inputsObject,
         include: includeOptions,
+        order: orderOptions,
       },
       afterMsg,
+      inputsObject,
     }
   },
 }

@@ -20,7 +20,7 @@ chai.use(require("chai-datetime"))
 
 const { faker } = require("@faker-js/faker")
 
-const generateUsername = () => {
+const fakerUsername = () => {
   const minLength = 4
   const maxLength = 20
   let username = faker.internet.userName()
@@ -32,7 +32,7 @@ const generateUsername = () => {
   return username
 }
 
-const generatePassword = () => {
+const fakerPassword = () => {
   const minLength = 8
   const maxLength = 20
   const uppercaseRegex = /[A-Z]/
@@ -52,6 +52,21 @@ const generatePassword = () => {
   return password
 }
 
+const fakerPhoneNumber = () => {
+  // all regex below are verified to be safe by
+  // using npm package safe-regex
+  const phoneNumberFormats = [
+    /([0-9]{3})[0-9]{3}-[0-9]{4}/,
+    /[0-9]{3}-[0-9]{3}-[0-9]{4}/,
+    /[0-9]{3}[0-9]{3}[0-9]{4}/,
+  ]
+
+  const phoneNumber = faker.helpers.fromRegExp(
+    phoneNumberFormats[Math.floor(Math.random() * 3)]
+  )
+  return phoneNumber
+}
+
 module.exports = {
   axios: require("axios"),
   axiosConfig,
@@ -60,8 +75,9 @@ module.exports = {
   expect,
   faker,
   fs: require("fs"),
-  generateUsername,
-  generatePassword,
+  fakerUsername,
+  fakerPassword,
+  fakerPhoneNumber,
   httpMocks: require("node-mocks-http"),
   httpStatusCodes: require("../util/index").httpStatusCodes,
   preMerchantMsg: "Merchant: 1",

@@ -1,7 +1,7 @@
 const clientsRouter = require("express").Router()
 const { clientsControllers } = require("../controllers/index")
 const { integerValidator, textValidator, dateValidator, phoneNumberValidator } =
-  require("../controllers/index").validators
+  require("../util/index").validators
 
 clientsRouter.param("clientId", clientsControllers.paramClientId)
 

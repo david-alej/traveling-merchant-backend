@@ -1,4 +1,5 @@
-const { validationPerusal, integerValidator } = require("./validators")
+const { validationPerusal, integerValidator } =
+  require("../util/index").validators
 const models = require("../database/models")
 const { authenticate } = require("../util/index").authenticate
 const { Api400Error, Api404Error, Api500Error } =

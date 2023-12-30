@@ -1,16 +1,10 @@
-const { validationPerusal, integerValidator } = require("./validators")
+const { validationPerusal, integerValidator } =
+  require("../util/index").validators
 const models = require("../database/models")
 const { Api400Error, Api404Error, Api500Error } =
   require("../util/index").apiErrors
 const { findClientQuery, parseClientInputs } =
   require("../services/index").clientsServices
-
-const createSubsetObject = (obj, keys) =>
-  Object.fromEntries(
-    keys
-      .filter((key) => typeof obj[String(key)] !== "undefined")
-      .map((key) => [key, obj[String(key)]])
-  )
 
 exports.paramClientId = async (req, res, next, clientId) => {
   const merchant = req.session.merchant
@@ -44,18 +38,9 @@ exports.getClient = async (req, res) => res.json(req.targetClient)
 
 exports.getClients = async (req, res, next) => {
   const merchant = req.session.merchant
-  const validInputs = [
-    "workId",
-    "fullname",
-    "address",
-    "createdAt",
-    "updatedAt",
-  ]
 
   try {
-    validationPerusal(req)
-
-    const { afterMsg, query } = parseClientInputs(req, validInputs)
+    const { afterMsg, query } = await parseClientInputs(req)
 
     const searched = await models.Clients.findAll(query)
 
@@ -74,12 +59,9 @@ exports.getClients = async (req, res, next) => {
 
 exports.postClient = async (req, res, next) => {
   const merchant = req.session.merchant
-  const requiredInputs = ["workId", "fullname", "address", "phoneNumber"]
 
   try {
-    validationPerusal(req)
-
-    const newClient = createSubsetObject(req.body, requiredInputs)
+    const { inputsObject: newClient } = await parseClientInputs(req, true)
 
     const created = await models.Clients.create(newClient)
 
@@ -99,18 +81,12 @@ exports.postClient = async (req, res, next) => {
 exports.putClient = async (req, res, next) => {
   const merchant = req.session.merchant
   const targetClient = req.targetClient
-  const validInputs = [
-    "workId",
-    "fullname",
-    "address",
-    "phoneNumber",
-    "relationship",
-  ]
 
   try {
-    validationPerusal(req)
-
-    const newValues = createSubsetObject(req.body, validInputs)
+    const { afterMsg, inputsObject: newValues } = await parseClientInputs(
+      req,
+      true
+    )
 
     if (JSON.stringify(newValues) === "{}") {
       throw new Api400Error(
@@ -118,8 +94,6 @@ exports.putClient = async (req, res, next) => {
         "Bad input request."
       )
     }
-
-    const { afterMsg } = parseClientInputs(newValues, true)
 
     const updated = await models.Clients.update(newValues, {
       where: { id: targetClient.id },

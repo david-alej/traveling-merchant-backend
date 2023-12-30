@@ -8,4 +8,5 @@ module.exports = {
   logger: require("./logger"),
   parseInputs: require("./parseInputs"),
   passwordHash: require("./passwordHash"),
+  validators: require("./validators"),
 }

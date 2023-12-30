@@ -1,6 +1,6 @@
 /* eslint-disable quotes */
 const { body, param } = require("express-validator")
-const { Api400Error } = require("../util/index").apiErrors
+const { Api400Error } = require("./apiErrors")
 const { validationResult } = require("express-validator")
 
 const sentenceCase = (camelCase) => {
@@ -132,9 +132,30 @@ const phoneNumberValidator = (
   inputIsParam = false,
   optional = false
 ) => {
-  const { head } = basicValidator(input, inputIsParam, optional)
+  const { head, inputName } = basicValidator(input, inputIsParam, optional)
 
-  return head.isMobilePhone()
+  return head
+    .custom((phoneNumber) => {
+      // all regex below are verified to be safe by
+      // using npm package safe-regex
+      const phoneNumberFormats = {
+        parenthesis: /\([0-9]{3}\)[0-9]{3}-[0-9]{4}/,
+        dashes: /[0-9]{3}-[0-9]{3}-[0-9]{4}/,
+        E164: /[0-9]{3}[0-9]{3}[0-9]{4}/,
+      }
+
+      for (const format in phoneNumberFormats) {
+        const isPhoneNumber =
+          phoneNumberFormats[String(format)].test(phoneNumber)
+
+        if (isPhoneNumber) return true
+      }
+
+      throw new Error(
+        `the given ${inputName} = ${phoneNumber} is not a proper phone number.`
+      )
+    })
+    .customSanitizer((phoneNumber) => phoneNumber.replace(/\D/g, ""))
 }
 
 exports.phoneNumberValidator = phoneNumberValidator

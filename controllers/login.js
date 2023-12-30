@@ -1,4 +1,4 @@
-const { validationPerusal } = require("./validators")
+const { validationPerusal } = require("../util/index").validators
 const { generateToken } = require("../util/index").doubleCsrf
 const { authenticate } = require("../util/index").authenticate
 const { Redis } = require("../services/index")

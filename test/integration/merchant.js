@@ -7,8 +7,8 @@ const {
   httpStatusCodes,
   merchantCredentials,
   preMerchantMsg,
-  generateUsername,
-  generatePassword,
+  fakerUsername,
+  fakerPassword,
   models,
 } = require("../common")
 
@@ -66,8 +66,8 @@ describe("Merchant routes", function () {
     const putUserNewCredentials = {}
 
     afterEach(async function () {
-      putUserNewCredentials.newUsername = generateUsername()
-      putUserNewCredentials.newPassword = generatePassword()
+      putUserNewCredentials.newUsername = fakerUsername()
+      putUserNewCredentials.newPassword = fakerPassword()
 
       const { status, data, headers } = await client.post(
         "/login",

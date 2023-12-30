@@ -8,6 +8,8 @@ const {
   merchantCredentials,
   preMerchantMsg,
   models,
+  faker,
+  fakerPhoneNumber,
 } = require("../common")
 
 const { OK, NOT_FOUND, BAD_REQUEST, CREATED } = httpStatusCodes
@@ -494,10 +496,10 @@ describe("Clients Routes", function () {
   describe("Post /", function () {
     it("When user inputs required values, Then client is created ", async function () {
       const requestBody = {
-        fullname: "Dave Jones",
-        address: "1234 Huey Dr.",
-        workId: 1,
-        phoneNumber: "9561234567",
+        fullname: faker.person.fullName(),
+        address: faker.location.streetAddress(),
+        workId: Math.ceil(Math.random() * 3),
+        phoneNumber: fakerPhoneNumber(),
       }
 
       const { status, data } = await client.post(
@@ -506,10 +508,21 @@ describe("Clients Routes", function () {
         setHeaders
       )
 
+      requestBody.phoneNumber = requestBody.phoneNumber.replace(/\D/g, "")
+      const newClientSearched = await models.Clients.findOne({
+        where: requestBody,
+      })
+      const newClient = newClientSearched.dataValues
+      const newClientDeleted = await models.Clients.destroy({
+        where: requestBody,
+      })
+
       expect(status).to.equal(CREATED)
       expect(data)
         .to.include.string(preMerchantMsg)
         .and.string(" client has been created.")
+      expect(newClient).to.include(requestBody)
+      expect(newClientDeleted).to.equal(1)
     })
   })
 
@@ -529,20 +542,21 @@ describe("Clients Routes", function () {
     })
 
     it("When inputs are given, Then client has the respective information updated", async function () {
-      const clientBeforeCreated = await models.Clients.create({
-        workId: "1",
-        fullname: "Initial name",
-        address: "0001 address",
-        phoneNumber: "6491234567",
-      })
+      const newClient = {
+        workId: Math.ceil(Math.random() * 3),
+        fullname: faker.person.fullName(),
+        address: faker.location.streetAddress(),
+        phoneNumber: fakerPhoneNumber().replace(/\D/g, ""),
+      }
+      const clientBeforeCreated = await models.Clients.create(newClient)
       const clientBefore = clientBeforeCreated.dataValues
       const clientId = clientBefore.id
       const requestBody = {
-        workId: 2,
-        fullname: "Final name",
-        address: "0002 address",
-        phoneNumber: "6492345678",
-        relationship: 7,
+        workId: Math.ceil(Math.random() * 3),
+        fullname: faker.person.fullName(),
+        address: faker.location.streetAddress(),
+        phoneNumber: fakerPhoneNumber(),
+        relationship: Math.ceil(Math.random() * 10),
       }
 
       const { status, data } = await client.put(
@@ -551,6 +565,7 @@ describe("Clients Routes", function () {
         setHeaders
       )
 
+      requestBody.phoneNumber = requestBody.phoneNumber.replace(/\D/g, "")
       const clientAfterSearched = await models.Clients.findOne({
         where: { id: clientId },
       })

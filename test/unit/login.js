@@ -1,7 +1,7 @@
 const {
   expect,
-  generateUsername,
-  generatePassword,
+  fakerUsername,
+  fakerPassword,
   httpMocks,
   merchantCredentials,
 } = require("../common")
@@ -27,8 +27,8 @@ describe("Rate Limiters Controllers (Beware test suite will take long due to tes
   describe("Login Route .postLogin", function () {
     it("When client tries to login with wrong username and password one more time than is allowed, 100 times, in less than the duration, Then response is a too many request ", async function () {
       const iterations = 101
-      const username = generateUsername()
-      const password = generatePassword()
+      const username = fakerUsername()
+      const password = fakerPassword()
       const req = createRequest({
         method: "PUT",
         originalUrl: "/login",
@@ -65,8 +65,8 @@ describe("Rate Limiters Controllers (Beware test suite will take long due to tes
 
     it("When client tries to login with wrong username and password after already getting an 429 error, Then response is a too many request ", async function () {
       const iterations = 102
-      const username = generateUsername()
-      const password = generatePassword()
+      const username = fakerUsername()
+      const password = fakerPassword()
       const req = createRequest({
         method: "PUT",
         originalUrl: "/login",

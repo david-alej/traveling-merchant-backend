@@ -18,9 +18,8 @@ exports.findClientQuery = {
 
 exports.parseClientInputs = (
   inputsObject,
-  inputNames,
   afterMsgOnly = false,
   includeOptions = [{ ...ticketsInclusion, limit: 1 }, workInclusion]
 ) => {
-  return parseInputs(inputsObject, inputNames, afterMsgOnly, includeOptions)
+  return parseInputs(inputsObject, afterMsgOnly, includeOptions)
 }

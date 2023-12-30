@@ -2,7 +2,7 @@ const express = require("express")
 const merchantRouter = express.Router()
 const { merchantControllers } = require("../controllers/index")
 const { credentialsValidator, newCredentialsValidator } =
-  require("../controllers/index").validators
+  require("../util/index").validators
 
 merchantRouter.param("merchantId", merchantControllers.paramMerchantId)
 

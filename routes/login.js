@@ -1,7 +1,7 @@
 const express = require("express")
 const loginRouter = express.Router()
 const { loginControllers } = require("../controllers/index")
-const { credentialsValidator } = require("../controllers/index").validators
+const { credentialsValidator } = require("../util/index").validators
 
 loginRouter.get("/", loginControllers.getLogin)
 
