@@ -4,19 +4,17 @@ const { Op, Sequelize } = require("sequelize")
 const { matchedData } = require("express-validator")
 const { validationPerusal } = require("./validators")
 
-const createDateQuery = (inputName, input, object) => {
+const createDateQuery = (inputName, input, whereOptions, tableName) => {
   input = new Date(input)
 
-  delete object[String(inputName)]
-
-  if (object[Op.and]) {
-    object[Op.and].push(
+  if (whereOptions[Op.and]) {
+    whereOptions[Op.and].push(
       Sequelize.fn(
-        `EXTRACT(MONTH from \"Clients\".\"${inputName}\") =`,
+        `EXTRACT(MONTH from \"${tableName}\".\"${inputName}\") =`,
         input.getMonth() + 1
       ),
       Sequelize.fn(
-        `EXTRACT(YEAR from \"Clients\".\"${inputName}\") =`,
+        `EXTRACT(YEAR from \"${tableName}\".\"${inputName}\") =`,
         input.getFullYear()
       )
     )
@@ -24,20 +22,22 @@ const createDateQuery = (inputName, input, object) => {
     return
   }
 
-  object[Op.and] = [
+  whereOptions[Op.and] = [
     Sequelize.fn(
-      `EXTRACT(MONTH from \"Clients\".\"${inputName}\") =`,
+      `EXTRACT(MONTH from \"${tableName}\".\"${inputName}\") =`,
       input.getMonth() + 1
     ),
     Sequelize.fn(
-      `EXTRACT(YEAR from \"Clients\".\"${inputName}\") =`,
+      `EXTRACT(YEAR from \"${tableName}\".\"${inputName}\") =`,
       input.getFullYear()
     ),
   ]
 }
 
-const createStringQuery = (inputName, input, object) => {
-  object[String(inputName)] = { [Op.iLike]: "%" + input + "%" }
+const createStringQuery = (inputName, input, whereOptions) => {
+  whereOptions[String(inputName)] = {
+    [Op.iLike]: "%" + input + "%",
+  }
 }
 
 const createSubsetObject = (obj, keys) => {
@@ -50,12 +50,7 @@ const createSubsetObject = (obj, keys) => {
 
 module.exports = {
   createSubsetObject,
-  parseInputs: async (
-    req,
-    afterMsgOnly = false,
-    includeOptions = [],
-    orderOptions = []
-  ) => {
+  parseInputs: async (req, otherOptions, modelName) => {
     validationPerusal(req)
 
     const inputNames = Object.keys(matchedData(req))
@@ -66,7 +61,7 @@ module.exports = {
 
     if (inputNames.length === 0) {
       return {
-        query: { include: includeOptions, order: orderOptions },
+        query: otherOptions,
         afterMsg: ".",
         inputsObject: {},
       }
@@ -84,6 +79,8 @@ module.exports = {
 
     let numberOfInputsLeft = numberOfInputs
 
+    const whereOptions = {}
+
     for (let inputName in inputsObject) {
       const input = inputsObject[String(inputName)]
 
@@ -98,20 +95,19 @@ module.exports = {
         afterMsg += `${inputName} = ${input}, `
       }
 
-      if (!afterMsgOnly) {
-        if (lastTwoChar === "At") {
-          createDateQuery(inputName, input, inputsObject)
-        } else if (lastTwoChar !== "Id") {
-          createStringQuery(inputName, input, inputsObject)
-        }
+      if (lastTwoChar === "At") {
+        createDateQuery(inputName, input, whereOptions, modelName)
+      } else if (lastTwoChar !== "Id") {
+        createStringQuery(inputName, input, whereOptions)
+      } else {
+        whereOptions[String(inputName)] = input
       }
     }
 
     return {
       query: {
-        where: inputsObject,
-        include: includeOptions,
-        order: orderOptions,
+        where: whereOptions,
+        ...otherOptions,
       },
       afterMsg,
       inputsObject,

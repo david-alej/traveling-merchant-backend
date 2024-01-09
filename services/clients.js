@@ -18,8 +18,10 @@ exports.findClientQuery = {
 
 exports.parseClientInputs = (
   inputsObject,
-  afterMsgOnly = false,
-  includeOptions = [{ ...ticketsInclusion, limit: 1 }, workInclusion]
+  includeOptions = {
+    include: [{ ...ticketsInclusion, limit: 1 }, workInclusion],
+  },
+  modelName = "Clients"
 ) => {
-  return parseInputs(inputsObject, afterMsgOnly, includeOptions)
+  return parseInputs(inputsObject, includeOptions, modelName)
 }

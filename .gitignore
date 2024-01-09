@@ -2,3 +2,5 @@ node_modules
 .env
 testing.js
 testing.html
+template/*
+templateGenerator.js

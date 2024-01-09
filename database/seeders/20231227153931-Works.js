@@ -11,7 +11,7 @@ module.exports = {
           address: "38 Galvin Ave.",
           phoneNumber: "9075554011",
           createdAt: new Date("2024-11-02"),
-          updatedAt: new Date("2024-11-02"),
+          updatedAt: new Date("2024-12-02"),
         },
         {
           name: "Deckow and Sons",

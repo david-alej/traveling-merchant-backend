@@ -10,10 +10,8 @@ const clientsInclusion = {
 exports.findWorkQuery = { include: [clientsInclusion] }
 
 exports.parseWorkInputs = (
-  inputsObject,
-  inputNames,
-  afterMsgOnly = false,
-  includeOptions = [clientsInclusion]
+  req,
+  includeOptions = { include: [clientsInclusion] }
 ) => {
-  return parseInputs(inputsObject, inputNames, afterMsgOnly, includeOptions)
+  return parseInputs(req, includeOptions, "Works")
 }

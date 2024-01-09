@@ -1,6 +1,6 @@
 const worksRouter = require("express").Router()
 const { worksControllers } = require("../controllers/index")
-const { textValidator, phoneNumberValidator } =
+const { textValidator, phoneNumberValidator, dateValidator } =
   require("../util/index").validators
 
 worksRouter.param("workId", worksControllers.paramWorkId)
@@ -9,7 +9,12 @@ worksRouter.get("/:workId", worksControllers.getWork)
 
 worksRouter.get(
   "/",
-  [textValidator("name", false, true), textValidator("address", false, true)],
+  [
+    textValidator("name", false, true),
+    textValidator("address", false, true),
+    dateValidator("createdAt", false, true),
+    dateValidator("updatedAt", false, true),
+  ],
   worksControllers.getWorks
 )
 
@@ -28,5 +33,7 @@ worksRouter.put(
   ],
   worksControllers.putWork
 )
+
+worksRouter.delete("/:workId", worksControllers.deleteWork)
 
 module.exports = worksRouter
