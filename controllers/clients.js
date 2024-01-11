@@ -87,7 +87,7 @@ exports.putClient = async (req, res, next) => {
       req,
       true
     )
-    console.log(newValues)
+
     if (JSON.stringify(newValues) === "{}") {
       throw new Api400Error(
         merchant.preMsg + " did not update any value.",

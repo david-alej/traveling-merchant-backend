@@ -17,11 +17,11 @@ module.exports = {
         type: Sequelize.FLOAT,
         allowNull: false,
       },
-      expectedDate: {
+      expectedAt: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      actualDate: {
+      actualAt: {
         type: Sequelize.DATE,
       },
       createdAt: {

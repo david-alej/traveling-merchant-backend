@@ -35,5 +35,8 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "OrdersWares",
     }
   )
+
+  OrdersWares.removeAttribute("id")
+
   return OrdersWares
 }

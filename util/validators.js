@@ -90,6 +90,16 @@ const integerValidator = (input, inputIsParam = false, optional = false) => {
 
 exports.integerValidator = integerValidator
 
+const floatValidator = (input, inputIsParam = false, optional = false) => {
+  const { head, inputName } = basicValidator(input, inputIsParam, optional)
+
+  return head
+    .isFloat({ min: 0 })
+    .withMessage(inputName + " must be an float number.")
+}
+
+exports.floatValidator = floatValidator
+
 const textValidator = (input, inputIsParam = false, optional = false) => {
   const { head, inputName } = basicValidator(input, inputIsParam, optional)
 
@@ -141,7 +151,7 @@ const phoneNumberValidator = (
       const phoneNumberFormats = {
         parenthesis: /\([0-9]{3}\)[0-9]{3}-[0-9]{4}/,
         dashes: /[0-9]{3}-[0-9]{3}-[0-9]{4}/,
-        E164: /[0-9]{3}[0-9]{3}[0-9]{4}/,
+        E164: /[0-9]{10}/,
       }
 
       for (const format in phoneNumberFormats) {
@@ -155,7 +165,11 @@ const phoneNumberValidator = (
         `the given ${inputName} = ${phoneNumber} is not a proper phone number.`
       )
     })
-    .customSanitizer((phoneNumber) => phoneNumber.replace(/\D/g, ""))
+    .customSanitizer((phoneNumber) => {
+      if (!phoneNumber) return phoneNumber
+
+      return phoneNumber.replace(/\D/g, "")
+    })
 }
 
 exports.phoneNumberValidator = phoneNumberValidator

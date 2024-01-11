@@ -97,10 +97,10 @@ module.exports = {
 
       if (lastTwoChar === "At") {
         createDateQuery(inputName, input, whereOptions, modelName)
-      } else if (lastTwoChar !== "Id") {
-        createStringQuery(inputName, input, whereOptions)
-      } else {
+      } else if (typeof input === "number") {
         whereOptions[String(inputName)] = input
+      } else {
+        createStringQuery(inputName, input, whereOptions)
       }
     }
 

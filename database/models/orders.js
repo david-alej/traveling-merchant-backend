@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
 
       Orders.hasMany(models.OrdersWares, {
         foreignKey: "orderId",
-        as: "wares bought",
+        as: "waresBought",
         onDelete: "CASCADE",
       })
     }
@@ -26,8 +26,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       providerId: DataTypes.INTEGER,
       cost: DataTypes.INTEGER,
-      expectedDate: DataTypes.DATE,
-      actualDate: DataTypes.DATE,
+      expectedAt: DataTypes.DATE,
+      actualAt: DataTypes.DATE,
     },
     {
       sequelize,

@@ -14,7 +14,7 @@ const {
 
 const { OK, NOT_FOUND, BAD_REQUEST, CREATED } = httpStatusCodes
 
-describe.only("Works Routes", function () {
+describe("Works Routes", function () {
   let client
   const setHeaders = { headers: {} }
   const workObject = {
