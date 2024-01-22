@@ -111,6 +111,16 @@ const textValidator = (input, inputIsParam = false, optional = false) => {
 
 exports.textValidator = textValidator
 
+const booleanValidator = (input, inputIsParam = false, optional = false) => {
+  const { head, inputName } = basicValidator(input, inputIsParam, optional)
+
+  return head
+    .isBoolean()
+    .withMessage(inputName + " must be either true or false.")
+}
+
+exports.booleanValidator = booleanValidator
+
 const incrementValidator = (input) => {
   const { head } = basicValidator(input, false, false)
 

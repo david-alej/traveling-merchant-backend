@@ -7,6 +7,7 @@ const clientsRouter = require("./clients")
 const worksRouter = require("./works")
 const providersRouter = require("./providers")
 const ordersRouter = require("./orders")
+const orderswaresRouter = require("./orderswares")
 
 const { authorizedUser } = require("../controllers/index").authorize
 const { logError, logErrorMiddleware, returnError, isOperationalError } =
@@ -28,6 +29,7 @@ router.use("/clients", clientsRouter)
 router.use("/works", worksRouter)
 router.use("/providers", providersRouter)
 router.use("/orders", ordersRouter)
+router.use("/orderswares", orderswaresRouter)
 
 router.use("/logout", logoutRouter)
 

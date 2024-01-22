@@ -6,27 +6,43 @@ const { Api400Error, Api404Error, Api500Error } =
 const { findOrdersWareQuery, parseOrdersWareInputs } =
   require("../services/index").orderswaresServices
 
-exports.paramOrdersWareId = async (req, res, next, orderswareId) => {
+exports.paramOrderId = async (req, res, next, orderId) => {
+  try {
+    await integerValidator("orderId", true).run(req)
+
+    req.orderId = orderId
+
+    next()
+  } catch (err) {
+    next(err)
+  }
+}
+
+exports.paramWareId = async (req, res, next, wareId) => {
   const merchant = req.session.merchant
 
   try {
-    await integerValidator("orderswareId", true).run(req)
+    await integerValidator("wareId", true).run(req)
 
     validationPerusal(req)
 
     const searched = await models.OrdersWares.findOne({
-      where: { id: orderswareId },
+      where: {
+        orderId: req.orderId,
+        wareId,
+      },
       ...findOrdersWareQuery,
     })
 
     if (!searched) {
       throw new Api404Error(
-        merchant.preMsg + ` target ordersware ${orderswareId} not found.`,
+        merchant.preMsg +
+          ` target ordersware with order id of ${req.orderId} and ware id of ${wareId} not found.`,
         "OrdersWare not found."
       )
     }
 
-    req.targetOrdersWare = searched.dataValues
+    req.targetOrdersWare = JSON.parse(JSON.stringify(searched))
 
     next()
   } catch (err) {
@@ -61,7 +77,7 @@ exports.postOrdersWare = async (req, res, next) => {
   const merchant = req.session.merchant
 
   try {
-    const { inputsObject: newOrdersWare } = await parseOrdersWareInputs(req, true)
+    const { inputsObject: newOrdersWare } = await parseOrdersWareInputs(req)
 
     const created = await models.OrdersWares.create(newOrdersWare)
 
@@ -84,8 +100,7 @@ exports.putOrdersWare = async (req, res, next) => {
 
   try {
     const { afterMsg, inputsObject: newValues } = await parseOrdersWareInputs(
-      req,
-      true
+      req
     )
 
     if (JSON.stringify(newValues) === "{}") {
@@ -96,7 +111,10 @@ exports.putOrdersWare = async (req, res, next) => {
     }
 
     const updated = await models.OrdersWares.update(newValues, {
-      where: { id: targetOrdersWare.id },
+      where: {
+        orderId: targetOrdersWare.orderId,
+        wareId: targetOrdersWare.wareId,
+      },
     })
 
     if (!updated) {
@@ -108,7 +126,7 @@ exports.putOrdersWare = async (req, res, next) => {
 
     res.send(
       merchant.preMsg +
-        ` ordersware with id = ${targetOrdersWare.id} was updated` +
+        ` ordersware with order id = ${targetOrdersWare.orderId} and ware id of ${targetOrdersWare.wareId} was updated` +
         afterMsg
     )
   } catch (err) {
@@ -122,7 +140,10 @@ exports.deleteOrdersWare = async (req, res, next) => {
 
   try {
     const deleted = await models.OrdersWares.destroy({
-      where: { id: targetOrdersWare.id },
+      where: {
+        orderId: targetOrdersWare.orderId,
+        wareId: targetOrdersWare.wareId,
+      },
     })
 
     if (!deleted) {
@@ -134,7 +155,43 @@ exports.deleteOrdersWare = async (req, res, next) => {
 
     res.send(
       merchant.preMsg +
-        ` has deleted a ordersware with id = ${targetOrdersWare.id} and fullname = ${targetOrdersWare.fullname}.`
+        ` has deleted a ordersware with order id = ${targetOrdersWare.orderId} and ware id of ${targetOrdersWare.wareId}.`
+    )
+  } catch (err) {
+    next(err)
+  }
+}
+
+exports.deleteOrdersWares = async (req, res, next) => {
+  const merchant = req.session.merchant
+
+  try {
+    const {
+      inputsObject: { orderId },
+    } = await parseOrdersWareInputs(req)
+
+    const orderSearched = await models.Orders.findOne({
+      where: { id: orderId },
+    })
+
+    if (!orderSearched) {
+      throw new Api404Error(
+        merchant.preMsg + " order does not exist.",
+        "Oder not found."
+      )
+    }
+
+    const deleted = await models.OrdersWares.destroy({ where: { orderId } })
+
+    if (!deleted) {
+      throw new Api500Error(
+        merchant.preMsg + " delete ordersware query did not work.",
+        "Internal server query error."
+      )
+    }
+
+    res.send(
+      merchant.preMsg + ` has deleted a ordersware with order id = ${orderId}.`
     )
   } catch (err) {
     next(err)

@@ -1,24 +1,59 @@
 const orderswaresRouter = require("express").Router()
 const { orderswaresControllers } = require("../controllers/index")
-const { dateValidator } = require("../util/index").validators
+const { floatValidator, integerValidator, dateValidator } =
+  require("../util/index").validators
 
-orderswaresRouter.param("orderswareId", orderswaresControllers.paramOrdersWareId)
+orderswaresRouter.param("orderId", orderswaresControllers.paramOrderId)
 
-orderswaresRouter.get("/:orderswareId", orderswaresControllers.getOrdersWare)
+orderswaresRouter.param("wareId", orderswaresControllers.paramWareId)
+
+orderswaresRouter.get("/:orderId/:wareId", orderswaresControllers.getOrdersWare)
 
 orderswaresRouter.get(
   "/",
   [
+    integerValidator("orderId", false, true),
+    integerValidator("wareId", false, true),
+    integerValidator("amount", false, true),
+    floatValidator("cost", false, true),
+    integerValidator("returned", false, true),
     dateValidator("createdAt", false, true),
     dateValidator("updatedAt", false, true),
   ],
   orderswaresControllers.getOrdersWares
 )
 
-orderswaresRouter.post("/", [], orderswaresControllers.postOrdersWare)
+orderswaresRouter.post(
+  "/",
+  [
+    integerValidator("orderId"),
+    integerValidator("wareId"),
+    integerValidator("amount"),
+    floatValidator("cost"),
+    integerValidator("returned", false, true),
+  ],
+  orderswaresControllers.postOrdersWare
+)
 
-orderswaresRouter.put("/:orderswareId", [], orderswaresControllers.putOrdersWare)
+orderswaresRouter.put(
+  "/:orderId/:wareId",
+  [
+    integerValidator("amount", false, true),
+    floatValidator("cost", false, true),
+    integerValidator("returned", false, true),
+  ],
+  orderswaresControllers.putOrdersWare
+)
 
-orderswaresRouter.delete("/:orderswareId", orderswaresControllers.deleteOrdersWare)
+orderswaresRouter.delete(
+  "/:orderId/:wareId",
+  orderswaresControllers.deleteOrdersWare
+)
+
+orderswaresRouter.delete(
+  "/",
+  [integerValidator("orderId")],
+  orderswaresControllers.deleteOrdersWares
+)
 
 module.exports = orderswaresRouter
