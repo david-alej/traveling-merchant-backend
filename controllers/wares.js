@@ -127,7 +127,8 @@ exports.deleteWare = async (req, res, next) => {
 
     if (!deleted) {
       throw new Api500Error(
-        merchant.preMsg + " delete ware query did not work.",
+        merchant.preMsg +
+          ` delete ware query did not work with ware id = ${targetWare.id}.`,
         "Internal server query error."
       )
     }

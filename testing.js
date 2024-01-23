@@ -3,6 +3,8 @@
 // console.log(crypto.randomBytes(48).toString("base64url"))
 // "cross-env NODE_ENV=test nyc --reporter=html mocha ./test/main.js --testTimeout=10000 --exit"
 
-const { faker } = require("@faker-js/faker")
+const fs = require("node:fs")
 
-console.log(faker.date.future().toISOString())
+const files = fs.readdirSync("./routes/")
+const input = "index"
+console.log(files.includes(input), files)

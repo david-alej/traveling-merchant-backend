@@ -9,6 +9,7 @@ module.exports = {
   ordersControllers: require("./orders"),
   orderswaresControllers: require("./orderswares"),
   providersControllers: require("./providers"),
+  ticketsControllers: require("./tickets"),
   waresControllers: require("./wares"),
   worksControllers: require("./works"),
 }

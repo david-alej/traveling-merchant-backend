@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
 
       Tickets.hasMany(models.WaresTickets, {
         foreignKey: "ticketId",
-        as: "wares bought",
+        as: "waresSold",
         onDelete: "CASCADE",
       })
     }
