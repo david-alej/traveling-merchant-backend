@@ -1,7 +1,12 @@
 const waresRouter = require("express").Router()
 const { waresControllers } = require("../controllers/index")
-const { arrayTextValidator, dateValidator, integerValidator, textValidator } =
-  require("../util/index").validators
+const {
+  arrayTextValidator,
+  dateValidator,
+  integerValidator,
+  floatValidator,
+  textValidator,
+} = require("../util/index").validators
 
 waresRouter.param("wareId", waresControllers.paramWareId)
 
@@ -14,7 +19,7 @@ waresRouter.get(
     textValidator("type", false, true),
     arrayTextValidator("tags", false, true),
     integerValidator("stock", false, true),
-    integerValidator("cost", false, true),
+    floatValidator("cost", false, true),
     dateValidator("createdAt", false, true),
     dateValidator("updatedAt", false, true),
   ],
@@ -28,7 +33,7 @@ waresRouter.post(
     textValidator("type"),
     arrayTextValidator("tags", false, true),
     integerValidator("stock"),
-    integerValidator("cost"),
+    floatValidator("cost"),
   ],
   waresControllers.postWare
 )
@@ -40,7 +45,7 @@ waresRouter.put(
     textValidator("type", false, true),
     arrayTextValidator("tags", false, true),
     integerValidator("stock", false, true),
-    integerValidator("cost", false, true),
+    floatValidator("cost", false, true),
   ],
   waresControllers.putWare
 )

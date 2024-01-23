@@ -61,10 +61,8 @@ exports.postTransaction = async (req, res, next) => {
   const merchant = req.session.merchant
 
   try {
-    const { afterMsg, inputsObject: newTransaction } = await parseTransactionInputs(
-      req,
-      true
-    )
+    const { afterMsg, inputsObject: newTransaction } =
+      await parseTransactionInputs(req, true)
 
     const created = await models.Transactions.create(newTransaction)
 

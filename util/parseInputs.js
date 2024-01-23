@@ -84,8 +84,6 @@ module.exports = {
 
     for (let inputName in inputsObject) {
       const input = inputsObject[String(inputName)]
-
-      const lastTwoChar = inputName.slice(-2)
       numberOfInputsLeft--
 
       if (numberOfInputs === 1) {
@@ -96,7 +94,7 @@ module.exports = {
         afterMsg += `${inputName} = ${input}, `
       }
 
-      if (lastTwoChar === "At") {
+      if (!isNaN(Date.parse(input)) && typeof input !== "number") {
         createDateQuery(inputName, input, whereOptions, modelName)
       } else if (typeof input === "number") {
         whereOptions[String(inputName)] = input

@@ -5,6 +5,7 @@ module.exports = {
   ordersServices: require("./orders"),
   orderswaresServices: require("./orderswares"),
   ticketsServices: require("./tickets"),
+  transactionsServices: require("./transactions"),
   waresServices: require("./wares"),
   workServices: require("./works"),
 }
