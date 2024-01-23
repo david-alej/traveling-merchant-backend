@@ -13,7 +13,7 @@ const {
 
 const { OK, NOT_FOUND, BAD_REQUEST, CREATED } = httpStatusCodes
 
-describe.only("OrdersWares Routes", function () {
+describe("OrdersWares Routes", function () {
   let client
   const setHeaders = { headers: {} }
   const orderswareObject = {

@@ -11,13 +11,13 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Wares.hasMany(models.WaresTickets, {
         foreignKey: "wareId",
-        as: "wares sold",
+        as: "sold",
         onDelete: "CASCADE",
       })
 
       Wares.hasMany(models.OrdersWares, {
         foreignKey: "wareId",
-        as: "wares bought",
+        as: "bought",
         onDelete: "CASCADE",
       })
     }

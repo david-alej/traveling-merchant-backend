@@ -109,29 +109,10 @@ describe("Providers Routes", function () {
   describe("Get /", function () {
     const allProviders = [
       {
-        id: 1,
-        name: "Amazon",
-        address: "0000 online",
-        phoneNumber: "1632474734",
-        createdAt: "2024-11-11T00:00:00.000Z",
-        updatedAt: "2024-11-11T00:00:00.000Z",
-        orders: [
-          {
-            actualAt: null,
-            cost: 110,
-            createdAt: "2024-11-11T00:00:00.000Z",
-            expectedAt: "2024-11-02T00:00:00.000Z",
-            id: 2,
-            providerId: 1,
-            updatedAt: "2024-11-11T00:00:00.000Z",
-          },
-        ],
-      },
-      {
-        id: 2,
-        name: "Ebay",
-        address: "0000 online",
-        phoneNumber: "5125869601",
+        id: 4,
+        name: "Marshalls",
+        address: "41090 Jaime Springs",
+        phoneNumber: "3718802186",
         createdAt: "2024-11-11T00:00:00.000Z",
         updatedAt: "2024-11-11T00:00:00.000Z",
         orders: [],
@@ -156,15 +137,35 @@ describe("Providers Routes", function () {
         ],
       },
       {
-        id: 4,
-        name: "Marshalls",
-        address: "41090 Jaime Springs",
-        phoneNumber: "3718802186",
+        id: 2,
+        name: "Ebay",
+        address: "0000 online",
+        phoneNumber: "5125869601",
         createdAt: "2024-11-11T00:00:00.000Z",
         updatedAt: "2024-11-11T00:00:00.000Z",
         orders: [],
       },
+      {
+        id: 1,
+        name: "Amazon",
+        address: "0000 online",
+        phoneNumber: "1632474734",
+        createdAt: "2024-11-11T00:00:00.000Z",
+        updatedAt: "2024-11-11T00:00:00.000Z",
+        orders: [
+          {
+            actualAt: null,
+            cost: 110,
+            createdAt: "2024-11-11T00:00:00.000Z",
+            expectedAt: "2024-11-02T00:00:00.000Z",
+            id: 2,
+            providerId: 1,
+            updatedAt: "2024-11-11T00:00:00.000Z",
+          },
+        ],
+      },
     ]
+
     it("When no inputs is provided, Then default query search is returned ", async function () {
       const expectedProviders = allProviders
 
@@ -179,7 +180,7 @@ describe("Providers Routes", function () {
     })
 
     it("When name is the only input, Then response all providers with the a name that includes the subtring entered", async function () {
-      const expectedProviders = [allProviders[1]]
+      const expectedProviders = [allProviders[2]]
       const config = structuredClone(setHeaders)
       config.data = { name: "ebay" }
 
@@ -191,7 +192,7 @@ describe("Providers Routes", function () {
     })
 
     it("When address is the only input, Then response all providers with the a address that includes the subtring entered", async function () {
-      const expectedProviders = [allProviders[3]]
+      const expectedProviders = [allProviders[0]]
       const config = structuredClone(setHeaders)
       config.data = { address: "0 jaim" }
 
@@ -203,7 +204,7 @@ describe("Providers Routes", function () {
     })
 
     it("When a valid and full phone number is the only input, Then response all providers with the given phone number", async function () {
-      const expectedProviders = [allProviders[2]]
+      const expectedProviders = [allProviders[1]]
       const config = structuredClone(setHeaders)
       config.data = { phoneNumber: "6192621956" }
 
@@ -239,7 +240,7 @@ describe("Providers Routes", function () {
     })
 
     it("When multiple inputs are given, Then response is all providers that satisfy the input comparisons", async function () {
-      const expectedProviders = [allProviders[1]]
+      const expectedProviders = [allProviders[2]]
       const config = structuredClone(setHeaders)
       config.data = {
         name: "bay",

@@ -99,6 +99,8 @@ module.exports = {
         createDateQuery(inputName, input, whereOptions, modelName)
       } else if (typeof input === "number") {
         whereOptions[String(inputName)] = input
+      } else if (Array.isArray(input)) {
+        whereOptions[String(inputName)] = { [Op.contains]: input }
       } else {
         createStringQuery(inputName, input, whereOptions)
       }

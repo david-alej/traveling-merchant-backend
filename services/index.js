@@ -4,5 +4,6 @@ module.exports = {
   Redis: require("./Redis"),
   ordersServices: require("./orders"),
   orderswaresServices: require("./orderswares"),
+  waresServices: require("./wares"),
   workServices: require("./works"),
 }

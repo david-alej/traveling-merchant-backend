@@ -135,6 +135,32 @@ const incrementValidator = (input) => {
 
 exports.incrementValidator = incrementValidator
 
+const arrayTextValidator = (input, inputIsParam = false, optional = false) => {
+  const { head, inputName } = basicValidator(input, inputIsParam, optional)
+
+  return head
+    .isArray({ max: 10, min: 1 })
+    .withMessage(
+      inputName +
+        " array must have at least one element and less than 11 elements."
+    )
+    .custom((array) => {
+      const arrayHasAllStringElements = array.every(
+        (element) => typeof element === "string"
+      )
+
+      if (!arrayHasAllStringElements) {
+        throw new Error(
+          ` the given ${inputName} = ${array} is not an array that is made of all string elements.`
+        )
+      }
+
+      return true
+    })
+}
+
+exports.arrayTextValidator = arrayTextValidator
+
 const dateValidator = (input, inputIsParam = false, optional = false) => {
   const { head, inputName } = basicValidator(input, inputIsParam, optional)
 

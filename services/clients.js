@@ -19,7 +19,7 @@ exports.findClientQuery = {
 exports.parseClientInputs = (
   inputsObject,
   includeOptions = {
-    include: [{ ...ticketsInclusion, limit: 1 }, workInclusion],
+    include: [ticketsInclusion, workInclusion],
   },
   modelName = "Clients"
 ) => {

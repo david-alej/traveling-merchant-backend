@@ -15,6 +15,7 @@ exports.parseProviderInputs = (
   inputsObject,
   otherOptions = {
     include: [{ ...ordersInclusion, limit: 5 }],
+    order: [["id", "DESC"]],
   },
   modelName = "Providers"
 ) => {
