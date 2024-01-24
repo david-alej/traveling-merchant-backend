@@ -430,6 +430,26 @@ describe("OrdersWares Routes", function () {
   })
 
   describe("Delete /", function () {
+    it("When order id is not an integer, Then response is bad request ", async function () {
+      const config = structuredClone(setHeaders)
+      config.data = { orderId: "string" }
+
+      const { status, data } = await client.delete("/orderswares/", config)
+
+      expect(status).to.equal(BAD_REQUEST)
+      expect(data).to.equal("Bad input request.")
+    })
+
+    it("When order id does not exists, Then response is not found ", async function () {
+      const config = structuredClone(setHeaders)
+      config.data = { orderId: 10 + Math.ceil(Math.random() * 5) }
+
+      const { status, data } = await client.delete("/orderswares/", config)
+
+      expect(status).to.equal(NOT_FOUND)
+      expect(data).to.equal("Order not found.")
+    })
+
     it("When order id exists, Then all orderswares rows with respective order id are deleted ", async function () {
       const newOrder = await models.Orders.create({
         providerId: Math.ceil(Math.random() * 4),

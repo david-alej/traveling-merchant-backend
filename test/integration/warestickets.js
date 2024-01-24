@@ -12,13 +12,49 @@ const {
 
 const { OK, NOT_FOUND, BAD_REQUEST, CREATED } = httpStatusCodes
 
-describe.only("WaresTickets Routes", function () {
+describe("WaresTickets Routes", function () {
   let client
   const setHeaders = { headers: {} }
   const waresticketObject = {
     type: "object",
-    required: ["id", "createdAt", "updatedAt"],
-    properties: {},
+    required: [
+      "wareId",
+      "ticketId",
+      "amount",
+      "returned",
+      "createdAt",
+      "updatedAt",
+      "ticket",
+      "ware",
+    ],
+    properties: {
+      ticket: {
+        type: "object",
+        required: [
+          "id",
+          "clientId",
+          "cost",
+          "paymentPlan",
+          "description",
+          "createdAt",
+          "updatedAt",
+          "owed",
+        ],
+      },
+      ware: {
+        type: "object",
+        required: [
+          "id",
+          "name",
+          "type",
+          "tags",
+          "stock",
+          "cost",
+          "createdAt",
+          "updatedAt",
+        ],
+      },
+    },
   }
 
   const waresticketSchema = {
@@ -58,24 +94,28 @@ describe.only("WaresTickets Routes", function () {
     await stopWebServer()
   })
 
-  describe.only("Get /:waresticketId", function () {
+  describe("Get /:waresticketId", function () {
     it("When an existing waresticket id is given, Then the response is the waresticket", async function () {
-      const waresticketId = Math.ceil(Math.random() * 3)
+      const [wareId, ticketId] = [
+        [3, 1],
+        [1, 2],
+      ][Math.floor(Math.random() * 2)]
 
       const { status, data } = await client.get(
-        "/warestickets/" + waresticketId,
+        `/warestickets/${wareId}/${ticketId}`,
         setHeaders
       )
-      console.log(data)
+
       expect(status).to.equal(OK)
       expect(data).to.be.jsonSchema(waresticketSchema)
     })
 
     it("When an non-existing waresticket id is given, Then the response is not found #paramWaresTicketId", async function () {
-      const waresticketId = Math.ceil(Math.random() * 10) + 3
+      const wareId = Math.ceil(Math.random() * 10) + 3
+      const ticketId = Math.floor(Math.random() * 3) + 3
 
       const { status, data } = await client.get(
-        "/warestickets/" + waresticketId,
+        `/warestickets/${wareId}/${ticketId}`,
         setHeaders
       )
 
@@ -84,10 +124,11 @@ describe.only("WaresTickets Routes", function () {
     })
 
     it("When waresticket id given is not an integer, Then the response is not found #integerValidator #paramWaresTicketId", async function () {
-      const waresticketId = "string"
+      const wareId = "string"
+      const ticketId = 2
 
       const { status, data } = await client.get(
-        "/warestickets/" + waresticketId,
+        `/warestickets/${wareId}/${ticketId}`,
         setHeaders
       )
 
@@ -97,7 +138,64 @@ describe.only("WaresTickets Routes", function () {
   })
 
   describe("Get /", function () {
-    const allWaresTickets = []
+    const allWaresTickets = [
+      {
+        wareId: 1,
+        ticketId: 2,
+        amount: 1,
+        returned: 0,
+        createdAt: "2024-11-11T00:00:00.000Z",
+        updatedAt: "2024-11-11T00:00:00.000Z",
+        ticket: {
+          id: 2,
+          clientId: 2,
+          cost: 155,
+          paymentPlan: "weekly",
+          description: null,
+          createdAt: "2024-11-11T00:00:00.000Z",
+          updatedAt: "2024-11-11T00:00:00.000Z",
+          owed: 0,
+        },
+        ware: {
+          id: 1,
+          name: "Loewe 001 Woman Perfume",
+          type: "perfume",
+          tags: ["women", "1-pc"],
+          stock: 1,
+          cost: 155,
+          createdAt: "2024-11-11T00:00:00.000Z",
+          updatedAt: "2024-11-11T00:00:00.000Z",
+        },
+      },
+      {
+        wareId: 3,
+        ticketId: 1,
+        amount: 1,
+        returned: 0,
+        createdAt: "2024-11-11T00:00:00.000Z",
+        updatedAt: "2024-11-11T00:00:00.000Z",
+        ticket: {
+          id: 1,
+          clientId: 1,
+          cost: 450,
+          paymentPlan: "biweekly",
+          description: null,
+          createdAt: "2024-11-11T00:00:00.000Z",
+          updatedAt: "2024-11-11T00:00:00.000Z",
+          owed: 300,
+        },
+        ware: {
+          id: 3,
+          name: "The Leather Medium Tote Bag",
+          type: "bag",
+          tags: ["women"],
+          stock: 2,
+          cost: 450,
+          createdAt: "2024-11-11T00:00:00.000Z",
+          updatedAt: "2024-11-11T00:00:00.000Z",
+        },
+      },
+    ]
 
     async function getWaresTicketsIt(
       requestBody,
@@ -110,7 +208,10 @@ describe.only("WaresTickets Routes", function () {
       const config = structuredClone(setHeaders)
       config.data = requestBody
 
-      const { status, data: warestickets } = await client.get("/warestickets", config)
+      const { status, data: warestickets } = await client.get(
+        "/warestickets",
+        config
+      )
 
       if (isPrinted) {
         console.log("[")
@@ -126,11 +227,30 @@ describe.only("WaresTickets Routes", function () {
     }
 
     it("When no inputs is provided, Then default query search is returned ", async function () {
-      await getWaresTicketsIt({}, allWaresTickets, true)
+      await getWaresTicketsIt({}, allWaresTickets)
+    })
+
+    it("When ware id is the only input, Then response is all orders with the same ware id", async function () {
+      await getWaresTicketsIt({ wareId: 1 }, allWaresTickets[0])
+    })
+
+    it("When ticket id is the only input, Then response is all orders with the same ticket id", async function () {
+      await getWaresTicketsIt({ ticketId: 1 }, allWaresTickets[1])
+    })
+
+    it("When amount is the only input, Then response is all orders with the same amount of a ware sold on the ticket", async function () {
+      await getWaresTicketsIt({ amount: 5 })
+    })
+
+    it("When returned is the only input, Then response is all orders with the same number of returned wares that are the same type of ware on the ticket", async function () {
+      await getWaresTicketsIt({ returned: 0 }, allWaresTickets)
     })
 
     it("When a created at date is given, Then response is all warestickets within that same month and year", async function () {
-      await getWaresTicketsIt({ createdAt: new Date("2024-11-11") }, allWaresTickets)
+      await getWaresTicketsIt(
+        { createdAt: new Date("2024-11-11") },
+        allWaresTickets
+      )
     })
 
     it("When a updated at date is given, Then response is all warestickets within that same month and year", async function () {
@@ -139,15 +259,27 @@ describe.only("WaresTickets Routes", function () {
 
     it("When multiple inputs are given, Then response is all warestickets that satisfy the input comparisons", async function () {
       await getWaresTicketsIt(
-        { createdAt: "2024-11-11", updatedAt: "2024-12-11" },
-        allWaresTickets
+        {
+          wareId: 3,
+          ticketId: 1,
+          amount: 1,
+          returned: 0,
+          createdAt: "2024-11-11",
+          updatedAt: "2024-11-11",
+        },
+        allWaresTickets[1]
       )
     })
   })
 
   describe("Post /", function () {
     it("When merchant inputs required values, Then waresticket is created ", async function () {
-      const requestBody = {}
+      const requestBody = {
+        wareId: [2, 4][Math.floor(Math.random() * 2)],
+        ticketId: Math.ceil(Math.random() * 2),
+        amount: Math.ceil(Math.random() * 3),
+        returned: Math.ceil(Math.random() * 2),
+      }
 
       const { status, data } = await client.post(
         "/warestickets",
@@ -174,11 +306,14 @@ describe.only("WaresTickets Routes", function () {
 
   describe("Put /:waresticketId", function () {
     it("When there are no inputs, Then response is bad request", async function () {
-      const waresticketId = Math.ceil(Math.random() * 3)
+      const [wareId, ticketId] = [
+        [3, 1],
+        [1, 2],
+      ][Math.floor(Math.random() * 2)]
       const requestBody = {}
 
       const { status, data } = await client.put(
-        "/warestickets/" + waresticketId,
+        `/warestickets/${wareId}/${ticketId}`,
         requestBody,
         setHeaders
       )
@@ -188,29 +323,42 @@ describe.only("WaresTickets Routes", function () {
     })
 
     it("When inputs are given, Then waresticket has the respective information updated", async function () {
-      const waresticketBeforeCreated = await models.WaresTickets.create({})
+      const [wareId, ticketId] = [
+        [2, 4][Math.floor(Math.random() * 2)],
+        Math.ceil(Math.random() * 2),
+      ]
+      const waresticketBeforeCreated = await models.WaresTickets.create({
+        wareId,
+        ticketId,
+        amount: Math.ceil(Math.random() * 3),
+        returned: Math.ceil(Math.random() * 2),
+      })
       const waresticketBefore = waresticketBeforeCreated.dataValues
-      const waresticketId = waresticketBefore.id
-      const requestBody = {}
+      const requestBody = {
+        amount: Math.ceil(Math.random() * 3),
+        returned: Math.ceil(Math.random() * 2),
+      }
 
       const { status, data } = await client.put(
-        "/warestickets/" + waresticketId,
+        `/warestickets/${wareId}/${ticketId}`,
         requestBody,
         setHeaders
       )
 
       const waresticketAfterSearched = await models.WaresTickets.findOne({
-        where: { id: waresticketId },
+        where: { wareId, ticketId },
       })
       const waresticketAfter = waresticketAfterSearched.dataValues
       const waresticketDeleted = await models.WaresTickets.destroy({
-        where: { id: waresticketId },
+        where: { wareId, ticketId },
       })
 
       expect(status).to.equal(OK)
       expect(data)
         .to.include.string(preMerchantMsg)
-        .and.string(` waresticket with id = ${waresticketId} was updated`)
+        .and.string(
+          ` waresticket with ware id = ${wareId} and ticket id = ${ticketId} was updated`
+        )
       expect(waresticketAfter).to.include(requestBody)
       expect(new Date(waresticketBefore.updatedAt)).to.be.beforeTime(
         new Date(waresticketAfter.updatedAt)
@@ -221,25 +369,91 @@ describe.only("WaresTickets Routes", function () {
 
   describe("Delete /:waresticketId", function () {
     it("When taget waresticket id exists, Then respective waresticket is deleted ", async function () {
-      const waresticketCreated = await models.WaresTickets.create({})
-      const newWaresTicket = waresticketCreated.dataValues
-      const waresticketId = newWaresTicket.id
+      const [wareId, ticketId] = [
+        [2, 4][Math.floor(Math.random() * 2)],
+        Math.ceil(Math.random() * 2),
+      ]
+      await models.WaresTickets.create({
+        wareId,
+        ticketId,
+        amount: Math.ceil(Math.random() * 3),
+        returned: Math.ceil(Math.random() * 2),
+      })
 
       const { status, data } = await client.delete(
-        "/warestickets/" + waresticketId,
+        `/warestickets/${wareId}/${ticketId}`,
         setHeaders
       )
 
       const afterWaresTicketSearched = await models.WaresTickets.findOne({
-        where: { id: waresticketId },
+        where: { wareId, ticketId },
       })
 
       expect(status).to.equal(OK)
       expect(data)
         .to.include.string(preMerchantMsg)
         .and.string(
-          ` has deleted a waresticket with id = ${waresticketId} and fullname = ${newWaresTicket.fullname}.`
+          ` has deleted a waresticket with ware id = ${wareId} and ticket id = ${ticketId}.`
         )
+      expect(afterWaresTicketSearched).to.equal(null)
+    })
+  })
+
+  describe("Delete /", function () {
+    it("When taget ticket id is not an integer, Then response is bad request ", async function () {
+      const config = structuredClone(setHeaders)
+      config.data = { ticketId: "string" }
+
+      const { status, data } = await client.delete("/warestickets/", config)
+
+      expect(status).to.equal(BAD_REQUEST)
+      expect(data).to.equal("Bad input request.")
+    })
+
+    it("When taget ticket id does not exists, Then response is not found ", async function () {
+      const config = structuredClone(setHeaders)
+      config.data = { ticketId: Math.ceil(Math.random() * 5) + 5 }
+
+      const { status, data } = await client.delete("/warestickets/", config)
+
+      expect(status).to.equal(NOT_FOUND)
+      expect(data).to.equal("Ticket not found.")
+    })
+
+    it("When taget ticket id exists, Then respective warestickets are deleted ", async function () {
+      const newTicketCreated = await models.Tickets.create({
+        clientId: 3,
+        cost: Math.ceil(Math.random() * 250) + 500,
+        paymentPlan: "biweekly",
+        description: null,
+      })
+      const newTicket = newTicketCreated.dataValues
+      const ticketId = newTicket.id
+      await models.WaresTickets.create({
+        wareId: Math.ceil(Math.random() * 2),
+        ticketId,
+        amount: Math.ceil(Math.random() * 3),
+        returned: Math.ceil(Math.random() * 2),
+      })
+      await models.WaresTickets.create({
+        wareId: Math.ceil(Math.random() * 2) + 2,
+        ticketId,
+        amount: Math.ceil(Math.random() * 3),
+        returned: Math.ceil(Math.random() * 2),
+      })
+      const config = structuredClone(setHeaders)
+      config.data = { ticketId }
+
+      const { status, data } = await client.delete("/warestickets/", config)
+
+      const afterWaresTicketSearched = await models.WaresTickets.findOne({
+        where: { ticketId },
+      })
+
+      expect(status).to.equal(OK)
+      expect(data)
+        .to.include.string(preMerchantMsg)
+        .and.string(` has deleted a waresticket with ticket id = ${ticketId}.`)
       expect(afterWaresTicketSearched).to.equal(null)
     })
   })

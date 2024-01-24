@@ -20,6 +20,7 @@ exports.paramWareId = async (req, res, next, wareId) => {
 
 exports.paramTicketId = async (req, res, next, ticketId) => {
   const merchant = req.session.merchant
+  const wareId = req.wareId
 
   try {
     await integerValidator("ticketId", true).run(req)
@@ -27,13 +28,14 @@ exports.paramTicketId = async (req, res, next, ticketId) => {
     validationPerusal(req)
 
     const searched = await models.WaresTickets.findOne({
-      where: { id: waresticketId },
+      where: { ticketId, wareId },
       ...findWaresTicketQuery,
     })
 
     if (!searched) {
       throw new Api404Error(
-        merchant.preMsg + ` target waresticket ${waresticketId} not found.`,
+        merchant.preMsg +
+          ` target waresticket with ware id = ${wareId} and ticket id = ${ticketId} not found.`,
         "WaresTicket not found."
       )
     }
@@ -74,7 +76,7 @@ exports.postWaresTicket = async (req, res, next) => {
 
   try {
     const { afterMsg, inputsObject: newWaresTicket } =
-      await parseWaresTicketInputs(req, true)
+      await parseWaresTicketInputs(req)
 
     const created = await models.WaresTickets.create(newWaresTicket)
 
@@ -93,12 +95,11 @@ exports.postWaresTicket = async (req, res, next) => {
 
 exports.putWaresTicket = async (req, res, next) => {
   const merchant = req.session.merchant
-  const targetWaresTicket = req.targetWaresTicket
+  const { wareId, ticketId } = req.targetWaresTicket
 
   try {
     const { afterMsg, inputsObject: newValues } = await parseWaresTicketInputs(
-      req,
-      true
+      req
     )
 
     if (JSON.stringify(newValues) === "{}") {
@@ -109,7 +110,7 @@ exports.putWaresTicket = async (req, res, next) => {
     }
 
     const updated = await models.WaresTickets.update(newValues, {
-      where: { id: targetWaresTicket.id },
+      where: { wareId, ticketId },
     })
 
     if (!updated) {
@@ -121,7 +122,7 @@ exports.putWaresTicket = async (req, res, next) => {
 
     res.send(
       merchant.preMsg +
-        ` waresticket with id = ${targetWaresTicket.id} was updated` +
+        ` waresticket with ware id = ${wareId} and ticket id = ${ticketId} was updated` +
         afterMsg
     )
   } catch (err) {
@@ -131,24 +132,64 @@ exports.putWaresTicket = async (req, res, next) => {
 
 exports.deleteWaresTicket = async (req, res, next) => {
   const merchant = req.session.merchant
-  const targetWaresTicket = req.targetWaresTicket
+  const { wareId, ticketId } = req.targetWaresTicket
 
   try {
     const deleted = await models.WaresTickets.destroy({
-      where: { id: targetWaresTicket.id },
+      where: { wareId, ticketId },
     })
 
     if (!deleted) {
       throw new Api500Error(
         merchant.preMsg +
-          ` delete waresticket query did not work with waresticket id = ${targetWaresTicket.id}`,
+          ` delete waresticket query did not work with ware id = ${wareId} and ticket id = ${ticketId}.`,
         "Internal server query error."
       )
     }
 
     res.send(
       merchant.preMsg +
-        ` has deleted a waresticket with id = ${targetWaresTicket.id} and fullname = ${targetWaresTicket.fullname}.`
+        ` has deleted a waresticket with ware id = ${wareId} and ticket id = ${ticketId}.`
+    )
+  } catch (err) {
+    next(err)
+  }
+}
+
+exports.deleteWaresTickets = async (req, res, next) => {
+  const merchant = req.session.merchant
+
+  try {
+    const {
+      inputsObject: { ticketId },
+    } = await parseWaresTicketInputs(req)
+
+    const ticketSearched = await models.Tickets.findOne({
+      where: { id: ticketId },
+    })
+
+    if (!ticketSearched) {
+      throw new Api404Error(
+        merchant.preMsg + ` order does not exist with ticket id = ${ticketId}.`,
+        "Ticket not found."
+      )
+    }
+
+    const deleted = await models.WaresTickets.destroy({
+      where: { ticketId },
+    })
+
+    if (!deleted) {
+      throw new Api500Error(
+        merchant.preMsg +
+          ` delete waresticket query did not work with ticket id = ${ticketId}.`,
+        "Internal server query error."
+      )
+    }
+
+    res.send(
+      merchant.preMsg +
+        ` has deleted a waresticket with ticket id = ${ticketId}.`
     )
   } catch (err) {
     next(err)

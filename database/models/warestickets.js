@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       WaresTickets.belongsTo(models.Wares, {
         foreignKey: "wareId",
-        as: "ware sold",
+        as: "ware",
         onDelete: "CASCADE",
       })
 

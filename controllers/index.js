@@ -12,6 +12,6 @@ module.exports = {
   ticketsControllers: require("./tickets"),
   transactionsControllers: require("./transactions"),
   waresControllers: require("./wares"),
-  waresTicketsControllers: require("./warestickets"),
+  waresticketsControllers: require("./warestickets"),
   worksControllers: require("./works"),
 }

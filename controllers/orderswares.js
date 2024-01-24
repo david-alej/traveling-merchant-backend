@@ -96,7 +96,7 @@ exports.postOrdersWare = async (req, res, next) => {
 
 exports.putOrdersWare = async (req, res, next) => {
   const merchant = req.session.merchant
-  const targetOrdersWare = req.targetOrdersWare
+  const { orderId, wareId } = req.targetOrdersWare
 
   try {
     const { afterMsg, inputsObject: newValues } = await parseOrdersWareInputs(
@@ -112,8 +112,8 @@ exports.putOrdersWare = async (req, res, next) => {
 
     const updated = await models.OrdersWares.update(newValues, {
       where: {
-        orderId: targetOrdersWare.orderId,
-        wareId: targetOrdersWare.wareId,
+        orderId,
+        wareId,
       },
     })
 
@@ -126,7 +126,7 @@ exports.putOrdersWare = async (req, res, next) => {
 
     res.send(
       merchant.preMsg +
-        ` ordersware with order id = ${targetOrdersWare.orderId} and ware id of ${targetOrdersWare.wareId} was updated` +
+        ` ordersware with order id = ${orderId} and ware id of ${wareId} was updated` +
         afterMsg
     )
   } catch (err) {
@@ -136,13 +136,13 @@ exports.putOrdersWare = async (req, res, next) => {
 
 exports.deleteOrdersWare = async (req, res, next) => {
   const merchant = req.session.merchant
-  const targetOrdersWare = req.targetOrdersWare
+  const { orderId, wareId } = req.targetOrdersWare
 
   try {
     const deleted = await models.OrdersWares.destroy({
       where: {
-        orderId: targetOrdersWare.orderId,
-        wareId: targetOrdersWare.wareId,
+        orderId,
+        wareId,
       },
     })
 
@@ -155,7 +155,7 @@ exports.deleteOrdersWare = async (req, res, next) => {
 
     res.send(
       merchant.preMsg +
-        ` has deleted a ordersware with order id = ${targetOrdersWare.orderId} and ware id of ${targetOrdersWare.wareId}.`
+        ` has deleted a ordersware with order id = ${orderId} and ware id of ${wareId}.`
     )
   } catch (err) {
     next(err)
@@ -176,8 +176,8 @@ exports.deleteOrdersWares = async (req, res, next) => {
 
     if (!orderSearched) {
       throw new Api404Error(
-        merchant.preMsg + " order does not exist.",
-        "Oder not found."
+        merchant.preMsg + ` order does not exist with order id = ${orderId}.`,
+        "Order not found."
       )
     }
 
@@ -185,7 +185,8 @@ exports.deleteOrdersWares = async (req, res, next) => {
 
     if (!deleted) {
       throw new Api500Error(
-        merchant.preMsg + " delete ordersware query did not work.",
+        merchant.preMsg +
+          ` delete ordersware query did not work with order id = ${orderId}.`,
         "Internal server query error."
       )
     }
