@@ -9,6 +9,7 @@ const {
   preMerchantMsg,
   models,
   faker,
+  round,
 } = require("../common")
 
 const { OK, NOT_FOUND, BAD_REQUEST, CREATED } = httpStatusCodes
@@ -289,7 +290,7 @@ describe("OrdersWares Routes", function () {
           orderId === 1
             ? [2, 4][Math.floor(Math.random() * 2)]
             : Math.ceil(Math.random() * 4),
-        cost: Math.ceil(Math.random() * 750) + 250,
+        cost: round(Math.random() * 750) + 250,
         amount: Math.ceil(Math.random() * 3),
       }
 
@@ -335,7 +336,7 @@ describe("OrdersWares Routes", function () {
     it("When inputs are given, Then ordersware has the respective information updated", async function () {
       const newOrder = await models.Orders.create({
         providerId: Math.ceil(Math.random() * 4),
-        cost: Math.ceil(Math.random() * 300) + 500,
+        cost: round(Math.random() * 300) + 500,
         expectedAt: faker.date.future().toISOString(),
         actualAt: null,
       })
@@ -345,7 +346,7 @@ describe("OrdersWares Routes", function () {
       const newOrdersWare = {
         orderId,
         wareId,
-        cost: Math.ceil(Math.random() * 750) + 250,
+        cost: round(Math.random() * 750) + 250,
         amount: Math.ceil(Math.random() * 3),
       }
       const orderswareBeforeCreated = await models.OrdersWares.create(
@@ -353,7 +354,7 @@ describe("OrdersWares Routes", function () {
       )
       const orderswareBefore = orderswareBeforeCreated.dataValues
       const requestBody = {
-        cost: Math.ceil(Math.random() * 750) + 250,
+        cost: round(Math.random() * 750) + 250,
         amount: Math.ceil(Math.random() * 3) + 1,
         returned: 1,
       }
@@ -396,7 +397,7 @@ describe("OrdersWares Routes", function () {
     it("When taget ordersware id exists, Then respective ordersware is deleted ", async function () {
       const newOrder = await models.Orders.create({
         providerId: Math.ceil(Math.random() * 4),
-        cost: Math.ceil(Math.random() * 300) + 500,
+        cost: round(Math.random() * 300) + 500,
         expectedAt: faker.date.future().toISOString(),
         actualAt: null,
       })
@@ -405,7 +406,7 @@ describe("OrdersWares Routes", function () {
       await models.OrdersWares.create({
         orderId,
         wareId,
-        cost: Math.ceil(Math.random() * 750) + 250,
+        cost: round(Math.random() * 750) + 250,
         amount: Math.ceil(Math.random() * 3),
       })
 
@@ -432,7 +433,7 @@ describe("OrdersWares Routes", function () {
     it("When order id exists, Then all orderswares rows with respective order id are deleted ", async function () {
       const newOrder = await models.Orders.create({
         providerId: Math.ceil(Math.random() * 4),
-        cost: Math.ceil(Math.random() * 300) + 500,
+        cost: round(Math.random() * 300) + 500,
         expectedAt: faker.date.future().toISOString(),
         actualAt: null,
       })
@@ -440,13 +441,13 @@ describe("OrdersWares Routes", function () {
       await models.OrdersWares.create({
         orderId,
         wareId: Math.ceil(Math.random() * 2),
-        cost: Math.ceil(Math.random() * 750) + 250,
+        cost: round(Math.random() * 750) + 250,
         amount: Math.ceil(Math.random() * 3),
       })
       await models.OrdersWares.create({
         orderId,
         wareId: Math.ceil(Math.random() * 2) + 2,
-        cost: Math.ceil(Math.random() * 750) + 250,
+        cost: round(Math.random() * 750) + 250,
         amount: Math.ceil(Math.random() * 3),
       })
       const config = structuredClone(setHeaders)

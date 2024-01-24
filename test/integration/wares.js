@@ -8,6 +8,7 @@ const {
   merchantCredentials,
   preMerchantMsg,
   models,
+  round,
 } = require("../common")
 
 const { OK, NOT_FOUND, BAD_REQUEST, CREATED } = httpStatusCodes
@@ -362,7 +363,7 @@ describe("Wares Routes", function () {
         type: "perfume",
         tags,
         stock: Math.ceil(Math.random() * 2),
-        cost: Math.ceil(Math.random() * 30) + 90,
+        cost: round(Math.random() * 30) + 90,
       }
 
       const { status, data } = await client.post(
@@ -412,7 +413,7 @@ describe("Wares Routes", function () {
         type: "bracelet",
         tags,
         stock: Math.ceil(Math.random() * 2),
-        cost: Math.ceil(Math.random() * 4) + 48,
+        cost: round(Math.random() * 4) + 48,
       })
       const wareBefore = wareBeforeCreated.dataValues
       const wareId = wareBefore.id
@@ -421,7 +422,7 @@ describe("Wares Routes", function () {
         name: "Men's 4.0mm Solid Foxtail Chain Bracelet in Silver - 9.0\"",
         tags,
         stock: Math.ceil(Math.random() * 2) + 2,
-        cost: Math.ceil(Math.random() * 4) + 68,
+        cost: round(Math.random() * 4) + 68,
       }
 
       const { status, data } = await client.put(
@@ -459,7 +460,7 @@ describe("Wares Routes", function () {
         type: "bracelet",
         tags: ["women", "2-pc"],
         stock: Math.ceil(Math.random() * 2),
-        cost: Math.ceil(Math.random() * 4) + 48,
+        cost: round(Math.random() * 4) + 48,
       })
       const newWare = wareCreated.dataValues
       const wareId = newWare.id

@@ -8,11 +8,12 @@ const {
   merchantCredentials,
   preMerchantMsg,
   models,
+  round,
 } = require("../common")
 
 const { OK, NOT_FOUND, BAD_REQUEST, CREATED } = httpStatusCodes
 
-describe.only("Transactions Routes", function () {
+describe("Transactions Routes", function () {
   let client
   const setHeaders = { headers: {} }
   const transactionObject = {
@@ -263,7 +264,7 @@ describe.only("Transactions Routes", function () {
       const date = "2024-12-11"
       const requestBody = {
         ticketId: 2,
-        payment: Math.random() * 300,
+        payment: round(Math.random() * 300),
         paymentType: "venmo",
         date,
       }
@@ -311,7 +312,7 @@ describe.only("Transactions Routes", function () {
     it("When inputs are given, Then transaction has the respective information updated", async function () {
       const transactionBeforeCreated = await models.Transactions.create({
         ticketId: 1,
-        payment: Math.random() * 150,
+        payment: round(Math.random() * 150),
         paymentType: "cash",
         date: new Date("2025-01-02"),
       })
@@ -320,7 +321,7 @@ describe.only("Transactions Routes", function () {
       let date = "2025-01-02"
       const requestBody = {
         ticketId: 2,
-        payment: Math.random() * 150,
+        payment: round(Math.random() * 150),
         paymentType: "cash",
         date,
       }
@@ -358,7 +359,7 @@ describe.only("Transactions Routes", function () {
     it("When taget transaction id exists, Then respective transaction is deleted ", async function () {
       const transactionCreated = await models.Transactions.create({
         ticketId: 2,
-        payment: Math.random() * 150,
+        payment: round(Math.random() * 150),
         paymentType: "cash",
         date: new Date("2025-01-02"),
       })

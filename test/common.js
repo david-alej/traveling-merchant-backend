@@ -67,6 +67,10 @@ const fakerPhoneNumber = () => {
   return phoneNumber
 }
 
+const round = (number) => {
+  return Math.ceil(number * 100) / 100
+}
+
 module.exports = {
   axios: require("axios"),
   axiosConfig,
@@ -87,4 +91,5 @@ module.exports = {
     password: "nissiJire2",
   },
   models: require("../database/models"),
+  round,
 }

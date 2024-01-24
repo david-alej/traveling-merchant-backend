@@ -8,6 +8,7 @@ const {
   merchantCredentials,
   preMerchantMsg,
   models,
+  round,
 } = require("../common")
 
 const { OK, NOT_FOUND, BAD_REQUEST, CREATED } = httpStatusCodes
@@ -321,7 +322,7 @@ describe("Tickets Routes", function () {
 
   describe("Post /", function () {
     it("When merchant inputs required values, Then ticket is created ", async function () {
-      const requestBody = { clientId: 3, cost: 14, paymentPlan: "weekly" }
+      const requestBody = { clientId: 3, cost: 14.5, paymentPlan: "weekly" }
 
       const { status, data } = await client.post(
         "/tickets",
@@ -348,7 +349,7 @@ describe("Tickets Routes", function () {
 
   describe("Put /:ticketId", function () {
     it("When there are no inputs, Then response is bad request", async function () {
-      const ticketId = Math.ceil(Math.random() * 3)
+      const ticketId = Math.ceil(Math.random() * 2)
       const requestBody = {}
 
       const { status, data } = await client.put(
@@ -364,14 +365,14 @@ describe("Tickets Routes", function () {
     it("When inputs are given, Then ticket has the respective information updated", async function () {
       const ticketBeforeCreated = await models.Tickets.create({
         clientId: Math.ceil(Math.random() * 3),
-        cost: Math.ceil(Math.random() * 5) + 14,
+        cost: round(Math.random() * 5) + 14,
         paymentPlan: ["weekly", "biweekly"][Math.floor(Math.random() * 2)],
       })
       const ticketBefore = ticketBeforeCreated.dataValues
       const ticketId = ticketBefore.id
       const requestBody = {
         clientId: Math.ceil(Math.random() * 3),
-        cost: Math.ceil(Math.random() * 5) + 9,
+        cost: round(Math.random() * 5 + 9),
         paymentPlan: ["weekly", "lump-sum"][Math.floor(Math.random() * 2)],
       }
 
@@ -405,7 +406,7 @@ describe("Tickets Routes", function () {
     it("When taget ticket id exists, Then respective ticket is deleted ", async function () {
       const ticketCreated = await models.Tickets.create({
         clientId: Math.ceil(Math.random() * 3),
-        cost: Math.ceil(Math.random() * 50) + 170,
+        cost: round(Math.random() * 50) + 170,
         paymentPlan: ["monthly", "biweekly"][Math.floor(Math.random() * 2)],
       })
       const newTicket = ticketCreated.dataValues

@@ -8,6 +8,7 @@ const {
   merchantCredentials,
   preMerchantMsg,
   models,
+  round,
 } = require("../common")
 
 const { OK, NOT_FOUND, BAD_REQUEST, CREATED } = httpStatusCodes
@@ -254,7 +255,7 @@ describe("Orders Routes", function () {
     it("When merchant inputs required values, Then order is created ", async function () {
       const requestBody = {
         providerId: Math.ceil(Math.random() * 4),
-        cost: Math.ceil(Math.random() * 300) + 500,
+        cost: round(Math.random() * 300) + 500,
         expectedAt: "2025-02-02",
         actualAt: null,
       }
@@ -302,7 +303,7 @@ describe("Orders Routes", function () {
     it("When inputs are given, Then order has the respective information updated", async function () {
       const newOrder = {
         providerId: Math.ceil(Math.random() * 4),
-        cost: Math.ceil(Math.random() * 300) + 500,
+        cost: round(Math.random() * 300) + 500,
         expectedAt: "2025-02-02",
         actualAt: null,
       }
@@ -311,7 +312,7 @@ describe("Orders Routes", function () {
       const orderId = orderBefore.id
       const requestBody = {
         providerId: Math.ceil(Math.random() * 4),
-        cost: Math.ceil(Math.random() * 300) + 500,
+        cost: round(Math.random() * 300) + 500,
         expectedAt: "2025-02-03",
         actualAt: "2025-02-04",
       }
@@ -351,7 +352,7 @@ describe("Orders Routes", function () {
     it("When taget order id exists, Then respective order is deleted ", async function () {
       const orderCreated = await models.Orders.create({
         providerId: Math.ceil(Math.random() * 4),
-        cost: Math.ceil(Math.random() * 300) + 500,
+        cost: round(Math.random() * 300) + 500,
         expectedAt: "2025-01-02",
         actualAt: null,
       })
