@@ -8,7 +8,7 @@ module.exports = {
       [
         {
           ticketId: 1,
-          date: "2024-11-01T20:00:00.000Z",
+          paidAt: "2024-11-01T20:00:00.000Z",
           payment: 150,
           paymentType: "cash app",
           createdAt: new Date("2024-11-11"),
@@ -16,7 +16,7 @@ module.exports = {
         },
         {
           ticketId: 2,
-          date: "2024-11-01T20:00:00.000Z",
+          paidAt: "2024-11-01T20:00:00.000Z",
           payment: 75,
           paymentType: "cash",
           createdAt: new Date("2024-11-11"),
@@ -24,7 +24,7 @@ module.exports = {
         },
         {
           ticketId: 2,
-          date: "2024-11-08T20:00:00.000Z",
+          paidAt: "2024-11-08T20:00:00.000Z",
           payment: 80,
           paymentType: "cash",
           createdAt: new Date("2024-11-11"),

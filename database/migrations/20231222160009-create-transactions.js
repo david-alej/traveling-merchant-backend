@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      date: {
+      paidAt: {
         type: Sequelize.DATE,
         allowNull: false,
       },

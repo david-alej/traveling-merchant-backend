@@ -52,7 +52,7 @@ describe("Tickets Routes", function () {
           required: [
             "id",
             "ticketId",
-            "date",
+            "paidAt",
             "payment",
             "paymentType",
             "createdAt",
@@ -177,7 +177,7 @@ describe("Tickets Routes", function () {
           {
             id: 3,
             ticketId: 2,
-            date: "2024-11-08T20:00:00.000Z",
+            paidAt: "2024-11-08T20:00:00.000Z",
             payment: 80,
             paymentType: "cash",
             createdAt: "2024-11-11T00:00:00.000Z",
@@ -186,7 +186,7 @@ describe("Tickets Routes", function () {
           {
             id: 2,
             ticketId: 2,
-            date: "2024-11-01T20:00:00.000Z",
+            paidAt: "2024-11-01T20:00:00.000Z",
             payment: 75,
             paymentType: "cash",
             createdAt: "2024-11-11T00:00:00.000Z",
@@ -227,7 +227,7 @@ describe("Tickets Routes", function () {
           {
             id: 1,
             ticketId: 1,
-            date: "2024-11-01T20:00:00.000Z",
+            paidAt: "2024-11-01T20:00:00.000Z",
             payment: 150,
             paymentType: "cash app",
             createdAt: "2024-11-11T00:00:00.000Z",

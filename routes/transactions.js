@@ -19,7 +19,7 @@ transactionsRouter.get(
     integerValidator("ticketId", false, true),
     floatValidator("payment", false, true),
     textValidator("paymentType", false, true),
-    dateValidator("date", false, true),
+    dateValidator("paidAt", false, true),
     dateValidator("createdAt", false, true),
     dateValidator("updatedAt", false, true),
   ],
@@ -32,7 +32,7 @@ transactionsRouter.post(
     integerValidator("ticketId"),
     floatValidator("payment"),
     textValidator("paymentType"),
-    dateValidator("date"),
+    dateValidator("paidAt"),
   ],
   transactionsControllers.postTransaction
 )
@@ -43,7 +43,7 @@ transactionsRouter.put(
     integerValidator("ticketId", false, true),
     floatValidator("payment", false, true),
     textValidator("paymentType", false, true),
-    dateValidator("date", false, true),
+    dateValidator("paidAt", false, true),
   ],
   transactionsControllers.putTransaction
 )

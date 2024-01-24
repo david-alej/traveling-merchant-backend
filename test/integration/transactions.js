@@ -21,7 +21,7 @@ describe("Transactions Routes", function () {
     required: [
       "id",
       "ticketId",
-      "date",
+      "paidAt",
       "payment",
       "paymentType",
       "createdAt",
@@ -125,7 +125,7 @@ describe("Transactions Routes", function () {
       {
         id: 3,
         ticketId: 2,
-        date: "2024-11-08T20:00:00.000Z",
+        paidAt: "2024-11-08T20:00:00.000Z",
         payment: 80,
         paymentType: "cash",
         createdAt: "2024-11-11T00:00:00.000Z",
@@ -144,7 +144,7 @@ describe("Transactions Routes", function () {
       {
         id: 2,
         ticketId: 2,
-        date: "2024-11-01T20:00:00.000Z",
+        paidAt: "2024-11-01T20:00:00.000Z",
         payment: 75,
         paymentType: "cash",
         createdAt: "2024-11-11T00:00:00.000Z",
@@ -163,7 +163,7 @@ describe("Transactions Routes", function () {
       {
         id: 1,
         ticketId: 1,
-        date: "2024-11-01T20:00:00.000Z",
+        paidAt: "2024-11-01T20:00:00.000Z",
         payment: 150,
         paymentType: "cash app",
         createdAt: "2024-11-11T00:00:00.000Z",
@@ -230,7 +230,10 @@ describe("Transactions Routes", function () {
     })
 
     it("When a date is given, Then response is all transactions within that same month and year", async function () {
-      await getTransactionsIt({ date: new Date("2024-11-8") }, allTransactions)
+      await getTransactionsIt(
+        { paidAt: new Date("2024-11-8") },
+        allTransactions
+      )
     })
 
     it("When a created at date is given, Then response is all transactions within that same month and year", async function () {
@@ -248,7 +251,7 @@ describe("Transactions Routes", function () {
       await getTransactionsIt(
         {
           ticketId: 1,
-          date: "2024-11-02",
+          paidAt: "2024-11-02",
           payment: 150,
           paymentType: "cash app",
           createdAt: "2024-11-11",
@@ -261,12 +264,12 @@ describe("Transactions Routes", function () {
 
   describe("Post /", function () {
     it("When merchant inputs required values, Then transaction is created ", async function () {
-      const date = "2024-12-11"
+      const paidAt = "2024-12-11"
       const requestBody = {
         ticketId: 2,
         payment: round(Math.random() * 300),
         paymentType: "venmo",
-        date,
+        paidAt,
       }
 
       const { status, data } = await client.post(
@@ -275,7 +278,7 @@ describe("Transactions Routes", function () {
         setHeaders
       )
 
-      delete requestBody.date
+      delete requestBody.paidAt
       const newTransactionSearched = await models.Transactions.findOne({
         where: requestBody,
       })
@@ -289,7 +292,7 @@ describe("Transactions Routes", function () {
         .to.include.string(preMerchantMsg)
         .and.string(" transaction has been created.")
       expect(newTransaction).to.include(requestBody)
-      expect(new Date(date)).to.equalDate(new Date(newTransaction.date))
+      expect(new Date(paidAt)).to.equalDate(new Date(newTransaction.paidAt))
       expect(newTransactionDeleted).to.equal(1)
     })
   })
@@ -314,16 +317,16 @@ describe("Transactions Routes", function () {
         ticketId: 1,
         payment: round(Math.random() * 150),
         paymentType: "cash",
-        date: new Date("2025-01-02"),
+        paidAt: new Date("2025-01-02"),
       })
       const transactionBefore = transactionBeforeCreated.dataValues
       const transactionId = transactionBefore.id
-      let date = "2025-01-02"
+      let paidAt = "2025-01-02"
       const requestBody = {
         ticketId: 2,
         payment: round(Math.random() * 150),
         paymentType: "cash",
-        date,
+        paidAt,
       }
 
       const { status, data } = await client.put(
@@ -332,8 +335,8 @@ describe("Transactions Routes", function () {
         setHeaders
       )
 
-      date = new Date(date)
-      delete requestBody.date
+      paidAt = new Date(paidAt)
+      delete requestBody.paidAt
       const transactionAfterSearched = await models.Transactions.findOne({
         where: { id: transactionId },
       })
@@ -350,7 +353,7 @@ describe("Transactions Routes", function () {
       expect(new Date(transactionBefore.updatedAt)).to.be.beforeTime(
         new Date(transactionAfter.updatedAt)
       )
-      expect(date).to.be.equalTime(transactionAfter.date)
+      expect(paidAt).to.be.equalTime(transactionAfter.paidAt)
       expect(transactionDeleted).to.equal(1)
     })
   })
@@ -361,7 +364,7 @@ describe("Transactions Routes", function () {
         ticketId: 2,
         payment: round(Math.random() * 150),
         paymentType: "cash",
-        date: new Date("2025-01-02"),
+        paidAt: new Date("2025-01-02"),
       })
       const newTransaction = transactionCreated.dataValues
       const transactionId = newTransaction.id

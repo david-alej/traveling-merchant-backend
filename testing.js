@@ -3,4 +3,4 @@
 // console.log(crypto.randomBytes(48).toString("base64url"))
 // "cross-env NODE_ENV=test nyc --reporter=html mocha ./test/main.js --testTimeout=10000 --exit"
 
-console.log(Math.ceil(Math.random() * 10 * 100) / 100)
+console.log(!isNaN(Date.parse("0000")))
