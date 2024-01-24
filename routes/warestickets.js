@@ -17,7 +17,7 @@ waresticketsRouter.get(
     integerValidator("wareId", false, true),
     integerValidator("ticketId", false, true),
     integerValidator("amount", false, true),
-    integerValidator("returned", false, true),
+    integerValidator("returned", false, true, false),
     dateValidator("createdAt", false, true),
     dateValidator("updatedAt", false, true),
   ],
@@ -30,7 +30,7 @@ waresticketsRouter.post(
     integerValidator("wareId"),
     integerValidator("ticketId"),
     integerValidator("amount"),
-    integerValidator("returned", false, true),
+    integerValidator("returned", false, true, false),
   ],
   waresticketsControllers.postWaresTicket
 )
@@ -39,7 +39,7 @@ waresticketsRouter.put(
   "/:wareId/:ticketId",
   [
     integerValidator("amount", false, true),
-    integerValidator("returned", false, true),
+    integerValidator("returned", false, true, false),
   ],
   waresticketsControllers.putWaresTicket
 )

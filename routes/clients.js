@@ -37,7 +37,7 @@ clientsRouter.put(
     textValidator("fullname", false, true),
     textValidator("address", false, true),
     phoneNumberValidator("phoneNumber", false, true),
-    integerValidator("relationship", false, true),
+    integerValidator("relationship", false, true, false),
   ],
   clientsControllers.putClient
 )

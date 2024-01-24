@@ -82,20 +82,62 @@ const basicValidator = (input, inputIsParam = false, optional = false) => {
   return { head, inputName }
 }
 
-const integerValidator = (input, inputIsParam = false, optional = false) => {
+const integerValidator = (
+  input,
+  inputIsParam = false,
+  optional = false,
+  excludeZero = true
+) => {
   const { head, inputName } = basicValidator(input, inputIsParam, optional)
 
-  return head.isInt().withMessage(inputName + " must be an integer.")
+  return head
+    .isInt()
+    .withMessage(inputName + " must be an integer.")
+    .custom((int) => {
+      let errorMsg = " must be greater than or equal to zero."
+      let intIsZero = false
+
+      if (excludeZero) {
+        intIsZero = int === 0
+        errorMsg = " must be greater than zero."
+      }
+
+      if (int < 0 || intIsZero) {
+        throw new Error(inputName + errorMsg)
+      }
+
+      return true
+    })
 }
 
 exports.integerValidator = integerValidator
 
-const floatValidator = (input, inputIsParam = false, optional = false) => {
+const floatValidator = (
+  input,
+  inputIsParam = false,
+  optional = false,
+  excludeZero = true
+) => {
   const { head, inputName } = basicValidator(input, inputIsParam, optional)
 
   return head
     .isFloat({ min: 0 })
     .withMessage(inputName + " must be an float number.")
+    .custom((float) => {
+      let errorMsg = " must be greater than or equal to zero."
+      let floatIsZero = false
+
+      if (excludeZero) {
+        floatIsZero = float === 0
+        errorMsg = " must be greater than zero."
+      }
+
+      if (float < 0 || floatIsZero) {
+        throw new Error(inputName + errorMsg)
+      }
+
+      return true
+    })
 }
 
 exports.floatValidator = floatValidator

@@ -18,7 +18,7 @@ waresRouter.get(
     textValidator("name", false, true),
     textValidator("type", false, true),
     arrayTextValidator("tags", false, true),
-    integerValidator("stock", false, true),
+    integerValidator("stock", false, true, false),
     floatValidator("cost", false, true),
     dateValidator("createdAt", false, true),
     dateValidator("updatedAt", false, true),
@@ -32,7 +32,7 @@ waresRouter.post(
     textValidator("name"),
     textValidator("type"),
     arrayTextValidator("tags", false, true),
-    integerValidator("stock"),
+    integerValidator("stock", false, false, false),
     floatValidator("cost"),
   ],
   waresControllers.postWare
@@ -44,7 +44,7 @@ waresRouter.put(
     textValidator("name", false, true),
     textValidator("type", false, true),
     arrayTextValidator("tags", false, true),
-    integerValidator("stock", false, true),
+    integerValidator("stock", false, true, false),
     floatValidator("cost", false, true),
   ],
   waresControllers.putWare
