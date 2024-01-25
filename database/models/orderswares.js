@@ -12,13 +12,11 @@ module.exports = (sequelize, DataTypes) => {
       OrdersWares.belongsTo(models.Orders, {
         foreignKey: "orderId",
         as: "order",
-        onDelete: "CASCADE",
       })
 
       OrdersWares.belongsTo(models.Wares, {
         foreignKey: "wareId",
         as: "wareBought",
-        onDelete: "CASCADE",
       })
     }
   }

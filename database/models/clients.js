@@ -12,13 +12,11 @@ module.exports = (sequelize, DataTypes) => {
       Clients.belongsTo(models.Works, {
         foreignKey: "workId",
         as: "work",
-        onDelete: "CASCADE",
       })
 
       Clients.hasMany(models.Tickets, {
         foreignKey: "clientId",
         as: "tickets",
-        onDelete: "CASCADE",
       })
     }
   }

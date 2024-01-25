@@ -221,6 +221,40 @@ const arrayTextValidator = (input, inputIsParam = false, optional = false) => {
 
 exports.arrayTextValidator = arrayTextValidator
 
+const arrayObjectValidator = (
+  input,
+  inputIsParam = false,
+  optional = false
+) => {
+  const { head, inputName } = basicValidator(input, inputIsParam, optional)
+
+  return head
+    .isArray({ max: 50, min: 1 })
+    .withMessage(
+      inputName +
+        " array must have at least one element and less than 50 elements."
+    )
+    .custom((array) => {
+      const arrayHasAllStringElements = array.every((element) => {
+        return (
+          typeof element === "object" &&
+          !Array.isArray(element) &&
+          element !== null
+        )
+      })
+
+      if (!arrayHasAllStringElements) {
+        throw new Error(
+          ` the given ${inputName} = ${array} is not an array that is made of all string objects.`
+        )
+      }
+
+      return true
+    })
+}
+
+exports.arrayObjectValidator = arrayObjectValidator
+
 const dateValidator = (input, inputIsParam = false, optional = false) => {
   const { head, inputName } = basicValidator(input, inputIsParam, optional)
 

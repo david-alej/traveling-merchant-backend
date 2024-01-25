@@ -18,7 +18,6 @@ module.exports = (sequelize, DataTypes) => {
       Tickets.belongsTo(models.Clients, {
         foreignKey: "clientId",
         as: "client",
-        onDelete: "CASCADE",
       })
 
       Tickets.hasMany(models.WaresTickets, {

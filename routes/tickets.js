@@ -1,6 +1,7 @@
 const ticketsRouter = require("express").Router()
 const { ticketsControllers } = require("../controllers/index")
 const {
+  arrayObjectValidator,
   booleanValidator,
   integerValidator,
   textValidator,
@@ -30,10 +31,12 @@ ticketsRouter.post(
   "/",
   [
     integerValidator("clientId"),
-    floatValidator("cost"),
+    floatValidator("cost", false, true),
     textValidator("paymentPlan"),
     textValidator("description", false, true),
+    arrayObjectValidator("waresTickets"),
   ],
+  ticketsControllers.postValidation,
   ticketsControllers.postTicket
 )
 

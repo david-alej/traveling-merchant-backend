@@ -57,14 +57,85 @@ exports.getTickets = async (req, res, next) => {
   }
 }
 
+exports.postValidation = async (req, res, next) => {
+  const { waresTickets } = req.body
+
+  if (!Array.isArray(waresTickets)) return next()
+
+  for (let i = 0; i < waresTickets.length; i++) {
+    await integerValidator(`waresTickets[${i}].wareId`).run(req)
+    await integerValidator(`waresTickets[${i}].amount`).run(req)
+    await integerValidator(
+      `waresTickets[${i}].returned`,
+      false,
+      true,
+      false
+    ).run(req)
+  }
+
+  next()
+}
+
 exports.postTicket = async (req, res, next) => {
   const merchant = req.session.merchant
 
   try {
-    const { afterMsg, inputsObject: newTicket } = await parseTicketInputs(
-      req,
-      true
+    const { afterMsg, inputsObject } = await parseTicketInputs(req, true)
+
+    const newWaresTickets = inputsObject.waresTickets
+    delete inputsObject.waresTickets
+
+    const wareIds = newWaresTickets.map((waresTickets) => {
+      return waresTickets.wareId
+    })
+
+    const duplicateWareIds = wareIds.filter(
+      (item, index) => wareIds.indexOf(item) !== index
     )
+
+    if (duplicateWareIds.length !== 0) {
+      throw new Api400Error(
+        merchant.preMsg +
+          ` merchant has input the following duplicate ware ids, ${duplicateWareIds}, in the waresTickets array.`,
+        "Bad input request."
+      )
+    }
+
+    const waresSearched = await models.Wares.findAll({ where: { id: wareIds } })
+
+    const wares = waresSearched.map((ware) => ware.dataValues)
+
+    if (wares.length !== wareIds.length) {
+      const searchedWareIds = wares.map((ware) => {
+        return ware.id
+      })
+
+      const notFoundWareIds = wareIds.filter((wareId) => {
+        return !searchedWareIds.includes(wareId)
+      })
+
+      throw new Api404Error(
+        merchant.preMsg +
+          ` the wares with the following ids, ${notFoundWareIds}, were not found.`,
+        "Ware not found."
+      )
+    }
+
+    const newTicket = inputsObject
+
+    if (!newTicket.cost) {
+      let totalCost = 0
+
+      newWaresTickets.forEach((waresTicket) => {
+        for (const ware of wares) {
+          if (ware.id === waresTicket.wareId) {
+            totalCost += ware.cost * waresTicket.amount
+          }
+        }
+      })
+
+      newTicket.cost = totalCost
+    }
 
     const created = await models.Tickets.create(newTicket)
 
@@ -73,6 +144,28 @@ exports.postTicket = async (req, res, next) => {
         merchant.preMsg + " create ticket query did not work" + afterMsg,
         "Internal server query error."
       )
+    }
+
+    const ticketId = created.dataValues.id
+
+    for (const newWaresTicket of newWaresTickets) {
+      const waresTicketCreated = await models.WaresTickets.create({
+        ticketId,
+        ...newWaresTicket,
+      })
+
+      if (!waresTicketCreated) {
+        await models.Tickets.destroy({
+          where: { id: ticketId },
+        })
+
+        throw new Api500Error(
+          merchant.preMsg +
+            " create waresTickets query with tickets query did not work" +
+            afterMsg,
+          "Internal server query error."
+        )
+      }
     }
 
     res.status(201).send(merchant.preMsg + " ticket has been created.")

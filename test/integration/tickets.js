@@ -386,9 +386,13 @@ describe("Tickets Routes", function () {
     })
   })
 
-  describe("Post /", function () {
-    it("When merchant inputs required values, Then ticket is created ", async function () {
-      const requestBody = { clientId: 3, cost: 14.5, paymentPlan: "weekly" }
+  describe.only("Post /", function () {
+    it("When merchant inputs values for tickets data but not required warestickets input, Then response is bad request ", async function () {
+      const requestBody = {
+        clientId: Math.ceil(Math.random() * 3),
+        cost: Math.floor(Math.random() * 4) + 50,
+        paymentPlan: "weekly",
+      }
 
       const { status, data } = await client.post(
         "/tickets",
@@ -396,6 +400,74 @@ describe("Tickets Routes", function () {
         setHeaders
       )
 
+      expect(status).to.equal(BAD_REQUEST)
+      expect(data).to.equal("Bad input request.")
+    })
+
+    it("When merchant inputs values for tickets data and warestickets data with duplicate ware ids, Then response is bad request ", async function () {
+      const waresTickets = [
+        { wareId: 1, amount: 1 },
+        { wareId: 5, amount: 1 },
+        { wareId: 1, amount: 1 },
+      ]
+      const requestBody = {
+        clientId: Math.ceil(Math.random() * 3),
+        cost: Math.floor(Math.random() * 4) + 50,
+        paymentPlan: "weekly",
+        waresTickets,
+      }
+
+      const { status, data } = await client.post(
+        "/tickets",
+        requestBody,
+        setHeaders
+      )
+
+      expect(status).to.equal(BAD_REQUEST)
+      expect(data).to.equal("Bad input request.")
+    })
+
+    it("When merchant inputs values for tickets data and warestickets data that contains a non-exisiting wareId, Then response is bad request ", async function () {
+      const waresTickets = [
+        { wareId: 1, amount: 1 },
+        { wareId: 5, amount: 1 },
+        { wareId: 700, amount: 1 },
+      ]
+      const requestBody = {
+        clientId: Math.ceil(Math.random() * 3),
+        cost: Math.floor(Math.random() * 4) + 50,
+        paymentPlan: "weekly",
+        waresTickets,
+      }
+
+      const { status, data } = await client.post(
+        "/tickets",
+        requestBody,
+        setHeaders
+      )
+
+      expect(status).to.equal(NOT_FOUND)
+      expect(data).to.equal("Ware not found.")
+    })
+
+    it("When merchant inputs required values, Then ticket is created ", async function () {
+      const waresTickets = [
+        { wareId: 2, amount: 1 },
+        { wareId: 5, amount: 2 },
+      ]
+      const requestBody = {
+        clientId: 3,
+        paymentPlan: "weekly",
+        waresTickets,
+      }
+
+      const { status, data } = await client.post(
+        "/tickets",
+        requestBody,
+        setHeaders
+      )
+
+      delete requestBody.waresTickets
       const newTicketSearched = await models.Tickets.findOne({
         where: requestBody,
       })
@@ -403,6 +475,16 @@ describe("Tickets Routes", function () {
       const newTicketDeleted = await models.Tickets.destroy({
         where: requestBody,
       })
+      const newWaresTicketsSearched = await models.WaresTickets.findAll({
+        where: { ticketId: newTicket.id },
+      })
+      const newWaresTickets = newWaresTicketsSearched.map((waresTicket) => {
+        return waresTicket.dataValues
+      })
+      await models.WaresTickets.destroy({
+        where: { ticketId: newTicket.id },
+      })
+      console.log(newTicket, newWaresTickets)
 
       expect(status).to.equal(CREATED)
       expect(data)
