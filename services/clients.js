@@ -5,6 +5,17 @@ const ticketsInclusion = {
   model: models.Tickets,
   as: "tickets",
   order: [["id", "DESC"]],
+  attributes: {
+    include: [
+      [
+        models.Sequelize.literal(
+          // eslint-disable-next-line quotes
+          '(SELECT "tickets"."cost" - COALESCE(SUM("payment"), 0) FROM "Transactions" WHERE "ticketId" = "tickets"."id")'
+        ),
+        "owed",
+      ],
+    ],
+  },
 }
 
 const workInclusion = {

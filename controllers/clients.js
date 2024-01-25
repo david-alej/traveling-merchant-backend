@@ -1,5 +1,9 @@
-const { validationPerusal, integerValidator } =
-  require("../util/index").validators
+const {
+  validationPerusal,
+  integerValidator,
+  phoneNumberValidator,
+  textValidator,
+} = require("../util/index").validators
 const models = require("../database/models")
 const { Api400Error, Api404Error, Api500Error } =
   require("../util/index").apiErrors
@@ -57,11 +61,52 @@ exports.getClients = async (req, res, next) => {
   }
 }
 
+exports.workValidation = async (req, res, next) => {
+  const { workId, work } = req.body
+
+  if (workId && work) {
+    throw new Error("cannot input workId and work at the same time.")
+  }
+
+  if (workId) {
+    await integerValidator("workId").run(req)
+  } else {
+    const workValidators = [
+      textValidator("work.name"),
+      textValidator("work.address"),
+      phoneNumberValidator("work.phoneNumber"),
+    ]
+
+    for (const validator of workValidators) {
+      await validator.run(req)
+    }
+  }
+
+  next()
+}
+
 exports.postClient = async (req, res, next) => {
   const merchant = req.session.merchant
 
   try {
-    const { inputsObject: newClient } = await parseClientInputs(req, true)
+    const { inputsObject } = await parseClientInputs(req, {})
+
+    let newClient = inputsObject
+
+    if (inputsObject.work) {
+      const newWorkCreated = await models.Works.create(inputsObject.work)
+
+      if (!newWorkCreated) {
+        throw new Api500Error(
+          merchant.preMsg + " create work query did not work.",
+          "Internal server query error."
+        )
+      }
+
+      newClient.workId = newWorkCreated.dataValues.id
+
+      delete newClient.work
+    }
 
     const created = await models.Clients.create(newClient)
 
@@ -85,7 +130,7 @@ exports.putClient = async (req, res, next) => {
   try {
     const { afterMsg, inputsObject: newValues } = await parseClientInputs(
       req,
-      true
+      {}
     )
 
     if (JSON.stringify(newValues) === "{}") {

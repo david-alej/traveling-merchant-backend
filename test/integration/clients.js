@@ -38,6 +38,19 @@ describe("Clients Routes", function () {
       },
       tickets: {
         type: "array",
+        items: {
+          type: "object",
+          required: [
+            "id",
+            "clientId",
+            "cost",
+            "paymentPlan",
+            "description",
+            "createdAt",
+            "updatedAt",
+            "owed",
+          ],
+        },
       },
     },
   }
@@ -118,86 +131,90 @@ describe("Clients Routes", function () {
   })
 
   describe("Get /", function () {
-    it("When no inputs is provided, Then default query search is returned ", async function () {
-      const expectedClients = [
-        {
+    const allClients = [
+      {
+        id: 1,
+        workId: 1,
+        fullname: "James Moe",
+        address: "1823 Steele Street",
+        phoneNumber: "9566347775",
+        relationship: 5,
+        createdAt: "2024-11-10T00:00:00.000Z",
+        updatedAt: "2024-12-12T00:00:00.000Z",
+        work: {
           id: 1,
-          workId: 1,
-          fullname: "James Moe",
-          address: "1823 Steele Street",
-          phoneNumber: "9566347775",
-          relationship: 5,
-          createdAt: "2024-11-10T00:00:00.000Z",
-          updatedAt: "2024-12-12T00:00:00.000Z",
-          work: {
+          name: "Hamill, Denesik and Davis",
+          address: "38 Galvin Ave.",
+          phoneNumber: "9075554011",
+          createdAt: "2024-11-02T00:00:00.000Z",
+          updatedAt: "2024-12-02T00:00:00.000Z",
+        },
+        tickets: [
+          {
             id: 1,
-            name: "Hamill, Denesik and Davis",
-            address: "38 Galvin Ave.",
-            phoneNumber: "9075554011",
-            createdAt: "2024-11-02T00:00:00.000Z",
-            updatedAt: "2024-12-02T00:00:00.000Z",
+            clientId: 1,
+            cost: 450,
+            paymentPlan: "biweekly",
+            description: null,
+            createdAt: "2024-11-11T00:00:00.000Z",
+            updatedAt: "2024-11-11T00:00:00.000Z",
+            owed: 300,
           },
-          tickets: [
-            {
-              id: 1,
-              clientId: 1,
-              cost: 450,
-              paymentPlan: "biweekly",
-              description: null,
-              createdAt: "2024-11-11T00:00:00.000Z",
-              updatedAt: "2024-11-11T00:00:00.000Z",
-            },
-          ],
-        },
-        {
+        ],
+      },
+      {
+        id: 2,
+        workId: 2,
+        fullname: "Kellen Paucek",
+        address: "1454 Sussex Court",
+        phoneNumber: "2543865553",
+        relationship: 5,
+        createdAt: "2024-11-14T00:00:00.000Z",
+        updatedAt: "2024-11-29T00:00:00.000Z",
+        work: {
           id: 2,
-          workId: 2,
-          fullname: "Kellen Paucek",
-          address: "1454 Sussex Court",
-          phoneNumber: "2543865553",
-          relationship: 5,
-          createdAt: "2024-11-14T00:00:00.000Z",
-          updatedAt: "2024-11-29T00:00:00.000Z",
-          work: {
+          name: "Deckow and Sons",
+          address: "245 John Drive",
+          phoneNumber: "7644084620",
+          createdAt: "2024-11-02T00:00:00.000Z",
+          updatedAt: "2024-11-02T00:00:00.000Z",
+        },
+        tickets: [
+          {
             id: 2,
-            name: "Deckow and Sons",
-            address: "245 John Drive",
-            phoneNumber: "7644084620",
-            createdAt: "2024-11-02T00:00:00.000Z",
-            updatedAt: "2024-11-02T00:00:00.000Z",
+            clientId: 2,
+            cost: 155,
+            paymentPlan: "weekly",
+            description: null,
+            createdAt: "2024-11-11T00:00:00.000Z",
+            updatedAt: "2024-11-11T00:00:00.000Z",
+            owed: 0,
           },
-          tickets: [
-            {
-              id: 2,
-              clientId: 2,
-              cost: 155,
-              paymentPlan: "weekly",
-              description: null,
-              createdAt: "2024-11-11T00:00:00.000Z",
-              updatedAt: "2024-11-11T00:00:00.000Z",
-            },
-          ],
-        },
-        {
+        ],
+      },
+      {
+        id: 3,
+        workId: 3,
+        fullname: "Madilyn Langosh",
+        address: "1571 Weekly Street",
+        phoneNumber: "2103424367",
+        relationship: 5,
+        createdAt: "2024-11-22T00:00:00.000Z",
+        updatedAt: "2024-11-25T00:00:00.000Z",
+        work: {
           id: 3,
-          workId: 3,
-          fullname: "Madilyn Langosh",
-          address: "1571 Weekly Street",
-          phoneNumber: "2103424367",
-          relationship: 5,
-          createdAt: "2024-11-22T00:00:00.000Z",
-          updatedAt: "2024-11-25T00:00:00.000Z",
-          work: {
-            id: 3,
-            name: "Lynch PLC",
-            address: "38 Lafayette St.",
-            phoneNumber: "9103623505",
-            createdAt: "2024-11-02T00:00:00.000Z",
-            updatedAt: "2024-11-02T00:00:00.000Z",
-          },
-          tickets: [],
+          name: "Lynch PLC",
+          address: "38 Lafayette St.",
+          phoneNumber: "9103623505",
+          createdAt: "2024-11-02T00:00:00.000Z",
+          updatedAt: "2024-11-02T00:00:00.000Z",
         },
-      ]
+        tickets: [],
+      },
+    ]
+
+    it("When no inputs is provided, Then default query search is returned ", async function () {
+      const expectedClients = allClients
 
       const { status, data: clients } = await client.get("/clients", setHeaders)
 
@@ -207,27 +224,7 @@ describe("Clients Routes", function () {
     })
 
     it("When work id is the only input, Then response all clients with the same work id", async function () {
-      const expectedClients = [
-        {
-          id: 3,
-          workId: 3,
-          fullname: "Madilyn Langosh",
-          address: "1571 Weekly Street",
-          phoneNumber: "2103424367",
-          relationship: 5,
-          createdAt: "2024-11-22T00:00:00.000Z",
-          updatedAt: "2024-11-25T00:00:00.000Z",
-          work: {
-            id: 3,
-            name: "Lynch PLC",
-            address: "38 Lafayette St.",
-            phoneNumber: "9103623505",
-            createdAt: "2024-11-02T00:00:00.000Z",
-            updatedAt: "2024-11-02T00:00:00.000Z",
-          },
-          tickets: [],
-        },
-      ]
+      const expectedClients = [allClients[2]]
       const config = structuredClone(setHeaders)
       config.data = { workId: 3 }
 
@@ -239,85 +236,7 @@ describe("Clients Routes", function () {
     })
 
     it("When a created at date is given, Then response is all clients within that same month and year", async function () {
-      const expectedClients = [
-        {
-          id: 1,
-          workId: 1,
-          fullname: "James Moe",
-          address: "1823 Steele Street",
-          phoneNumber: "9566347775",
-          relationship: 5,
-          createdAt: "2024-11-10T00:00:00.000Z",
-          updatedAt: "2024-12-12T00:00:00.000Z",
-          work: {
-            id: 1,
-            name: "Hamill, Denesik and Davis",
-            address: "38 Galvin Ave.",
-            phoneNumber: "9075554011",
-            createdAt: "2024-11-02T00:00:00.000Z",
-            updatedAt: "2024-12-02T00:00:00.000Z",
-          },
-          tickets: [
-            {
-              id: 1,
-              clientId: 1,
-              cost: 450,
-              paymentPlan: "biweekly",
-              description: null,
-              createdAt: "2024-11-11T00:00:00.000Z",
-              updatedAt: "2024-11-11T00:00:00.000Z",
-            },
-          ],
-        },
-        {
-          id: 2,
-          workId: 2,
-          fullname: "Kellen Paucek",
-          address: "1454 Sussex Court",
-          phoneNumber: "2543865553",
-          relationship: 5,
-          createdAt: "2024-11-14T00:00:00.000Z",
-          updatedAt: "2024-11-29T00:00:00.000Z",
-          work: {
-            id: 2,
-            name: "Deckow and Sons",
-            address: "245 John Drive",
-            phoneNumber: "7644084620",
-            createdAt: "2024-11-02T00:00:00.000Z",
-            updatedAt: "2024-11-02T00:00:00.000Z",
-          },
-          tickets: [
-            {
-              id: 2,
-              clientId: 2,
-              cost: 155,
-              paymentPlan: "weekly",
-              description: null,
-              createdAt: "2024-11-11T00:00:00.000Z",
-              updatedAt: "2024-11-11T00:00:00.000Z",
-            },
-          ],
-        },
-        {
-          id: 3,
-          workId: 3,
-          fullname: "Madilyn Langosh",
-          address: "1571 Weekly Street",
-          phoneNumber: "2103424367",
-          relationship: 5,
-          createdAt: "2024-11-22T00:00:00.000Z",
-          updatedAt: "2024-11-25T00:00:00.000Z",
-          work: {
-            id: 3,
-            name: "Lynch PLC",
-            address: "38 Lafayette St.",
-            phoneNumber: "9103623505",
-            createdAt: "2024-11-02T00:00:00.000Z",
-            updatedAt: "2024-11-02T00:00:00.000Z",
-          },
-          tickets: [],
-        },
-      ]
+      const expectedClients = allClients
       const config = structuredClone(setHeaders)
       config.data = { createdAt: new Date("2024-11-11") }
 
@@ -329,37 +248,7 @@ describe("Clients Routes", function () {
     })
 
     it("When a updated at date is given, Then response is all clients within that same month and year", async function () {
-      const expectedClients = [
-        {
-          id: 1,
-          workId: 1,
-          fullname: "James Moe",
-          address: "1823 Steele Street",
-          phoneNumber: "9566347775",
-          relationship: 5,
-          createdAt: "2024-11-10T00:00:00.000Z",
-          updatedAt: "2024-12-12T00:00:00.000Z",
-          work: {
-            id: 1,
-            name: "Hamill, Denesik and Davis",
-            address: "38 Galvin Ave.",
-            phoneNumber: "9075554011",
-            createdAt: "2024-11-02T00:00:00.000Z",
-            updatedAt: "2024-12-02T00:00:00.000Z",
-          },
-          tickets: [
-            {
-              id: 1,
-              clientId: 1,
-              cost: 450,
-              paymentPlan: "biweekly",
-              description: null,
-              createdAt: "2024-11-11T00:00:00.000Z",
-              updatedAt: "2024-11-11T00:00:00.000Z",
-            },
-          ],
-        },
-      ]
+      const expectedClients = [allClients[0]]
       const config = structuredClone(setHeaders)
       config.data = { updatedAt: new Date("2024-12-10") }
 
@@ -371,27 +260,7 @@ describe("Clients Routes", function () {
     })
 
     it("When part of a fullname is given, Then response is all clients that include the given string using case insensitive search", async function () {
-      const expectedClients = [
-        {
-          id: 3,
-          workId: 3,
-          fullname: "Madilyn Langosh",
-          address: "1571 Weekly Street",
-          phoneNumber: "2103424367",
-          relationship: 5,
-          createdAt: "2024-11-22T00:00:00.000Z",
-          updatedAt: "2024-11-25T00:00:00.000Z",
-          work: {
-            id: 3,
-            name: "Lynch PLC",
-            address: "38 Lafayette St.",
-            phoneNumber: "9103623505",
-            createdAt: "2024-11-02T00:00:00.000Z",
-            updatedAt: "2024-11-02T00:00:00.000Z",
-          },
-          tickets: [],
-        },
-      ]
+      const expectedClients = [allClients[2]]
       const config = structuredClone(setHeaders)
       config.data = { fullname: "ADI" }
 
@@ -403,37 +272,7 @@ describe("Clients Routes", function () {
     })
 
     it("When part of an address is given, Then response is all clients that include the given string using case insensitive search", async function () {
-      const expectedClients = [
-        {
-          id: 1,
-          workId: 1,
-          fullname: "James Moe",
-          address: "1823 Steele Street",
-          phoneNumber: "9566347775",
-          relationship: 5,
-          createdAt: "2024-11-10T00:00:00.000Z",
-          updatedAt: "2024-12-12T00:00:00.000Z",
-          work: {
-            id: 1,
-            name: "Hamill, Denesik and Davis",
-            address: "38 Galvin Ave.",
-            phoneNumber: "9075554011",
-            createdAt: "2024-11-02T00:00:00.000Z",
-            updatedAt: "2024-12-02T00:00:00.000Z",
-          },
-          tickets: [
-            {
-              id: 1,
-              clientId: 1,
-              cost: 450,
-              paymentPlan: "biweekly",
-              description: null,
-              createdAt: "2024-11-11T00:00:00.000Z",
-              updatedAt: "2024-11-11T00:00:00.000Z",
-            },
-          ],
-        },
-      ]
+      const expectedClients = [allClients[0]]
       const config = structuredClone(setHeaders)
       config.data = { address: "TEEL" }
 
@@ -445,41 +284,11 @@ describe("Clients Routes", function () {
     })
 
     it("When multiple inputs are given, Then response is all clients that satisfy the input comparisons", async function () {
-      const expectedClients = [
-        {
-          id: 1,
-          workId: 1,
-          fullname: "James Moe",
-          address: "1823 Steele Street",
-          phoneNumber: "9566347775",
-          relationship: 5,
-          createdAt: "2024-11-10T00:00:00.000Z",
-          updatedAt: "2024-12-12T00:00:00.000Z",
-          work: {
-            id: 1,
-            name: "Hamill, Denesik and Davis",
-            address: "38 Galvin Ave.",
-            phoneNumber: "9075554011",
-            createdAt: "2024-11-02T00:00:00.000Z",
-            updatedAt: "2024-12-02T00:00:00.000Z",
-          },
-          tickets: [
-            {
-              id: 1,
-              clientId: 1,
-              cost: 450,
-              paymentPlan: "biweekly",
-              description: null,
-              createdAt: "2024-11-11T00:00:00.000Z",
-              updatedAt: "2024-11-11T00:00:00.000Z",
-            },
-          ],
-        },
-      ]
+      const expectedClients = [allClients[0]]
       const config = structuredClone(setHeaders)
       config.data = {
         workId: 1,
-        address: "TEEL",
+        address: "182",
         createdAt: "2024-11-11",
         fullname: "moe",
         updatedAt: "2024-12-11",
@@ -523,6 +332,76 @@ describe("Clients Routes", function () {
         .and.string(" client has been created.")
       expect(newClient).to.include(requestBody)
       expect(newClientDeleted).to.equal(1)
+    })
+
+    it("When user inputs required values and a new work are given, Then the new work is created then the client is created ", async function () {
+      const work = {
+        name: faker.company.name(),
+        address: faker.location.streetAddress(),
+        phoneNumber: fakerPhoneNumber(),
+      }
+      const requestBody = {
+        fullname: faker.person.fullName(),
+        address: faker.location.streetAddress(),
+        phoneNumber: fakerPhoneNumber(),
+        work,
+      }
+
+      const { status, data } = await client.post(
+        "/clients",
+        requestBody,
+        setHeaders
+      )
+
+      requestBody.phoneNumber = requestBody.phoneNumber.replace(/\D/g, "")
+      delete requestBody.work
+      work.phoneNumber = work.phoneNumber.replace(/\D/g, "")
+      const newClientSearched = await models.Clients.findOne({
+        where: requestBody,
+      })
+      const newClient = newClientSearched.dataValues
+      const newClientDeleted = await models.Clients.destroy({
+        where: requestBody,
+      })
+      const newWorkSearched = await models.Works.findOne({
+        where: work,
+      })
+      const newWork = newWorkSearched.dataValues
+      const newWorkDeleted = await models.Works.destroy({
+        where: work,
+      })
+
+      expect(status).to.equal(CREATED)
+      expect(data)
+        .to.include.string(preMerchantMsg)
+        .and.string(" client has been created.")
+      expect(newClient).to.include(requestBody)
+      expect(newClientDeleted).to.equal(1)
+      expect(newWork).to.include(work)
+      expect(newWorkDeleted).to.equal(1)
+    })
+
+    it("When user inputs required values and an invalid new work are given, Then response is bad request ", async function () {
+      const work = {
+        name: faker.company.name(),
+        address: Math.random() * 20,
+        phoneNumber: fakerPhoneNumber(),
+      }
+      const requestBody = {
+        fullname: faker.person.fullName(),
+        address: faker.location.streetAddress(),
+        phoneNumber: fakerPhoneNumber(),
+        work,
+      }
+
+      const { status, data } = await client.post(
+        "/clients",
+        requestBody,
+        setHeaders
+      )
+
+      expect(status).to.equal(BAD_REQUEST)
+      expect(data).to.equal("Bad input request.")
     })
   })
 

@@ -56,19 +56,15 @@ module.exports = {
 
     const inputNames = Object.keys(matchedData(req))
 
-    if (Object.keys(req.params).includes(inputNames[0])) {
-      inputNames.shift()
-    }
+    const inputsObject = createSubsetObject(req.body, inputNames)
 
-    if (inputNames.length === 0) {
+    if (JSON.stringify(inputsObject) === "{}") {
       return {
         query: otherOptions,
         afterMsg: ".",
         inputsObject: {},
       }
     }
-
-    const inputsObject = createSubsetObject(req.body, inputNames)
 
     if (inputsObject.phoneNumber) {
       inputsObject.phoneNumber = matchedData(req).phoneNumber

@@ -328,7 +328,7 @@ describe("Works Routes", function () {
         },
       ]
       const config = structuredClone(setHeaders)
-      config.data = { name: "de", address: "GAL" }
+      config.data = { name: "de", address: "38" }
 
       const { status, data: works } = await client.get("/works", config)
 

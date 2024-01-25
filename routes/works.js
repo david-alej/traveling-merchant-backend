@@ -11,7 +11,7 @@ worksRouter.get(
   "/",
   [
     textValidator("name", false, true),
-    textValidator("address", false, true),
+    textValidator("address", false, true, false),
     dateValidator("createdAt", false, true),
     dateValidator("updatedAt", false, true),
   ],

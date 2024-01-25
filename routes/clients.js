@@ -12,7 +12,7 @@ clientsRouter.get(
   [
     integerValidator("workId", false, true),
     textValidator("fullname", false, true),
-    textValidator("address", false, true),
+    textValidator("address", false, true, false),
     dateValidator("createdAt", false, true),
     dateValidator("updatedAt", false, true),
   ],
@@ -21,12 +21,8 @@ clientsRouter.get(
 
 clientsRouter.post(
   "/",
-  [
-    integerValidator("workId"),
-    textValidator("fullname"),
-    textValidator("address"),
-    phoneNumberValidator(),
-  ],
+  [textValidator("fullname"), textValidator("address"), phoneNumberValidator()],
+  clientsControllers.workValidation,
   clientsControllers.postClient
 )
 

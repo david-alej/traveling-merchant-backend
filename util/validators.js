@@ -142,13 +142,31 @@ const floatValidator = (
 
 exports.floatValidator = floatValidator
 
-const textValidator = (input, inputIsParam = false, optional = false) => {
+const textValidator = (
+  input,
+  inputIsParam = false,
+  optional = false,
+  includesCharacter = true
+) => {
   const { head, inputName } = basicValidator(input, inputIsParam, optional)
 
   return head
     .trim()
     .notEmpty()
     .withMessage(inputName + " must not be empty.")
+    .isString()
+    .withMessage(inputName + " must be a string.")
+    .custom((str) => {
+      if (!includesCharacter) return true
+
+      const hasCharacter = /[a-zA-Z]/.test(str)
+
+      if (!hasCharacter) {
+        throw new Error(inputName + " must include at least one character.")
+      }
+
+      return true
+    })
 }
 
 exports.textValidator = textValidator

@@ -4,6 +4,10 @@ const { parseInputs } = require("../util/index").parseInputs
 const clientsInclusion = {
   model: models.Clients,
   as: "client",
+  include: {
+    model: models.Works,
+    as: "work",
+  },
 }
 
 const transactionsInclusion = {
@@ -14,6 +18,10 @@ const transactionsInclusion = {
 const waresTicketsInclusion = {
   model: models.WaresTickets,
   as: "waresSold",
+  include: {
+    model: models.Wares,
+    as: "ware",
+  },
 }
 
 const findTicketQuery = {
@@ -32,6 +40,7 @@ const findTicketQuery = {
   order: [
     ["id", "DESC"],
     ["payments", "id", "DESC"],
+    ["waresSold", "ware", "cost", "DESC"],
   ],
 }
 
