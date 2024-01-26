@@ -13,7 +13,7 @@ const {
 
 const { OK, NOT_FOUND, BAD_REQUEST, CREATED } = httpStatusCodes
 
-describe("Tickets Routes", function () {
+describe.only("Tickets Routes", function () {
   let client
   const setHeaders = { headers: {} }
   const ticketObject = {
@@ -144,7 +144,7 @@ describe("Tickets Routes", function () {
     await stopWebServer()
   })
 
-  describe("Get /:ticketId", function () {
+  describe.only("Get /:ticketId", function () {
     it("When an existing ticket id is given, Then the response is the ticket", async function () {
       const ticketId = Math.ceil(Math.random() * 2)
 
@@ -386,7 +386,7 @@ describe("Tickets Routes", function () {
     })
   })
 
-  describe.only("Post /", function () {
+  describe("Post /", function () {
     it("When merchant inputs values for tickets data but not required warestickets input, Then response is bad request ", async function () {
       const requestBody = {
         clientId: Math.ceil(Math.random() * 3),
@@ -450,6 +450,50 @@ describe("Tickets Routes", function () {
       expect(data).to.equal("Ware not found.")
     })
 
+    it("When merchant inputs values for tickets data and warestickets data that contains the total amount of ware sold than is in stock, Then response is bad request ", async function () {
+      const waresTickets = [
+        { wareId: 1, amount: 1000 },
+        { wareId: 5, amount: 1 },
+      ]
+      const requestBody = {
+        clientId: Math.ceil(Math.random() * 3),
+        cost: Math.floor(Math.random() * 4) + 50,
+        paymentPlan: "weekly",
+        waresTickets,
+      }
+
+      const { status, data } = await client.post(
+        "/tickets",
+        requestBody,
+        setHeaders
+      )
+
+      expect(status).to.equal(BAD_REQUEST)
+      expect(data).to.equal("Bad input request.")
+    })
+
+    it("When merchant inputs values for tickets data and warestickets data that contains the amount sold of a ware (excluding the returned amount) than is in stock, Then response is bad request ", async function () {
+      const waresTickets = [
+        { wareId: 1, amount: 1000, returned: 999 },
+        { wareId: 5, amount: 1 },
+      ]
+      const requestBody = {
+        clientId: Math.ceil(Math.random() * 3),
+        cost: Math.floor(Math.random() * 4) + 50,
+        paymentPlan: "weekly",
+        waresTickets,
+      }
+
+      const { status, data } = await client.post(
+        "/tickets",
+        requestBody,
+        setHeaders
+      )
+
+      expect(status).to.equal(BAD_REQUEST)
+      expect(data).to.equal("Bad input request.")
+    })
+
     it("When merchant inputs required values, Then ticket is created ", async function () {
       const waresTickets = [
         { wareId: 2, amount: 1 },
@@ -472,26 +516,28 @@ describe("Tickets Routes", function () {
         where: requestBody,
       })
       const newTicket = newTicketSearched.dataValues
-      const newTicketDeleted = await models.Tickets.destroy({
-        where: requestBody,
-      })
       const newWaresTicketsSearched = await models.WaresTickets.findAll({
         where: { ticketId: newTicket.id },
       })
       const newWaresTickets = newWaresTicketsSearched.map((waresTicket) => {
         return waresTicket.dataValues
       })
-      await models.WaresTickets.destroy({
+      const newTicketDeleted = await models.Tickets.destroy({
+        where: requestBody,
+      })
+      const waresTicketsDeleted = await models.WaresTickets.destroy({
         where: { ticketId: newTicket.id },
       })
-      console.log(newTicket, newWaresTickets)
 
       expect(status).to.equal(CREATED)
       expect(data)
         .to.include.string(preMerchantMsg)
         .and.string(" ticket has been created.")
       expect(newTicket).to.include(requestBody)
+      expect(newWaresTickets[0]).to.include(waresTickets[0])
+      expect(newWaresTickets[1]).to.include(waresTickets[1])
       expect(newTicketDeleted).to.equal(1)
+      expect(waresTicketsDeleted).to.equal(0)
     })
   })
 

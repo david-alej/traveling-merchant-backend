@@ -13,14 +13,21 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "ticketId",
         as: "ticket",
       })
+
+      Transactions.belongsTo(models.Tickets, {
+        foreignKey: "orderId",
+        as: "order",
+      })
     }
   }
   Transactions.init(
     {
       ticketId: DataTypes.INTEGER,
-      paidAt: DataTypes.DATE,
+      orderId: DataTypes.INTEGER,
       payment: DataTypes.FLOAT,
       paymentType: DataTypes.STRING,
+      isMerchant: DataTypes.BOOLEAN,
+      paidAt: DataTypes.DATE,
     },
     {
       sequelize,

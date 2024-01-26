@@ -3,7 +3,7 @@ const { validationPerusal, integerValidator } =
 const models = require("../database/models")
 const { Api400Error, Api404Error, Api500Error } =
   require("../util/index").apiErrors
-const { findTicketQuery, parseTicketInputs } =
+const { findWaresQuery, findTicketQuery, parseTicketInputs } =
   require("../services/index").ticketsServices
 
 exports.paramTicketId = async (req, res, next, ticketId) => {
@@ -76,6 +76,82 @@ exports.postValidation = async (req, res, next) => {
   next()
 }
 
+const parseNewWaresTickets = async (waresTickets, merchantPreMsg) => {
+  const wareIds = waresTickets.map((waresTicket) => {
+    return waresTicket.wareId
+  })
+
+  const duplicateWareIds = wareIds.filter(
+    (item, index) => wareIds.indexOf(item) !== index
+  )
+
+  if (duplicateWareIds.length !== 0) {
+    throw new Api400Error(
+      merchantPreMsg +
+        ` merchant has input the following duplicate ware ids, ${duplicateWareIds}, in the waresTickets array.`,
+      "Bad input request."
+    )
+  }
+
+  const wares = await models.Wares.findAll({
+    where: { id: wareIds },
+    ...findWaresQuery,
+  })
+
+  let totalCost = 0
+  console.log(wares)
+  wares.forEach((ware) => {
+    for (const waresTicket of waresTickets) {
+      if (waresTicket.wareId === ware.id) {
+        totalCost += waresTicket.amount * ware.cost
+
+        const wareReturned = waresTicket.returned ? waresTicket.returned : 0
+        console.log(ware.stock)
+        const remainingStock = ware.stock - waresTicket.amount + wareReturned
+
+        if (remainingStock < 0 || waresTicket.amount > ware.stock) {
+          throw new Api400Error(
+            merchantPreMsg +
+              ` merchant has input more amount of a ware than what is in stock with ware id = ${ware.id}.`,
+            "Bad input request."
+          )
+        }
+
+        const index = wareIds.indexOf(ware.id)
+
+        wareIds.splice(index, 1)
+      }
+    }
+  })
+
+  if (wareIds.length !== 0) {
+    throw new Api404Error(
+      merchantPreMsg +
+        ` the wares with the following ids, ${wareIds}, were not found.`,
+      "Ware not found."
+    )
+  }
+
+  return totalCost
+}
+
+const createWaresTickets = async (ticketId, newWaresTickets, errorMsg) => {
+  for (const newWaresTicket of newWaresTickets) {
+    const waresTicketCreated = await models.WaresTickets.create({
+      ticketId,
+      ...newWaresTicket,
+    })
+
+    if (!waresTicketCreated) {
+      await models.Tickets.destroy({
+        where: { id: ticketId },
+      })
+
+      throw new Api500Error(errorMsg, "Internal server query error.")
+    }
+  }
+}
+
 exports.postTicket = async (req, res, next) => {
   const merchant = req.session.merchant
 
@@ -85,57 +161,14 @@ exports.postTicket = async (req, res, next) => {
     const newWaresTickets = inputsObject.waresTickets
     delete inputsObject.waresTickets
 
-    const wareIds = newWaresTickets.map((waresTickets) => {
-      return waresTickets.wareId
-    })
-
-    const duplicateWareIds = wareIds.filter(
-      (item, index) => wareIds.indexOf(item) !== index
-    )
-
-    if (duplicateWareIds.length !== 0) {
-      throw new Api400Error(
-        merchant.preMsg +
-          ` merchant has input the following duplicate ware ids, ${duplicateWareIds}, in the waresTickets array.`,
-        "Bad input request."
-      )
-    }
-
-    const waresSearched = await models.Wares.findAll({ where: { id: wareIds } })
-
-    const wares = waresSearched.map((ware) => ware.dataValues)
-
-    if (wares.length !== wareIds.length) {
-      const searchedWareIds = wares.map((ware) => {
-        return ware.id
-      })
-
-      const notFoundWareIds = wareIds.filter((wareId) => {
-        return !searchedWareIds.includes(wareId)
-      })
-
-      throw new Api404Error(
-        merchant.preMsg +
-          ` the wares with the following ids, ${notFoundWareIds}, were not found.`,
-        "Ware not found."
-      )
-    }
-
     const newTicket = inputsObject
 
-    if (!newTicket.cost) {
-      let totalCost = 0
+    const totalCost = await parseNewWaresTickets(
+      newWaresTickets,
+      merchant.preMsg
+    )
 
-      newWaresTickets.forEach((waresTicket) => {
-        for (const ware of wares) {
-          if (ware.id === waresTicket.wareId) {
-            totalCost += ware.cost * waresTicket.amount
-          }
-        }
-      })
-
-      newTicket.cost = totalCost
-    }
+    if (!newTicket.cost) newTicket.cost = totalCost
 
     const created = await models.Tickets.create(newTicket)
 
@@ -148,25 +181,13 @@ exports.postTicket = async (req, res, next) => {
 
     const ticketId = created.dataValues.id
 
-    for (const newWaresTicket of newWaresTickets) {
-      const waresTicketCreated = await models.WaresTickets.create({
-        ticketId,
-        ...newWaresTicket,
-      })
-
-      if (!waresTicketCreated) {
-        await models.Tickets.destroy({
-          where: { id: ticketId },
-        })
-
-        throw new Api500Error(
-          merchant.preMsg +
-            " create waresTickets query with tickets query did not work" +
-            afterMsg,
-          "Internal server query error."
-        )
-      }
-    }
+    await createWaresTickets(
+      ticketId,
+      newWaresTickets,
+      merchant.preMsg +
+        " create waresTickets query with tickets query did not work" +
+        afterMsg
+    )
 
     res.status(201).send(merchant.preMsg + " ticket has been created.")
   } catch (err) {

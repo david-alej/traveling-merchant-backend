@@ -18,12 +18,19 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "orderId",
         as: "waresBought",
       })
+
+      Orders.hasMany(models.Transactions, {
+        foreignKey: "orderId",
+        as: "expenses",
+      })
     }
   }
   Orders.init(
     {
       providerId: DataTypes.INTEGER,
-      cost: DataTypes.INTEGER,
+      cost: DataTypes.FLOAT,
+      tax: DataTypes.FLOAT,
+      shipment: DataTypes.FLOAT,
       expectedAt: DataTypes.DATE,
       actualAt: DataTypes.DATE,
     },

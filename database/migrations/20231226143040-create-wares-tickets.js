@@ -12,6 +12,8 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.INTEGER,
+        references: { model: "Tickets", key: "id" },
+        onDelete: "CASCADE",
       },
       amount: {
         allowNull: false,

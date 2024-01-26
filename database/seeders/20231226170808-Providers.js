@@ -20,20 +20,6 @@ module.exports = {
           createdAt: new Date("2024-11-11"),
           updatedAt: new Date("2024-11-11"),
         },
-        {
-          name: "JCPenny",
-          address: "84506 Deangelo Cliff",
-          phoneNumber: "6192621956",
-          createdAt: new Date("2024-11-11"),
-          updatedAt: new Date("2024-11-11"),
-        },
-        {
-          name: "Marshalls",
-          address: "41090 Jaime Springs",
-          phoneNumber: "3718802186",
-          createdAt: new Date("2024-11-11"),
-          updatedAt: new Date("2024-11-11"),
-        },
       ],
       {}
     )

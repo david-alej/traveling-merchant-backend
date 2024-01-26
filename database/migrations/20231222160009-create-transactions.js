@@ -11,11 +11,9 @@ module.exports = {
       },
       ticketId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
       },
-      paidAt: {
-        type: Sequelize.DATE,
-        allowNull: false,
+      orderId: {
+        type: Sequelize.INTEGER,
       },
       payment: {
         type: Sequelize.FLOAT,
@@ -23,6 +21,14 @@ module.exports = {
       },
       paymentType: {
         type: Sequelize.STRING,
+        allowNull: false,
+      },
+      isMerchant: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      paidAt: {
+        type: Sequelize.DATE,
         allowNull: false,
       },
       createdAt: {

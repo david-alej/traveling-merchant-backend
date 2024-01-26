@@ -25,13 +25,9 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      relationship: {
-        type: Sequelize.INTEGER,
-        defaultValue: 5,
-        validate: {
-          min: 0,
-          max: 10,
-        },
+      description: {
+        type: Sequelize.STRING,
+        defaultValue: "",
       },
       createdAt: {
         allowNull: false,

@@ -19,15 +19,9 @@ module.exports = {
       },
       tags: {
         type: Sequelize.ARRAY(Sequelize.STRING),
-        allowNull: false,
         defaultValue: [],
       },
-      stock: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        defaultValue: 0,
-      },
-      cost: {
+      unitPrice: {
         type: Sequelize.FLOAT,
         allowNull: false,
       },
