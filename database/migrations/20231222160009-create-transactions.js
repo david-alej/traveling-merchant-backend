@@ -23,10 +23,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      isMerchant: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
-      },
       paidAt: {
         type: Sequelize.DATE,
         allowNull: false,

@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         as: "ticket",
       })
 
-      Transactions.belongsTo(models.Tickets, {
+      Transactions.belongsTo(models.Orders, {
         foreignKey: "orderId",
         as: "order",
       })
@@ -26,7 +26,6 @@ module.exports = (sequelize, DataTypes) => {
       orderId: DataTypes.INTEGER,
       payment: DataTypes.FLOAT,
       paymentType: DataTypes.STRING,
-      isMerchant: DataTypes.BOOLEAN,
       paidAt: DataTypes.DATE,
     },
     {

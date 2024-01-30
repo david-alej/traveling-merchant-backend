@@ -9,6 +9,7 @@ const {
   preMerchantMsg,
   models,
   round,
+  faker,
 } = require("../common")
 
 const { OK, NOT_FOUND, BAD_REQUEST, CREATED } = httpStatusCodes
@@ -26,6 +27,8 @@ describe.only("Tickets Routes", function () {
       "description",
       "createdAt",
       "updatedAt",
+      "returned",
+      "paid",
       "owed",
       "client",
       "payments",
@@ -40,7 +43,7 @@ describe.only("Tickets Routes", function () {
           "fullname",
           "address",
           "phoneNumber",
-          "relationship",
+          "description",
           "createdAt",
           "updatedAt",
           "work",
@@ -66,9 +69,10 @@ describe.only("Tickets Routes", function () {
           required: [
             "id",
             "ticketId",
-            "paidAt",
+            "orderId",
             "payment",
             "paymentType",
+            "paidAt",
             "createdAt",
             "updatedAt",
           ],
@@ -96,10 +100,10 @@ describe.only("Tickets Routes", function () {
               "name",
               "type",
               "tags",
-              "stock",
-              "cost",
+              "unitPrice",
               "createdAt",
               "updatedAt",
+              "stock",
             ],
           },
         },
@@ -144,9 +148,9 @@ describe.only("Tickets Routes", function () {
     await stopWebServer()
   })
 
-  describe.only("Get /:ticketId", function () {
+  describe("Get /:ticketId", function () {
     it("When an existing ticket id is given, Then the response is the ticket", async function () {
-      const ticketId = Math.ceil(Math.random() * 2)
+      const ticketId = 1 //Math.ceil(Math.random() * 2)
 
       const { status, data } = await client.get(
         "/tickets/" + ticketId,
@@ -185,23 +189,129 @@ describe.only("Tickets Routes", function () {
   describe("Get /", function () {
     const allTickets = [
       {
-        id: 2,
-        clientId: 2,
-        cost: 155,
-        paymentPlan: "weekly",
-        description: null,
-        createdAt: "2024-11-11T00:00:00.000Z",
-        updatedAt: "2024-11-11T00:00:00.000Z",
+        id: 3,
+        clientId: 4,
+        cost: 168.27,
+        paymentPlan: "lump sum",
+        description: "",
+        createdAt: "2025-01-13T00:00:00.000Z",
+        updatedAt: "2025-01-13T00:00:00.000Z",
+        returned: 155,
+        paid: 13.27,
         owed: 0,
+        waresSold: [
+          {
+            ticketId: 3,
+            wareId: 1,
+            amount: 1,
+            returned: 1,
+            createdAt: "2025-01-13T00:00:00.000Z",
+            updatedAt: "2025-01-13T00:00:00.000Z",
+            ware: {
+              createdAt: "2024-11-11T00:00:00.000Z",
+              id: 1,
+              name: "Loewe 001 Woman Perfume",
+              stock: 0,
+              tags: ["women", "1-pc"],
+              type: "perfume",
+              unitPrice: 155,
+              updatedAt: "2024-11-11T00:00:00.000Z",
+            },
+          },
+        ],
+        payments: [
+          {
+            id: 7,
+            ticketId: 3,
+            orderId: null,
+            payment: -155,
+            paymentType: "cash app",
+            paidAt: "2025-01-17T00:00:00.000Z",
+            createdAt: "2025-01-17T00:00:00.000Z",
+            updatedAt: "2025-01-17T00:00:00.000Z",
+          },
+          {
+            id: 5,
+            ticketId: 3,
+            orderId: null,
+            payment: 168.27,
+            paymentType: "cash",
+            paidAt: "2025-01-13T00:00:00.000Z",
+            createdAt: "2025-01-13T00:00:00.000Z",
+            updatedAt: "2025-01-13T00:00:00.000Z",
+          },
+        ],
         client: {
-          id: 2,
+          id: 4,
+          workId: 3,
+          fullname: "Madilyn Langosh",
+          address: "1571 Weekly Street",
+          phoneNumber: "2103424367",
+          description: "",
+          createdAt: "2025-01-13T00:00:00.000Z",
+          updatedAt: "2025-01-13T00:00:00.000Z",
+          work: {
+            id: 3,
+            name: "Lynch PLC",
+            address: "38 Lafayette St.",
+            phoneNumber: "9103623505",
+            createdAt: "2024-11-02T00:00:00.000Z",
+            updatedAt: "2024-11-02T00:00:00.000Z",
+          },
+        },
+      },
+      {
+        id: 2,
+        clientId: 3,
+        cost: 488.52,
+        paymentPlan: "biweekly",
+        description: "",
+        createdAt: "2025-01-09T00:00:00.000Z",
+        updatedAt: "2025-01-09T00:00:00.000Z",
+        returned: 0,
+        paid: 200,
+        owed: 288.52,
+        waresSold: [
+          {
+            ticketId: 2,
+            wareId: 3,
+            amount: 1,
+            returned: 0,
+            createdAt: "2025-01-09T00:00:00.000Z",
+            updatedAt: "2025-01-09T00:00:00.000Z",
+            ware: {
+              createdAt: "2024-11-11T00:00:00.000Z",
+              id: 3,
+              name: "The Leather Medium Tote Bag",
+              stock: 1,
+              tags: ["women"],
+              type: "bag",
+              unitPrice: 450,
+              updatedAt: "2024-11-11T00:00:00.000Z",
+            },
+          },
+        ],
+        payments: [
+          {
+            id: 4,
+            ticketId: 2,
+            orderId: null,
+            payment: 200,
+            paymentType: "visa",
+            paidAt: "2025-01-09T00:00:00.000Z",
+            createdAt: "2025-01-09T00:00:00.000Z",
+            updatedAt: "2025-01-09T00:00:00.000Z",
+          },
+        ],
+        client: {
+          id: 3,
           workId: 2,
           fullname: "Kellen Paucek",
           address: "1454 Sussex Court",
           phoneNumber: "2543865553",
-          relationship: 5,
-          createdAt: "2024-11-14T00:00:00.000Z",
-          updatedAt: "2024-11-29T00:00:00.000Z",
+          description: "",
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
           work: {
             id: 2,
             name: "Deckow and Sons",
@@ -211,65 +321,105 @@ describe.only("Tickets Routes", function () {
             updatedAt: "2024-11-02T00:00:00.000Z",
           },
         },
-        payments: [
-          {
-            id: 3,
-            ticketId: 2,
-            paidAt: "2024-11-08T20:00:00.000Z",
-            payment: 80,
-            paymentType: "cash",
-            createdAt: "2024-11-11T00:00:00.000Z",
-            updatedAt: "2024-11-11T00:00:00.000Z",
-          },
-          {
-            id: 2,
-            ticketId: 2,
-            paidAt: "2024-11-01T20:00:00.000Z",
-            payment: 75,
-            paymentType: "cash",
-            createdAt: "2024-11-11T00:00:00.000Z",
-            updatedAt: "2024-11-11T00:00:00.000Z",
-          },
-        ],
+      },
+      {
+        id: 1,
+        clientId: 2,
+        cost: 391.9,
+        paymentPlan: "weekly",
+        description: "",
+        createdAt: "2025-01-09T00:00:00.000Z",
+        updatedAt: "2025-01-09T00:00:00.000Z",
+        returned: 155,
+        paid: 236.9,
+        owed: 0,
         waresSold: [
           {
-            wareId: 1,
-            ticketId: 2,
+            ticketId: 1,
+            wareId: 5,
+            amount: 2,
+            returned: 0,
+            createdAt: "2025-01-09T00:00:00.000Z",
+            updatedAt: "2025-01-09T00:00:00.000Z",
+            ware: {
+              createdAt: "2024-11-11T00:00:00.000Z",
+              id: 5,
+              name: "Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle",
+              stock: 8,
+              tags: ["unisex"],
+              type: "braclet",
+              unitPrice: 14,
+              updatedAt: "2024-11-11T00:00:00.000Z",
+            },
+          },
+          {
+            ticketId: 1,
+            wareId: 2,
             amount: 1,
             returned: 0,
-            createdAt: "2024-11-11T00:00:00.000Z",
-            updatedAt: "2024-11-11T00:00:00.000Z",
+            createdAt: "2025-01-09T00:00:00.000Z",
+            updatedAt: "2025-01-09T00:00:00.000Z",
             ware: {
-              cost: 155,
+              createdAt: "2024-11-11T00:00:00.000Z",
+              id: 2,
+              name: "DIOR 3-Pc. J'dore Eau de Parfum Gift Set",
+              stock: 4,
+              tags: ["women", "3-pc"],
+              type: "perfume",
+              unitPrice: 178,
+              updatedAt: "2024-11-11T00:00:00.000Z",
+            },
+          },
+          {
+            ticketId: 1,
+            wareId: 1,
+            amount: 1,
+            returned: 1,
+            createdAt: "2025-01-09T00:00:00.000Z",
+            updatedAt: "2025-01-09T00:00:00.000Z",
+            ware: {
               createdAt: "2024-11-11T00:00:00.000Z",
               id: 1,
               name: "Loewe 001 Woman Perfume",
-              stock: 1,
+              stock: 0,
               tags: ["women", "1-pc"],
               type: "perfume",
+              unitPrice: 155,
               updatedAt: "2024-11-11T00:00:00.000Z",
             },
           },
         ],
-      },
-      {
-        id: 1,
-        clientId: 1,
-        cost: 450,
-        paymentPlan: "biweekly",
-        description: null,
-        createdAt: "2024-11-11T00:00:00.000Z",
-        updatedAt: "2024-11-11T00:00:00.000Z",
-        owed: 300,
+        payments: [
+          {
+            id: 6,
+            ticketId: 1,
+            orderId: null,
+            payment: 86.9,
+            paymentType: "visa",
+            paidAt: "2025-01-16T00:00:00.000Z",
+            createdAt: "2025-01-16T00:00:00.000Z",
+            updatedAt: "2025-01-16T00:00:00.000Z",
+          },
+          {
+            id: 3,
+            ticketId: 1,
+            orderId: null,
+            payment: 150,
+            paymentType: "cash app",
+            paidAt: "2025-01-09T00:00:00.000Z",
+            createdAt: "2025-01-09T00:00:00.000Z",
+            updatedAt: "2025-01-09T00:00:00.000Z",
+          },
+        ],
         client: {
-          id: 1,
+          id: 2,
           workId: 1,
           fullname: "James Moe",
           address: "1823 Steele Street",
           phoneNumber: "9566347775",
-          relationship: 5,
-          createdAt: "2024-11-10T00:00:00.000Z",
-          updatedAt: "2024-12-12T00:00:00.000Z",
+          description: "",
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
           work: {
             id: 1,
             name: "Hamill, Denesik and Davis",
@@ -279,37 +429,6 @@ describe.only("Tickets Routes", function () {
             updatedAt: "2024-12-02T00:00:00.000Z",
           },
         },
-        payments: [
-          {
-            id: 1,
-            ticketId: 1,
-            paidAt: "2024-11-01T20:00:00.000Z",
-            payment: 150,
-            paymentType: "cash app",
-            createdAt: "2024-11-11T00:00:00.000Z",
-            updatedAt: "2024-11-11T00:00:00.000Z",
-          },
-        ],
-        waresSold: [
-          {
-            wareId: 3,
-            ticketId: 1,
-            amount: 1,
-            returned: 0,
-            createdAt: "2024-11-11T00:00:00.000Z",
-            updatedAt: "2024-11-11T00:00:00.000Z",
-            ware: {
-              cost: 450,
-              createdAt: "2024-11-11T00:00:00.000Z",
-              id: 3,
-              name: "The Leather Medium Tote Bag",
-              stock: 2,
-              tags: ["women"],
-              type: "bag",
-              updatedAt: "2024-11-11T00:00:00.000Z",
-            },
-          },
-        ],
       },
     ]
 
@@ -344,42 +463,49 @@ describe.only("Tickets Routes", function () {
     })
 
     it("When client id is the only input, Then response all providers with the respectived id are returned", async function () {
-      await getTicketsIt({ clientId: 1 }, allTickets[1])
+      await getTicketsIt({ clientId: 2 }, allTickets[2])
     })
 
     it("When cost is the only input, Then response all providers with the respectived cost are returned", async function () {
-      await getTicketsIt({ cost: 155 }, allTickets[0])
+      await getTicketsIt({ cost: 168.27 }, allTickets[0])
     })
 
     it("When payment plan is the only input, Then response all providers with the payment plan that includes the subtring entered", async function () {
-      await getTicketsIt({ paymentPlan: "week" }, allTickets)
+      await getTicketsIt({ paymentPlan: "week" }, [
+        allTickets[1],
+        allTickets[2],
+      ])
     })
 
     it("When description is the only input, Then response all providers with the description that includes the subtring entered", async function () {
-      await getTicketsIt({ description: null }, allTickets)
+      await getTicketsIt({ description: "" }, allTickets)
     })
 
     it("When a created at date is given, Then response is all tickets within that same month and year", async function () {
-      await getTicketsIt({ createdAt: new Date("2024-11-11") }, allTickets)
+      await getTicketsIt({ createdAt: new Date("2025-01-11") }, allTickets)
     })
 
     it("When a updated at date is given, Then response is all tickets within that same month and year", async function () {
-      await getTicketsIt({ updatedAt: new Date("2024-12-10") })
+      await getTicketsIt({ updatedAt: new Date("2025-02-10") })
     })
 
     it("When a pending is given, Then response is all tickets that have not been paid in full are returned", async function () {
-      await getTicketsIt({ pending: true }, allTickets[1])
+      await getTicketsIt({ pending: true }, [
+        allTickets[1],
+        allTickets[0],
+        allTickets[2],
+      ])
     })
 
     it("When multiple inputs are given, Then response is all tickets that satisfy the input comparisons", async function () {
       await getTicketsIt(
         {
-          clientId: 1,
-          cost: 450,
-          paymentPlan: "weekly",
-          description: null,
-          createdAt: "2024-11-11",
-          updatedAt: "2024-11-11",
+          clientId: 3,
+          cost: 488.52,
+          paymentPlan: "biweekly",
+          description: "",
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
         },
         allTickets[1]
       )
@@ -534,8 +660,8 @@ describe.only("Tickets Routes", function () {
         .to.include.string(preMerchantMsg)
         .and.string(" ticket has been created.")
       expect(newTicket).to.include(requestBody)
-      expect(newWaresTickets[0]).to.include(waresTickets[0])
-      expect(newWaresTickets[1]).to.include(waresTickets[1])
+      expect(newWaresTickets[0]).to.include(waresTickets[1])
+      expect(newWaresTickets[1]).to.include(waresTickets[0])
       expect(newTicketDeleted).to.equal(1)
       expect(waresTicketsDeleted).to.equal(0)
     })
@@ -568,6 +694,7 @@ describe.only("Tickets Routes", function () {
         clientId: Math.ceil(Math.random() * 3),
         cost: round(Math.random() * 5 + 9),
         paymentPlan: ["weekly", "lump-sum"][Math.floor(Math.random() * 2)],
+        description: faker.lorem.sentence({ min: 3, max: 10 }),
       }
 
       const { status, data } = await client.put(

@@ -3,6 +3,11 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("OrdersWares", {
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: false,
+      },
       wareId: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -13,12 +18,12 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      amount: {
-        type: Sequelize.INTEGER,
+      unitPrice: {
+        type: Sequelize.FLOAT,
         allowNull: false,
       },
-      cost: {
-        type: Sequelize.FLOAT,
+      amount: {
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       returned: {

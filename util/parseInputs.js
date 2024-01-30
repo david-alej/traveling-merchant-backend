@@ -2,7 +2,7 @@
 
 const { Op, Sequelize } = require("sequelize")
 const { matchedData } = require("express-validator")
-const models = require("../database/models")
+// const models = require("../database/models")
 const { validationPerusal } = require("./validators")
 
 const createDateQuery = (inputName, input, whereOptions, tableName) => {
@@ -99,17 +99,7 @@ module.exports = {
       } else if (Array.isArray(input)) {
         whereOptions[String(inputName)] = { [Op.contains]: input }
       } else if (input === true) {
-        otherOptions.order[0] = [models.Sequelize.col("owed"), "DESC"]
-        const whereOptionsClone = structuredClone(whereOptions)
-        whereOptions = {
-          [Op.and]: [
-            whereOptionsClone,
-            models.Sequelize.literal(
-              // eslint-disable-next-line quotes
-              '(SELECT "Tickets"."cost" - COALESCE(SUM("payment"), 0) > 0 FROM "Transactions" WHERE "ticketId" = "Tickets"."id")'
-            ),
-          ],
-        }
+        break
       } else {
         createStringQuery(inputName, input, whereOptions)
       }

@@ -25,6 +25,12 @@ module.exports = (sequelize, DataTypes) => {
         as: "waresSold",
         onDelete: "CASCADE",
       })
+
+      Tickets.belongsToMany(models.Wares, {
+        foreignKey: "ticketId",
+        as: "wares",
+        through: models.WaresTickets,
+      })
     }
   }
   Tickets.init(

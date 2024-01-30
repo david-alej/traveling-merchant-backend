@@ -18,6 +18,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "wareId",
         as: "bought",
       })
+
+      Wares.belongsToMany(models.Tickets, {
+        foreignKey: "wareId",
+        as: "tickets",
+        through: models.WaresTickets,
+      })
     }
   }
   Wares.init(

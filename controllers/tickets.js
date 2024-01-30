@@ -26,7 +26,14 @@ exports.paramTicketId = async (req, res, next, ticketId) => {
       )
     }
 
-    req.targetTicket = searched.dataValues
+    const ticket = JSON.parse(JSON.stringify(searched))
+
+    ticket.paid = Math.round(ticket.paid * 100) / 100
+
+    ticket.owed =
+      Math.round((ticket.cost - ticket.returned - ticket.paid) * 100) / 100
+
+    req.targetTicket = ticket
 
     next()
   } catch (err) {
@@ -36,11 +43,15 @@ exports.paramTicketId = async (req, res, next, ticketId) => {
 
 exports.getTicket = async (req, res) => res.json(req.targetTicket)
 
+const sortForPending = async (tickets) => {
+  tickets.sort((a, b) => b.owed - a.owed)
+}
+
 exports.getTickets = async (req, res, next) => {
   const merchant = req.session.merchant
 
   try {
-    const { afterMsg, query } = await parseTicketInputs(req)
+    const { afterMsg, query, inputsObject } = await parseTicketInputs(req)
 
     const searched = await models.Tickets.findAll(query)
 
@@ -51,7 +62,18 @@ exports.getTickets = async (req, res, next) => {
       )
     }
 
-    res.json(searched)
+    const tickets = JSON.parse(JSON.stringify(searched))
+
+    for (const ticket of tickets) {
+      ticket.paid = Math.round(ticket.paid * 100) / 100
+
+      ticket.owed =
+        Math.round((ticket.cost - ticket.returned - ticket.paid) * 100) / 100
+    }
+
+    if (inputsObject.pending === true) await sortForPending(tickets)
+
+    res.json(tickets)
   } catch (err) {
     next(err)
   }
@@ -77,6 +99,8 @@ exports.postValidation = async (req, res, next) => {
 }
 
 const parseNewWaresTickets = async (waresTickets, merchantPreMsg) => {
+  waresTickets.sort((a, b) => b.wareId - a.wareId)
+
   const wareIds = waresTickets.map((waresTicket) => {
     return waresTicket.wareId
   })
@@ -93,44 +117,38 @@ const parseNewWaresTickets = async (waresTickets, merchantPreMsg) => {
     )
   }
 
-  const wares = await models.Wares.findAll({
-    where: { id: wareIds },
-    ...findWaresQuery,
-  })
+  const waresSearched = await models.Wares.findAll(findWaresQuery(wareIds))
+
+  const wares = JSON.parse(JSON.stringify(waresSearched))
 
   let totalCost = 0
-  console.log(wares)
-  wares.forEach((ware) => {
-    for (const waresTicket of waresTickets) {
-      if (waresTicket.wareId === ware.id) {
-        totalCost += waresTicket.amount * ware.cost
 
-        const wareReturned = waresTicket.returned ? waresTicket.returned : 0
-        console.log(ware.stock)
-        const remainingStock = ware.stock - waresTicket.amount + wareReturned
+  waresTickets.forEach((waresTicket) => {
+    const index = wareIds.indexOf(waresTicket.wareId)
 
-        if (remainingStock < 0 || waresTicket.amount > ware.stock) {
-          throw new Api400Error(
-            merchantPreMsg +
-              ` merchant has input more amount of a ware than what is in stock with ware id = ${ware.id}.`,
-            "Bad input request."
-          )
-        }
+    const ware = wares[parseInt(index)]
 
-        const index = wareIds.indexOf(ware.id)
+    if (typeof ware !== "object" || ware.id !== waresTicket.wareId) {
+      throw new Api404Error(
+        merchantPreMsg +
+          ` the wares with id = ${waresTicket.wareId} was not found.`,
+        "Ware not found."
+      )
+    }
 
-        wareIds.splice(index, 1)
-      }
+    totalCost += waresTicket.amount * ware.unitPrice
+
+    const remainingStock =
+      ware.stock - waresTicket.amount + waresTicket.returned
+
+    if (remainingStock < 0 || waresTicket.amount > ware.stock) {
+      throw new Api400Error(
+        merchantPreMsg +
+          ` merchant has input more amount of a ware than what is in stock with ware id = ${ware.id}.`,
+        "Bad input request."
+      )
     }
   })
-
-  if (wareIds.length !== 0) {
-    throw new Api404Error(
-      merchantPreMsg +
-        ` the wares with the following ids, ${wareIds}, were not found.`,
-      "Ware not found."
-    )
-  }
 
   return totalCost
 }

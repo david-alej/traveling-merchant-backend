@@ -24,8 +24,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       wareId: DataTypes.INTEGER,
       orderId: DataTypes.INTEGER,
+      unitPrice: DataTypes.FLOAT,
       amount: DataTypes.INTEGER,
-      cost: DataTypes.FLOAT,
       returned: DataTypes.INTEGER,
     },
     {
@@ -33,8 +33,6 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "OrdersWares",
     }
   )
-
-  OrdersWares.removeAttribute("id")
 
   return OrdersWares
 }

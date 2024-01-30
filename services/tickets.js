@@ -18,27 +18,50 @@ const transactionsInclusion = {
 const waresTicketsInclusion = {
   model: models.WaresTickets,
   as: "waresSold",
+  attributes: { exclude: ["id"] },
   include: {
     model: models.Wares,
     as: "ware",
+    attributes: {
+      include: [
+        [
+          models.Sequelize.literal(
+            // eslint-disable-next-line quotes
+            '(SELECT "amount" + "waresSold"."returned" - "returned" - "waresSold"."amount" FROM "OrdersWares" WHERE "wareId" = "waresSold"."wareId")'
+          ),
+          "stock",
+        ],
+        "unitPrice",
+      ],
+    },
   },
 }
 
-exports.findWaresQuery = {
+exports.findWaresQuery = (wareId) => ({
+  where: { id: wareId },
   attributes: {
     include: [
       [
         models.Sequelize.literal(
           // eslint-disable-next-line quotes
-          '(SELECT COALESCE(SUM("returned"), 0) - COALESCE(SUM("amount"), 0) FROM "OrdersWares" WHERE "wareId" = "Wares"."id")'
+          '(SELECT "amount" + "sold"."returned" - "returned" - "sold"."amount" FROM "OrdersWares" WHERE "wareId" = "Wares"."id")'
         ),
         "stock",
       ],
     ],
   },
-  inlcude: [{ model: models.WaresTickets, as: "sold" }],
-  raw: true,
-}
+  include: [
+    {
+      model: models.WaresTickets,
+      as: "sold",
+    },
+    {
+      model: models.OrdersWares,
+      as: "bought",
+    },
+  ],
+  order: [["id", "DESC"]],
+})
 
 const findTicketQuery = {
   attributes: {
@@ -46,17 +69,37 @@ const findTicketQuery = {
       [
         models.Sequelize.literal(
           // eslint-disable-next-line quotes
-          '(SELECT "Tickets"."cost" - COALESCE(SUM("payment"), 0) FROM "Transactions" WHERE "ticketId" = "Tickets"."id")'
+          `( SELECT
+            SUM("returned" * "ware"."unitPrice")
+          FROM
+            "WaresTickets"
+          LEFT OUTER JOIN 
+            "Wares" AS "ware" ON "wareId" = "ware"."id" 
+          WHERE 
+            "ticketId" = "Tickets"."id" )`
         ),
-        "owed",
+        "returned",
+      ],
+      [
+        models.Sequelize.literal(
+          // eslint-disable-next-line quotes
+          `( SELECT 
+            COALESCE(SUM("payment"), 0)
+          FROM 
+            "Transactions" 
+          WHERE 
+            "ticketId" = "Tickets"."id" )`
+        ),
+        "paid",
       ],
     ],
   },
-  include: [clientsInclusion, transactionsInclusion, waresTicketsInclusion],
+  include: [waresTicketsInclusion, transactionsInclusion, clientsInclusion],
   order: [
     ["id", "DESC"],
     ["payments", "id", "DESC"],
-    ["waresSold", "ware", "cost", "DESC"],
+    ["waresSold", "wareId", "DESC"],
+    ["waresSold", "ware", "unitPrice", "DESC"],
   ],
 }
 
