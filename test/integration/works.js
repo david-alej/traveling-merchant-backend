@@ -14,7 +14,7 @@ const {
 
 const { OK, NOT_FOUND, BAD_REQUEST, CREATED } = httpStatusCodes
 
-describe("Works Routes", function () {
+describe.only("Works Routes", function () {
   let client
   const setHeaders = { headers: {} }
   const workObject = {
@@ -39,7 +39,7 @@ describe("Works Routes", function () {
             "fullname",
             "address",
             "phoneNumber",
-            "relationship",
+            "description",
             "createdAt",
             "updatedAt",
           ],
@@ -114,108 +114,110 @@ describe("Works Routes", function () {
     })
   })
 
-  describe("Get /", function () {
-    it("When no inputs are given, Then all works are returned", async function () {
-      const expectedWorks = [
-        {
-          id: 1,
-          name: "Hamill, Denesik and Davis",
-          address: "38 Galvin Ave.",
-          phoneNumber: "9075554011",
-          createdAt: "2024-11-02T00:00:00.000Z",
-          updatedAt: "2024-12-02T00:00:00.000Z",
-          employees: [
-            {
-              id: 1,
-              workId: 1,
-              fullname: "James Moe",
-              address: "1823 Steele Street",
-              phoneNumber: "9566347775",
-              relationship: 5,
-              createdAt: "2024-11-10T00:00:00.000Z",
-              updatedAt: "2024-12-12T00:00:00.000Z",
-            },
-          ],
-        },
-        {
-          id: 2,
-          name: "Deckow and Sons",
-          address: "245 John Drive",
-          phoneNumber: "7644084620",
-          createdAt: "2024-11-02T00:00:00.000Z",
-          updatedAt: "2024-11-02T00:00:00.000Z",
-          employees: [
-            {
-              id: 2,
-              workId: 2,
-              fullname: "Kellen Paucek",
-              address: "1454 Sussex Court",
-              phoneNumber: "2543865553",
-              relationship: 5,
-              createdAt: "2024-11-14T00:00:00.000Z",
-              updatedAt: "2024-11-29T00:00:00.000Z",
-            },
-          ],
-        },
-        {
-          id: 3,
-          name: "Lynch PLC",
-          address: "38 Lafayette St.",
-          phoneNumber: "9103623505",
-          createdAt: "2024-11-02T00:00:00.000Z",
-          updatedAt: "2024-11-02T00:00:00.000Z",
-          employees: [
-            {
-              address: "1571 Weekly Street",
-              createdAt: "2024-11-22T00:00:00.000Z",
-              fullname: "Madilyn Langosh",
-              id: 3,
-              phoneNumber: "2103424367",
-              relationship: 5,
-              updatedAt: "2024-11-25T00:00:00.000Z",
-              workId: 3,
-            },
-          ],
-        },
-      ]
-      const { status, data: works } = await client.get("/works", setHeaders)
+  describe.only("Get /", function () {
+    const allWorks = [
+      {
+        id: 3,
+        name: "Lynch PLC",
+        address: "38 Lafayette St.",
+        phoneNumber: "9103623505",
+        createdAt: "2024-11-02T00:00:00.000Z",
+        updatedAt: "2024-11-02T00:00:00.000Z",
+        employees: [
+          {
+            id: 4,
+            workId: 3,
+            fullname: "Madilyn Langosh",
+            address: "1571 Weekly Street",
+            phoneNumber: "2103424367",
+            description: "",
+            createdAt: "2025-01-13T00:00:00.000Z",
+            updatedAt: "2025-01-13T00:00:00.000Z",
+          },
+        ],
+      },
+      {
+        id: 2,
+        name: "Deckow and Sons",
+        address: "245 John Drive",
+        phoneNumber: "7644084620",
+        createdAt: "2024-11-02T00:00:00.000Z",
+        updatedAt: "2024-11-02T00:00:00.000Z",
+        employees: [
+          {
+            id: 3,
+            workId: 2,
+            fullname: "Kellen Paucek",
+            address: "1454 Sussex Court",
+            phoneNumber: "2543865553",
+            description: "",
+            createdAt: "2025-01-09T00:00:00.000Z",
+            updatedAt: "2025-01-09T00:00:00.000Z",
+          },
+        ],
+      },
+      {
+        id: 1,
+        name: "Hamill, Denesik and Davis",
+        address: "38 Galvin Ave.",
+        phoneNumber: "9075554011",
+        createdAt: "2024-11-02T00:00:00.000Z",
+        updatedAt: "2024-12-02T00:00:00.000Z",
+        employees: [
+          {
+            id: 2,
+            workId: 1,
+            fullname: "James Moe",
+            address: "1823 Steele Street",
+            phoneNumber: "9566347775",
+            description: "",
+            createdAt: "2025-01-09T00:00:00.000Z",
+            updatedAt: "2025-01-09T00:00:00.000Z",
+          },
+          {
+            id: 1,
+            workId: 1,
+            fullname: "Defective",
+            address: "0000 Street",
+            phoneNumber: "0000000000",
+            description: "",
+            createdAt: "2025-01-01T00:00:00.000Z",
+            updatedAt: "2025-01-01T00:00:00.000Z",
+          },
+        ],
+      },
+    ]
+
+    async function getWorksIt(
+      requestBody,
+      expectedWorks = [],
+      isPrinted = false
+    ) {
+      expectedWorks = Array.isArray(expectedWorks)
+        ? expectedWorks
+        : [expectedWorks]
+      const config = structuredClone(setHeaders)
+      config.data = requestBody
+
+      const { status, data: works } = await client.get("/works", config)
+
+      if (isPrinted) {
+        for (const work of works) {
+          console.log(work, ",")
+        }
+      }
 
       expect(status).to.equal(OK)
       expect(works).to.be.jsonSchema(worksSchema)
       expect(works).to.eql(expectedWorks)
+    }
+
+    it("When no inputs are given, Then all works are returned", async function () {
+      await getWorksIt({}, allWorks, true)
     })
 
     it("When a updated at date is given, Then response is all clients within that same month and year", async function () {
-      const expectedClients = [
-        {
-          id: 1,
-          name: "Hamill, Denesik and Davis",
-          address: "38 Galvin Ave.",
-          phoneNumber: "9075554011",
-          createdAt: "2024-11-02T00:00:00.000Z",
-          updatedAt: "2024-12-02T00:00:00.000Z",
-          employees: [
-            {
-              address: "1823 Steele Street",
-              createdAt: "2024-11-10T00:00:00.000Z",
-              fullname: "James Moe",
-              id: 1,
-              phoneNumber: "9566347775",
-              relationship: 5,
-              updatedAt: "2024-12-12T00:00:00.000Z",
-              workId: 1,
-            },
-          ],
-        },
-      ]
-      const config = structuredClone(setHeaders)
-      config.data = { updatedAt: new Date("2024-12-10") }
-
-      const { status, data: works } = await client.get("/works", config)
-
-      expect(status).to.equal(OK)
-      expect(works).to.be.jsonSchema(worksSchema)
-      expect(works).to.eql(expectedClients)
+      await getWorksIt({ updatedAt: new Date("2024-12-10") }, allWorks[0])
     })
 
     it("When a name is given, Then all works that have their names include the given string using case insensitive search", async function () {

@@ -48,6 +48,8 @@ describe("Clients Routes", function () {
             "description",
             "createdAt",
             "updatedAt",
+            "paid",
+            "returned",
             "owed",
           ],
         },
@@ -106,7 +108,7 @@ describe("Clients Routes", function () {
     })
 
     it("When an non-existing client id is given, Then the response is not found #paramClientId", async function () {
-      const clientId = Math.ceil(Math.random() * 10) + 3
+      const clientId = Math.ceil(Math.random() * 10) + 4
 
       const { status, data } = await client.get(
         "/clients/" + clientId,
@@ -150,7 +152,9 @@ describe("Clients Routes", function () {
             description: "",
             createdAt: "2025-01-13T00:00:00.000Z",
             updatedAt: "2025-01-13T00:00:00.000Z",
-            owed: -154.99999999999997,
+            returned: 155,
+            paid: 13.27,
+            owed: 0,
           },
         ],
         work: {
@@ -180,6 +184,8 @@ describe("Clients Routes", function () {
             description: "",
             createdAt: "2025-01-09T00:00:00.000Z",
             updatedAt: "2025-01-09T00:00:00.000Z",
+            returned: 0,
+            paid: 200,
             owed: 288.52,
           },
         ],
@@ -210,6 +216,8 @@ describe("Clients Routes", function () {
             description: "",
             createdAt: "2025-01-09T00:00:00.000Z",
             updatedAt: "2025-01-09T00:00:00.000Z",
+            returned: 155,
+            paid: 236.9,
             owed: 0,
           },
         ],

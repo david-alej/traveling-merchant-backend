@@ -14,7 +14,7 @@ const {
 
 const { OK, NOT_FOUND, BAD_REQUEST, CREATED } = httpStatusCodes
 
-describe.only("Tickets Routes", function () {
+describe("Tickets Routes", function () {
   let client
   const setHeaders = { headers: {} }
   const ticketObject = {
@@ -532,9 +532,9 @@ describe.only("Tickets Routes", function () {
 
     it("When merchant inputs values for tickets data and warestickets data with duplicate ware ids, Then response is bad request ", async function () {
       const waresTickets = [
-        { wareId: 1, amount: 1 },
+        { wareId: 2, amount: 1 },
         { wareId: 5, amount: 1 },
-        { wareId: 1, amount: 1 },
+        { wareId: 2, amount: 1 },
       ]
       const requestBody = {
         clientId: Math.ceil(Math.random() * 3),
@@ -555,7 +555,7 @@ describe.only("Tickets Routes", function () {
 
     it("When merchant inputs values for tickets data and warestickets data that contains a non-exisiting wareId, Then response is bad request ", async function () {
       const waresTickets = [
-        { wareId: 1, amount: 1 },
+        { wareId: 2, amount: 1 },
         { wareId: 5, amount: 1 },
         { wareId: 700, amount: 1 },
       ]
@@ -578,8 +578,8 @@ describe.only("Tickets Routes", function () {
 
     it("When merchant inputs values for tickets data and warestickets data that contains the total amount of ware sold than is in stock, Then response is bad request ", async function () {
       const waresTickets = [
-        { wareId: 1, amount: 1000 },
-        { wareId: 5, amount: 1 },
+        { wareId: 2, amount: 1 },
+        { wareId: 5, amount: 1000 },
       ]
       const requestBody = {
         clientId: Math.ceil(Math.random() * 3),
@@ -600,7 +600,29 @@ describe.only("Tickets Routes", function () {
 
     it("When merchant inputs values for tickets data and warestickets data that contains the amount sold of a ware (excluding the returned amount) than is in stock, Then response is bad request ", async function () {
       const waresTickets = [
-        { wareId: 1, amount: 1000, returned: 999 },
+        { wareId: 2, amount: 1000, returned: 999 },
+        { wareId: 5, amount: 1 },
+      ]
+      const requestBody = {
+        clientId: Math.ceil(Math.random() * 3),
+        cost: Math.floor(Math.random() * 4) + 50,
+        paymentPlan: "weekly",
+        waresTickets,
+      }
+
+      const { status, data } = await client.post(
+        "/tickets",
+        requestBody,
+        setHeaders
+      )
+
+      expect(status).to.equal(BAD_REQUEST)
+      expect(data).to.equal("Bad input request.")
+    })
+
+    it("When merchant inputs values for tickets data and warestickets data that cocontains the more amount returned than was bought, Then response is bad request ", async function () {
+      const waresTickets = [
+        { wareId: 2, amount: 1, returned: 2 },
         { wareId: 5, amount: 1 },
       ]
       const requestBody = {

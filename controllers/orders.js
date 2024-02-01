@@ -1,9 +1,15 @@
-const { validationPerusal, integerValidator } =
-  require("../util/index").validators
+const {
+  validationPerusal,
+  integerValidator,
+  floatValidator,
+  textValidator,
+  phoneNumberValidator,
+  emailValidator,
+} = require("../util/index").validators
 const models = require("../database/models")
 const { Api400Error, Api404Error, Api500Error } =
   require("../util/index").apiErrors
-const { findOrderQuery, parseOrderInputs } =
+const { findOrderQuery, parseOrderInputs, findWaresQuery } =
   require("../services/index").ordersServices
 
 exports.paramOrderId = async (req, res, next, orderId) => {
@@ -26,7 +32,22 @@ exports.paramOrderId = async (req, res, next, orderId) => {
       )
     }
 
-    req.targetOrder = searched.dataValues
+    const order = JSON.parse(JSON.stringify(searched))
+
+    order.waresBought.forEach((ordersWare) => {
+      const stockBought = ordersWare.amount - ordersWare.returned
+      const ware = ordersWare.ware
+      const waresTickets = ware.sold
+      let stockSold = 0
+
+      for (const waresTicket of waresTickets) {
+        stockSold += waresTicket.amount - waresTicket.returned
+      }
+
+      ware.stock = stockBought - stockSold
+    })
+
+    req.targetOrder = order
 
     next()
   } catch (err) {
@@ -51,19 +72,176 @@ exports.getOrders = async (req, res, next) => {
       )
     }
 
-    res.json(searched)
+    const orders = JSON.parse(JSON.stringify(searched))
+
+    orders.forEach((order) => {
+      order.waresBought.forEach((ordersWare) => {
+        const stockBought = ordersWare.amount - ordersWare.returned
+        const ware = ordersWare.ware
+        const waresTickets = ware.sold
+        let stockSold = 0
+
+        for (const waresTicket of waresTickets) {
+          stockSold += waresTicket.amount - waresTicket.returned
+        }
+
+        ware.stock = stockBought - stockSold
+      })
+    })
+
+    res.json(orders)
   } catch (err) {
     next(err)
   }
+}
+
+exports.postValidation = async (req, res, next) => {
+  const { ordersWares, provider, providerId } = req.body
+  const merchant = req.session.merchant
+
+  if (!Array.isArray(ordersWares)) return next()
+
+  try {
+    if (provider && providerId) {
+      throw new Api400Error(
+        merchant.preMsg +
+          " cannot input providerId and provider at the same time.",
+        "Bad input request."
+      )
+    }
+  } catch (err) {
+    next(err)
+  }
+
+  for (let i = 0; i < ordersWares.length; i++) {
+    await integerValidator(`ordersWares[${i}].wareId`).run(req)
+    await integerValidator(`ordersWares[${i}].amount`).run(req)
+    await floatValidator(`ordersWares[${i}].unitPrice`).run(req)
+    await integerValidator(
+      `ordersWares[${i}].returned`,
+      false,
+      true,
+      false
+    ).run(req)
+  }
+
+  if (providerId) {
+    await integerValidator("providerId").run(req)
+  } else {
+    const providerValidators = [
+      textValidator("provider.name"),
+      textValidator("provider.address"),
+      phoneNumberValidator("provider.phoneNumber"),
+      emailValidator("provider.email", false, true),
+    ]
+
+    for (const validator of providerValidators) {
+      await validator.run(req)
+    }
+  }
+
+  next()
+}
+
+const parseNewOrdersWares = async (inputsObject, merchantPreMsg) => {
+  const ordersWares = inputsObject.ordersWares
+
+  ordersWares.sort((a, b) => b.wareId - a.wareId)
+
+  const wareIds = ordersWares.map((ordersWare) => {
+    ordersWare.returned = ordersWare.returned || 0
+
+    if (ordersWare.amount < ordersWare.returned) {
+      throw new Api400Error(
+        merchantPreMsg +
+          ` has input more amount returned than was bought for ware id = ${ordersWare.wareId}.`,
+        "Bad input request."
+      )
+    }
+
+    return ordersWare.wareId
+  })
+
+  const duplicateWareIds = wareIds.filter(
+    (item, index) => wareIds.indexOf(item) !== index
+  )
+
+  if (duplicateWareIds.length !== 0) {
+    throw new Api400Error(
+      merchantPreMsg +
+        ` has input the following duplicate ware ids, ${duplicateWareIds}, in the waresOrders array.`,
+      "Bad input request."
+    )
+  }
+
+  const waresSearched = await models.Wares.findAll(findWaresQuery(wareIds))
+
+  const wares = JSON.parse(JSON.stringify(waresSearched))
+
+  ordersWares.forEach((ordersWare) => {
+    const index = wareIds.indexOf(ordersWare.wareId)
+
+    const ware = wares[parseInt(index)]
+
+    if (typeof ware !== "object" || ware.id !== ordersWare.wareId) {
+      throw new Api404Error(
+        merchantPreMsg + ` the ware with id = ${ware.id} was not found.`,
+        "Ware not found."
+      )
+    }
+  })
+
+  delete inputsObject.ordersWares
+
+  return ordersWares
+}
+
+const createOrdersWare = async (orderId, newOrdersWare, errorMsg) => {
+  newOrdersWare.forEach((ordersWare) => (ordersWare.orderId = orderId))
+
+  const ordersWaresCreated = await models.OrdersWares.bulkCreate(newOrdersWare)
+
+  if (!ordersWaresCreated) {
+    await models.Orders.destroy({
+      where: { id: orderId },
+    })
+
+    throw new Api500Error(errorMsg, "Internal server query error.")
+  }
+}
+
+const parseNewProvider = async (inputsObject, merchantPreMsg) => {
+  if (!inputsObject.provider) return
+
+  const newProviderCreated = await models.Providers.create(
+    inputsObject.provider
+  )
+
+  if (!newProviderCreated) {
+    throw new Api500Error(
+      merchantPreMsg +
+        " create provider query with order creation did not work.",
+      "Internal server query error."
+    )
+  }
+
+  inputsObject.providerId = newProviderCreated.dataValues.id
+
+  delete inputsObject.provider
 }
 
 exports.postOrder = async (req, res, next) => {
   const merchant = req.session.merchant
 
   try {
-    const { inputsObject: newOrder } = await parseOrderInputs(req, true)
+    const { afterMsg, inputsObject } = await parseOrderInputs(req, {})
 
-    const created = await models.Orders.create(newOrder)
+    const [newOrdersWares] = await Promise.all([
+      parseNewOrdersWares(inputsObject, merchant.preMsg),
+      parseNewProvider(inputsObject, merchant.preMsg),
+    ])
+
+    const created = await models.Orders.create(inputsObject)
 
     if (!created) {
       throw new Api500Error(
@@ -71,6 +249,16 @@ exports.postOrder = async (req, res, next) => {
         "Internal server query error."
       )
     }
+
+    const orderId = created.dataValues.id
+
+    await createOrdersWare(
+      orderId,
+      newOrdersWares,
+      merchant.preMsg +
+        " create ordersWares query with orders query did not work" +
+        afterMsg
+    )
 
     res.status(201).send(merchant.preMsg + " order has been created.")
   } catch (err) {

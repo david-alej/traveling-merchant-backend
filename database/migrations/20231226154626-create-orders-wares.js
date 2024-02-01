@@ -17,16 +17,19 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         primaryKey: true,
+        references: { model: "Orders", key: "id" },
+        onDelete: "CASCADE",
       },
       unitPrice: {
         type: Sequelize.FLOAT,
         allowNull: false,
       },
       amount: {
-        type: Sequelize.INTEGER,
         allowNull: false,
+        type: Sequelize.INTEGER,
       },
       returned: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         defaultValue: 0,
       },

@@ -1,7 +1,11 @@
 const ordersRouter = require("express").Router()
 const { ordersControllers } = require("../controllers/index")
-const { integerValidator, floatValidator, dateValidator } =
-  require("../util/index").validators
+const {
+  integerValidator,
+  floatValidator,
+  dateValidator,
+  arrayObjectValidator,
+} = require("../util/index").validators
 
 ordersRouter.param("orderId", ordersControllers.paramOrderId)
 
@@ -12,6 +16,8 @@ ordersRouter.get(
   [
     integerValidator("providerId", false, true),
     floatValidator("cost", false, true),
+    floatValidator("tax", false, true),
+    floatValidator("shipment", false, true),
     dateValidator("expectedAt", false, true),
     dateValidator("actualAt", false, true),
     dateValidator("createdAt", false, true),
@@ -23,11 +29,14 @@ ordersRouter.get(
 ordersRouter.post(
   "/",
   [
-    integerValidator("providerId"),
     floatValidator("cost"),
+    floatValidator("tax", false, true),
+    floatValidator("shipment", false, true),
     dateValidator("expectedAt"),
-    dateValidator("actualAt"),
+    dateValidator("actualAt", false, true),
+    arrayObjectValidator("ordersWares"),
   ],
+  ordersControllers.postValidation,
   ordersControllers.postOrder
 )
 
@@ -36,6 +45,8 @@ ordersRouter.put(
   [
     integerValidator("providerId", false, true),
     floatValidator("cost", false, true),
+    floatValidator("tax", false, true),
+    floatValidator("shipment", false, true),
     dateValidator("expectedAt", false, true),
     dateValidator("actualAt", false, true),
   ],

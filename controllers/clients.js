@@ -30,7 +30,16 @@ exports.paramClientId = async (req, res, next, clientId) => {
       )
     }
 
-    req.targetClient = searched.dataValues
+    const client = JSON.parse(JSON.stringify(searched))
+
+    client.tickets.forEach((ticket) => {
+      ticket.paid = Math.round(ticket.paid * 100) / 100
+
+      ticket.owed =
+        Math.round((ticket.cost - ticket.returned - ticket.paid) * 100) / 100
+    })
+
+    req.targetClient = client
 
     next()
   } catch (err) {
@@ -55,7 +64,20 @@ exports.getClients = async (req, res, next) => {
       )
     }
 
-    res.json(searched)
+    const clients = searched.map((client) => {
+      client = JSON.parse(JSON.stringify(client))
+
+      client.tickets.forEach((ticket) => {
+        ticket.paid = Math.round(ticket.paid * 100) / 100
+
+        ticket.owed =
+          Math.round((ticket.cost - ticket.returned - ticket.paid) * 100) / 100
+      })
+
+      return client
+    })
+
+    res.json(clients)
   } catch (err) {
     next(err)
   }
@@ -63,9 +85,16 @@ exports.getClients = async (req, res, next) => {
 
 exports.workValidation = async (req, res, next) => {
   const { workId, work } = req.body
+  const merchant = req.session.merchant
 
-  if (workId && work) {
-    throw new Error("cannot input workId and work at the same time.")
+  try {
+    if (workId && work) {
+      throw new Api400Error(
+        merchant.preMsg + " cannot input workId and work at the same time."
+      )
+    }
+  } catch (err) {
+    next(err)
   }
 
   if (workId) {

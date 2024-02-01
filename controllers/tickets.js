@@ -102,6 +102,16 @@ const parseNewWaresTickets = async (waresTickets, merchantPreMsg) => {
   waresTickets.sort((a, b) => b.wareId - a.wareId)
 
   const wareIds = waresTickets.map((waresTicket) => {
+    waresTicket.returned = waresTicket.returned || 0
+
+    if (waresTicket.amount < waresTicket.returned) {
+      throw new Api400Error(
+        merchantPreMsg +
+          ` has input more amount returned than was sold for ware id = ${waresTicket.wareId}.`,
+        "Bad input request."
+      )
+    }
+
     return waresTicket.wareId
   })
 
@@ -174,7 +184,7 @@ exports.postTicket = async (req, res, next) => {
   const merchant = req.session.merchant
 
   try {
-    const { afterMsg, inputsObject } = await parseTicketInputs(req, true)
+    const { afterMsg, inputsObject } = await parseTicketInputs(req, {})
 
     const newWaresTickets = inputsObject.waresTickets
     delete inputsObject.waresTickets

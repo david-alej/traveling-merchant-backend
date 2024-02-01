@@ -304,6 +304,21 @@ const phoneNumberValidator = (
 
 exports.phoneNumberValidator = phoneNumberValidator
 
+const emailValidator = (
+  input = "email",
+  inputIsParam = false,
+  optional = false
+) => {
+  const { head, inputName } = basicValidator(input, inputIsParam, optional)
+
+  return head
+    .normalizeEmail()
+    .isEmail()
+    .withMessage(inputName + " must be in email format.")
+}
+
+exports.emailValidator = emailValidator
+
 exports.validationPerusal = (req) => {
   const validationError = validationResult(req).array({
     onlyFirstError: true,

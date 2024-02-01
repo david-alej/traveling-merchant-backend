@@ -10,9 +10,23 @@ const ticketsInclusion = {
       [
         models.Sequelize.literal(
           // eslint-disable-next-line quotes
-          '(SELECT "tickets"."cost" - COALESCE(SUM("payment"), 0) FROM "Transactions" WHERE "ticketId" = "tickets"."id")'
+          `( SELECT
+            SUM("returned" * "ware"."unitPrice")
+          FROM
+            "WaresTickets"
+          LEFT OUTER JOIN 
+            "Wares" AS "ware" ON "wareId" = "ware"."id" 
+          WHERE 
+            "ticketId" = "tickets"."id" )`
         ),
-        "owed",
+        "returned",
+      ],
+      [
+        models.Sequelize.literal(
+          // eslint-disable-next-line quotes
+          '(SELECT COALESCE(SUM("payment"), 0) FROM "Transactions" WHERE "ticketId" = "tickets"."id")'
+        ),
+        "paid",
       ],
     ],
   },

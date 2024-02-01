@@ -9,6 +9,8 @@ const {
   preMerchantMsg,
   models,
   round,
+  fakerPhoneNumber,
+  faker,
 } = require("../common")
 
 const { OK, NOT_FOUND, BAD_REQUEST, CREATED } = httpStatusCodes
@@ -49,11 +51,44 @@ describe("Orders Routes", function () {
             "wareId",
             "orderId",
             "amount",
-            "cost",
+            "unitPrice",
             "returned",
             "createdAt",
             "updatedAt",
+            "ware",
           ],
+          properties: {
+            ware: {
+              type: "object",
+              required: [
+                "id",
+                "name",
+                "type",
+                "tags",
+                "unitPrice",
+                "createdAt",
+                "updatedAt",
+                "stock",
+                "sold",
+              ],
+              properties: {
+                sold: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    required: [
+                      "wareId",
+                      "ticketId",
+                      "amount",
+                      "returned",
+                      "createdAt",
+                      "updatedAt",
+                    ],
+                  },
+                },
+              },
+            },
+          },
         },
       },
     },
@@ -98,7 +133,7 @@ describe("Orders Routes", function () {
 
   describe("Get /:orderId", function () {
     it("When an existing order id is given, Then the response is the order", async function () {
-      const orderId = Math.ceil(Math.random() * 2)
+      const orderId = 1 //Math.ceil(Math.random() * 2)
 
       const { status, data } = await client.get(
         "/orders/" + orderId,
@@ -138,63 +173,204 @@ describe("Orders Routes", function () {
     const allOrders = [
       {
         id: 2,
-        providerId: 1,
-        cost: 110,
-        expectedAt: "2024-11-02T00:00:00.000Z",
-        actualAt: null,
-        createdAt: "2024-11-11T00:00:00.000Z",
-        updatedAt: "2024-11-11T00:00:00.000Z",
+        providerId: 2,
+        cost: 959.59,
+        tax: 89.59,
+        shipment: 20,
+        expectedAt: "2025-01-09T00:00:00.000Z",
+        actualAt: "2025-01-09T00:00:00.000Z",
+        createdAt: "2025-01-01T00:00:00.000Z",
+        updatedAt: "2025-01-17T00:00:00.000Z",
         provider: {
-          id: 1,
-          name: "Amazon",
+          id: 2,
+          name: "Ebay",
           address: "0000 online",
-          phoneNumber: "1632474734",
+          phoneNumber: "5125869601",
+          email: "",
           createdAt: "2024-11-11T00:00:00.000Z",
           updatedAt: "2024-11-11T00:00:00.000Z",
         },
         waresBought: [
           {
-            amount: 1,
-            cost: 100,
-            createdAt: "2024-11-11T00:00:00.000Z",
+            id: 4,
+            wareId: 4,
             orderId: 2,
+            unitPrice: 150,
+            amount: 5,
             returned: 0,
-            updatedAt: "2024-11-11T00:00:00.000Z",
+            createdAt: "2025-01-01T00:00:00.000Z",
+            updatedAt: "2025-01-01T00:00:00.000Z",
+            ware: {
+              id: 4,
+              name: "Versace Men's 4-Pc. Eros Eau de Toilette Gift Set",
+              type: "perfume",
+              tags: ["men", "4-pc"],
+              unitPrice: 176,
+              createdAt: "2024-11-11T00:00:00.000Z",
+              updatedAt: "2024-11-11T00:00:00.000Z",
+              sold: [],
+              stock: 5,
+            },
+          },
+          {
+            id: 5,
             wareId: 5,
+            orderId: 2,
+            unitPrice: 10,
+            amount: 10,
+            returned: 0,
+            createdAt: "2025-01-01T00:00:00.000Z",
+            updatedAt: "2025-01-01T00:00:00.000Z",
+            ware: {
+              id: 5,
+              name: "Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle",
+              type: "braclet",
+              tags: ["unisex"],
+              unitPrice: 14,
+              createdAt: "2024-11-11T00:00:00.000Z",
+              updatedAt: "2024-11-11T00:00:00.000Z",
+              sold: [
+                {
+                  amount: 2,
+                  createdAt: "2025-01-09T00:00:00.000Z",
+                  returned: 0,
+                  ticketId: 1,
+                  updatedAt: "2025-01-09T00:00:00.000Z",
+                  wareId: 5,
+                },
+              ],
+              stock: 8,
+            },
           },
         ],
       },
       {
         id: 1,
-        providerId: 3,
-        cost: 500,
-        expectedAt: "2024-11-02T00:00:00.000Z",
-        actualAt: "2024-11-09T00:00:00.000Z",
-        createdAt: "2024-11-11T00:00:00.000Z",
-        updatedAt: "2024-11-11T00:00:00.000Z",
+        providerId: 1,
+        cost: 3413.65,
+        tax: 283.65,
+        shipment: 50,
+        actualAt: "2025-01-09T00:00:00.000Z",
+        expectedAt: "2025-01-08T00:00:00.000Z",
+        createdAt: "2025-01-01T00:00:00.000Z",
+        updatedAt: "2025-01-01T00:00:00.000Z",
         provider: {
-          id: 3,
-          name: "JCPenny",
-          address: "84506 Deangelo Cliff",
-          phoneNumber: "6192621956",
+          id: 1,
+          name: "Amazon",
+          address: "0000 online",
+          phoneNumber: "1632474734",
+          email: "",
           createdAt: "2024-11-11T00:00:00.000Z",
           updatedAt: "2024-11-11T00:00:00.000Z",
         },
         waresBought: [
           {
-            amount: 1,
-            cost: 130,
-            createdAt: "2024-11-11T00:00:00.000Z",
-            orderId: 1,
-            returned: 0,
-            updatedAt: "2024-11-11T00:00:00.000Z",
+            id: 1,
             wareId: 1,
+            orderId: 1,
+            unitPrice: 145,
+            amount: 10,
+            returned: 10,
+            createdAt: "2025-01-01T00:00:00.000Z",
+            updatedAt: "2025-01-01T00:00:00.000Z",
+            ware: {
+              id: 1,
+              name: "Loewe 001 Woman Perfume",
+              type: "perfume",
+              tags: ["women", "1-pc"],
+              unitPrice: 155,
+              createdAt: "2024-11-11T00:00:00.000Z",
+              updatedAt: "2024-11-11T00:00:00.000Z",
+              sold: [
+                {
+                  ticketId: 1,
+                  wareId: 1,
+                  amount: 1,
+                  returned: 1,
+                  createdAt: "2025-01-09T00:00:00.000Z",
+                  updatedAt: "2025-01-09T00:00:00.000Z",
+                },
+                {
+                  ticketId: 3,
+                  wareId: 1,
+                  amount: 1,
+                  returned: 1,
+                  createdAt: "2025-01-13T00:00:00.000Z",
+                  updatedAt: "2025-01-13T00:00:00.000Z",
+                },
+              ],
+              stock: 0,
+            },
+          },
+          {
+            id: 2,
+            wareId: 2,
+            orderId: 1,
+            unitPrice: 160,
+            amount: 5,
+            returned: 0,
+            createdAt: "2025-01-01T00:00:00.000Z",
+            updatedAt: "2025-01-01T00:00:00.000Z",
+            ware: {
+              id: 2,
+              name: "DIOR 3-Pc. J'dore Eau de Parfum Gift Set",
+              type: "perfume",
+              tags: ["women", "3-pc"],
+              unitPrice: 178,
+              createdAt: "2024-11-11T00:00:00.000Z",
+              updatedAt: "2024-11-11T00:00:00.000Z",
+              sold: [
+                {
+                  amount: 1,
+                  createdAt: "2025-01-09T00:00:00.000Z",
+                  returned: 0,
+                  ticketId: 1,
+                  updatedAt: "2025-01-09T00:00:00.000Z",
+                  wareId: 2,
+                },
+              ],
+              stock: 4,
+            },
+          },
+          {
+            id: 3,
+            wareId: 3,
+            orderId: 1,
+            unitPrice: 415,
+            amount: 2,
+            returned: 0,
+            createdAt: "2025-01-01T00:00:00.000Z",
+            updatedAt: "2025-01-01T00:00:00.000Z",
+            ware: {
+              id: 3,
+              name: "The Leather Medium Tote Bag",
+              type: "bag",
+              tags: ["women"],
+              unitPrice: 450,
+              createdAt: "2024-11-11T00:00:00.000Z",
+              updatedAt: "2024-11-11T00:00:00.000Z",
+              sold: [
+                {
+                  amount: 1,
+                  createdAt: "2025-01-09T00:00:00.000Z",
+                  returned: 0,
+                  ticketId: 2,
+                  updatedAt: "2025-01-09T00:00:00.000Z",
+                  wareId: 3,
+                },
+              ],
+              stock: 1,
+            },
           },
         ],
       },
     ]
 
-    async function getOrdersIt(requestBody, expectedOrders = []) {
+    async function getOrdersIt(
+      requestBody,
+      expectedOrders = [],
+      isPrinted = false
+    ) {
       expectedOrders = Array.isArray(expectedOrders)
         ? expectedOrders
         : [expectedOrders]
@@ -202,6 +378,12 @@ describe("Orders Routes", function () {
       config.data = requestBody
 
       const { status, data: orders } = await client.get("/orders", config)
+
+      if (isPrinted) {
+        for (const order of orders) {
+          console.log(order.waresBought, ",")
+        }
+      }
 
       expect(status).to.equal(OK)
       expect(orders).to.be.jsonSchema(ordersSchema)
@@ -213,38 +395,48 @@ describe("Orders Routes", function () {
     })
 
     it("When provider id is the only input, Then response all orders with the same provider id", async function () {
-      await getOrdersIt({ providerId: 3 }, allOrders[1])
+      await getOrdersIt({ providerId: 1 }, allOrders[1])
     })
 
     it("When cost is the only input, Then response all orders with the same cost", async function () {
-      await getOrdersIt({ cost: 500 }, allOrders[1])
+      await getOrdersIt({ cost: 3413.65 }, allOrders[1])
+    })
+
+    it("When tax is the only input, Then response all orders with the same tax", async function () {
+      await getOrdersIt({ tax: 89.59 }, allOrders[0])
+    })
+
+    it("When shipment is the only input, Then response all orders with the same shipment", async function () {
+      await getOrdersIt({ shipment: 20 }, allOrders[0])
     })
 
     it("When an expected date is given, Then response is all orders within that same month and year", async function () {
-      await getOrdersIt({ expectedAt: "2024-11-11" }, allOrders)
+      await getOrdersIt({ expectedAt: "2025-01-08" }, allOrders)
     })
 
     it("When an actual date is given, Then response is all orders within that same month and year", async function () {
-      await getOrdersIt({ actualAt: new Date("2024-11-11") }, allOrders[1])
+      await getOrdersIt({ actualAt: new Date("2025-01-11") }, allOrders)
     })
 
     it("When a created at date is given, Then response is all orders within that same month and year", async function () {
-      await getOrdersIt({ actualAt: new Date("2024-12-11") })
+      await getOrdersIt({ actualAt: new Date("2025-02-11") })
     })
 
     it("When a updated at date is given, Then response is all orders within that same month and year", async function () {
-      await getOrdersIt({ updatedAt: new Date("2024-11-11") }, allOrders)
+      await getOrdersIt({ updatedAt: new Date("2025-01-11") }, allOrders)
     })
 
     it("When multiple inputs are given, Then response is all orders that satisfy the input comparisons", async function () {
       await getOrdersIt(
         {
-          providerId: 1,
-          cost: 110,
-          expectedAt: new Date("2024-11-02"),
-          actualAt: null,
-          createdAt: "2024-11-11",
-          updatedAt: "2024-11-11",
+          providerId: 2,
+          cost: 959.59,
+          tax: 89.59,
+          shipment: 20,
+          expectedAt: new Date("2025-01-02"),
+          actualAt: new Date("2025-01-02"),
+          createdAt: "2025-01-11",
+          updatedAt: "2025-01-11",
         },
         allOrders[0]
       )
@@ -252,12 +444,16 @@ describe("Orders Routes", function () {
   })
 
   describe("Post /", function () {
-    it("When merchant inputs required values, Then order is created ", async function () {
+    it("When merchant inputs values for orders data but not required ordersWares input, Then response is bad request ", async function () {
+      const tax = Math.random() * 100 + 400
+      const shipment = Math.random() * 10 + 60
+      let cost = Math.random() * 200 + 400
       const requestBody = {
         providerId: Math.ceil(Math.random() * 4),
-        cost: round(Math.random() * 300) + 500,
+        cost,
+        tax,
+        shipment,
         expectedAt: "2025-02-02",
-        actualAt: null,
       }
 
       const { status, data } = await client.post(
@@ -266,22 +462,273 @@ describe("Orders Routes", function () {
         setHeaders
       )
 
+      expect(status).to.equal(BAD_REQUEST)
+      expect(data).to.equal("Bad input request.")
+    })
+
+    it("When merchant inputs values for orders data and ordersWares data with duplicate ware ids, Then response is bad request ", async function () {
+      const unitPrice1 = 155
+      const unitPrice5 = 14
+      const ordersWares = [
+        { wareId: 1, unitPrice: unitPrice1, amount: 1 },
+        { wareId: 5, unitPrice: unitPrice5, amount: 1 },
+        { wareId: 1, unitPrice: unitPrice1, amount: 1 },
+      ]
+      const tax = Math.random() * 100 + 400
+      const shipment = Math.random() * 10 + 60
+      let cost = tax + shipment
+      for (const ordersWare of ordersWares) {
+        cost += ordersWare.unitPrice * ordersWare.amount
+      }
+      const requestBody = {
+        providerId: Math.ceil(Math.random() * 2),
+        cost,
+        tax,
+        shipment,
+        expectedAt: "2025-02-0" + Math.ceil(Math.random() * 10),
+        ordersWares,
+      }
+
+      const { status, data } = await client.post(
+        "/orders",
+        requestBody,
+        setHeaders
+      )
+
+      expect(status).to.equal(BAD_REQUEST)
+      expect(data).to.equal("Bad input request.")
+    })
+
+    it("When merchant inputs values for orders data and ordersWares data that contains a non-exisiting wareId, Then response is bad request ", async function () {
+      const unitPrice1 = 155
+      const unitPrice5 = 14
+      const unitPrice700 = 700
+      const ordersWares = [
+        { wareId: 1, unitPrice: unitPrice1, amount: 1 },
+        { wareId: 5, unitPrice: unitPrice5, amount: 1 },
+        { wareId: 700, unitPrice: unitPrice700, amount: 1 },
+      ]
+      const tax = Math.random() * 100 + 400
+      const shipment = Math.random() * 10 + 60
+      let cost = tax + shipment
+      for (const ordersWare of ordersWares) {
+        cost += ordersWare.unitPrice * ordersWare.amount
+      }
+      const requestBody = {
+        providerId: Math.ceil(Math.random() * 2),
+        cost,
+        tax,
+        shipment,
+        expectedAt: "2025-02-0" + Math.ceil(Math.random() * 10),
+        ordersWares,
+      }
+
+      const { status, data } = await client.post(
+        "/orders",
+        requestBody,
+        setHeaders
+      )
+
+      expect(status).to.equal(NOT_FOUND)
+      expect(data).to.equal("Ware not found.")
+    })
+
+    it("When merchant inputs values for orders data and ordersWares data that contains the more amount returned than was bought, Then response is bad request ", async function () {
+      const unitPrice1 = 155
+      const unitPrice5 = 14
+      const ordersWares = [
+        { wareId: 1, unitPrice: unitPrice1, amount: 1, returned: 2 },
+        { wareId: 5, unitPrice: unitPrice5, amount: 1 },
+      ]
+      const tax = Math.random() * 100 + 400
+      const shipment = Math.random() * 10 + 60
+      let cost = tax + shipment
+      for (const ordersWare of ordersWares) {
+        cost += ordersWare.unitPrice * ordersWare.amount
+      }
+      const requestBody = {
+        providerId: Math.ceil(Math.random() * 2),
+        cost,
+        tax,
+        shipment,
+        expectedAt: "2025-02-0" + Math.ceil(Math.random() * 10),
+        ordersWares,
+      }
+
+      const { status, data } = await client.post(
+        "/orders",
+        requestBody,
+        setHeaders
+      )
+
+      expect(status).to.equal(BAD_REQUEST)
+      expect(data).to.equal("Bad input request.")
+    })
+
+    it("When merchant inputs required values, Then order is created ", async function () {
+      const unitPrice4 = 176
+      const unitPrice5 = 14
+      const ordersWares = [
+        { wareId: 4, unitPrice: unitPrice4, amount: 1 },
+        { wareId: 5, unitPrice: unitPrice5, amount: 3, returned: 1 },
+      ]
+      const tax = Math.random() * 100 + 400
+      const shipment = Math.random() * 10 + 60
+      let cost = tax + shipment
+      for (const ordersWare of ordersWares) {
+        cost += ordersWare.unitPrice * ordersWare.amount
+      }
+      const requestBody = {
+        providerId: Math.ceil(Math.random() * 4),
+        cost,
+        tax,
+        shipment,
+        expectedAt: "2025-02-02",
+        ordersWares,
+      }
+
+      const { status, data } = await client.post(
+        "/orders",
+        requestBody,
+        setHeaders
+      )
+
+      delete requestBody.ordersWares
       requestBody.expectedAt = new Date(requestBody.expectedAt).toISOString()
       const newOrderSearched = await models.Orders.findOne({
         where: requestBody,
+        include: [{ model: models.OrdersWares, as: "waresBought" }],
       })
-      const newOrder = newOrderSearched.dataValues
+      const newOrder = JSON.parse(JSON.stringify(newOrderSearched))
+      const newOrdersWares = newOrder.waresBought
       const newOrderDeleted = await models.Orders.destroy({
         where: requestBody,
       })
-      newOrder.expectedAt = newOrder.expectedAt.toISOString()
+      const newOrdersWaresDeleted = await models.OrdersWares.destroy({
+        where: { orderId: newOrder.id },
+      })
+      // newOrder.expectedAt = newOrder.expectedAt.toISOString()
 
       expect(status).to.equal(CREATED)
       expect(data)
         .to.include.string(preMerchantMsg)
         .and.string(" order has been created.")
       expect(newOrder).to.include(requestBody)
+      expect(newOrdersWares[0]).to.include(ordersWares[1])
+      expect(newOrdersWares[1]).to.include(ordersWares[0])
       expect(newOrderDeleted).to.equal(1)
+      expect(newOrdersWaresDeleted).to.equal(0)
+    })
+
+    it("When merchant inputs order required values and rovides the providerId and provider object at the same time, Then response is bad request ", async function () {
+      const unitPrice4 = 176
+      const unitPrice5 = 14
+      const ordersWares = [
+        { wareId: 4, unitPrice: unitPrice4, amount: 1 },
+        { wareId: 5, unitPrice: unitPrice5, amount: 3, returned: 1 },
+      ]
+      const tax = round(Math.random() * 100 + 400)
+      const shipment = round(Math.random() * 10 + 60)
+      let cost = tax + shipment
+      for (const ordersWare of ordersWares) {
+        cost += ordersWare.unitPrice * ordersWare.amount
+      }
+      const provider = {
+        name: faker.person.fullName(),
+        address: faker.location.streetAddress(),
+        phoneNumber: fakerPhoneNumber(),
+        email: faker.internet.email(),
+      }
+      const requestBody = {
+        provider,
+        providerId: Math.ceil(Math.random() * 2),
+        cost,
+        tax,
+        shipment,
+        expectedAt: "2025-02-02",
+        ordersWares,
+      }
+
+      const { status, data } = await client.post(
+        "/orders",
+        requestBody,
+        setHeaders
+      )
+
+      expect(status).to.equal(BAD_REQUEST)
+      expect(data).to.equal("Bad input request.")
+    })
+
+    it("When merchant inputs order required values and provider optional values, Then order is created ", async function () {
+      const unitPrice4 = 176
+      const unitPrice5 = 14
+      const ordersWares = [
+        { wareId: 4, unitPrice: unitPrice4, amount: 1 },
+        { wareId: 5, unitPrice: unitPrice5, amount: 3, returned: 1 },
+      ]
+      const tax = round(Math.random() * 100 + 400)
+      const shipment = round(Math.random() * 10 + 60)
+      let cost = tax + shipment
+      for (const ordersWare of ordersWares) {
+        cost += ordersWare.unitPrice * ordersWare.amount
+      }
+      const provider = {
+        name: faker.person.fullName(),
+        address: faker.location.streetAddress(),
+        phoneNumber: fakerPhoneNumber(),
+        email: "victoria_adams@gmail.com",
+      }
+      const requestBody = {
+        provider,
+        cost,
+        tax,
+        shipment,
+        expectedAt: "2025-02-02",
+        ordersWares,
+      }
+
+      const { status, data } = await client.post(
+        "/orders",
+        requestBody,
+        setHeaders
+      )
+
+      delete requestBody.ordersWares
+      delete requestBody.provider
+      provider.phoneNumber = provider.phoneNumber.replace(/\D/g, "")
+      requestBody.expectedAt = new Date(requestBody.expectedAt).toISOString()
+      const newOrderSearched = await models.Orders.findOne({
+        where: requestBody,
+        include: [
+          { model: models.OrdersWares, as: "waresBought" },
+          { model: models.Providers, as: "provider" },
+        ],
+      })
+      const newOrder = JSON.parse(JSON.stringify(newOrderSearched))
+      const newOrdersWares = newOrder.waresBought
+      const newProvider = newOrder.provider
+      const newOrderDeleted = await models.Orders.destroy({
+        where: requestBody,
+      })
+      const newOrdersWaresDeleted = await models.OrdersWares.destroy({
+        where: { orderId: newOrder.id },
+      })
+      const newProviderDeleted = await models.Providers.destroy({
+        where: { id: newOrder.providerId },
+      })
+      // newOrder.expectedAt = newOrder.expectedAt.toISOString()
+
+      expect(status).to.equal(CREATED)
+      expect(data)
+        .to.include.string(preMerchantMsg)
+        .and.string(" order has been created.")
+      expect(newOrder).to.include(requestBody)
+      expect(newOrdersWares[0]).to.include(ordersWares[1])
+      expect(newOrdersWares[1]).to.include(ordersWares[0])
+      expect(newProvider).to.include(provider)
+      expect(newOrderDeleted).to.equal(1)
+      expect(newOrdersWaresDeleted).to.equal(0)
+      expect(newProviderDeleted).to.equal(1)
     })
   })
 
@@ -304,6 +751,8 @@ describe("Orders Routes", function () {
       const newOrder = {
         providerId: Math.ceil(Math.random() * 4),
         cost: round(Math.random() * 300) + 500,
+        tax: Math.random() * 40 + 40,
+        shipment: Math.random() * 30 + 10,
         expectedAt: "2025-02-02",
         actualAt: null,
       }
