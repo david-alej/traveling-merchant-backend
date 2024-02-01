@@ -187,8 +187,8 @@ describe("Orders Routes", function () {
           address: "0000 online",
           phoneNumber: "5125869601",
           email: "",
-          createdAt: "2024-11-11T00:00:00.000Z",
-          updatedAt: "2024-11-11T00:00:00.000Z",
+          createdAt: "2025-01-01T00:00:00.000Z",
+          updatedAt: "2025-01-01T00:00:00.000Z",
         },
         waresBought: [
           {
@@ -259,9 +259,9 @@ describe("Orders Routes", function () {
           name: "Amazon",
           address: "0000 online",
           phoneNumber: "1632474734",
-          email: "",
-          createdAt: "2024-11-11T00:00:00.000Z",
-          updatedAt: "2024-11-11T00:00:00.000Z",
+          email: "derick_kertzmann@amazon.support.com",
+          createdAt: "2025-01-01T00:00:00.000Z",
+          updatedAt: "2025-01-01T00:00:00.000Z",
         },
         waresBought: [
           {

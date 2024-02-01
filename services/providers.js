@@ -4,19 +4,20 @@ const { parseInputs } = require("../util/index").parseInputs
 const ordersInclusion = {
   model: models.Orders,
   as: "orders",
-  order: [["id", "DESC"]],
 }
 
-exports.findProviderQuery = {
+const findProviderQuery = {
   include: [ordersInclusion],
+  order: [
+    ["id", "DESC"],
+    ["orders", "id", "DESC"],
+  ],
 }
+exports.findProviderQuery = findProviderQuery
 
 exports.parseProviderInputs = (
   inputsObject,
-  otherOptions = {
-    include: [{ ...ordersInclusion, limit: 5 }],
-    order: [["id", "DESC"]],
-  },
+  otherOptions = findProviderQuery,
   modelName = "Providers"
 ) => {
   return parseInputs(inputsObject, otherOptions, modelName)

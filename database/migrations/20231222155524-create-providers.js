@@ -25,6 +25,7 @@ module.exports = {
       email: {
         type: Sequelize.STRING,
         defaultValue: "",
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

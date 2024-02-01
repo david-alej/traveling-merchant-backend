@@ -11,7 +11,13 @@ exports.findWorkQuery = { include: [clientsInclusion] }
 
 exports.parseWorkInputs = (
   req,
-  includeOptions = { include: [clientsInclusion], order: [["id", "DESC"]] }
+  includeOptions = {
+    include: [clientsInclusion],
+    order: [
+      ["id", "DESC"],
+      ["employees", "id", "DESC"],
+    ],
+  }
 ) => {
   return parseInputs(req, includeOptions, "Works")
 }

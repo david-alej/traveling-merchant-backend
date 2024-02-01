@@ -12,8 +12,8 @@ providersRouter.get(
   [
     textValidator("name", false, true),
     textValidator("address", false, true, false),
-    phoneNumberValidator("phoneNumber", false, true),
-    emailValidator("email", false, true),
+    textValidator("phoneNumber", false, true, false),
+    textValidator("email", false, true, false),
     dateValidator("createdAt", false, true),
     dateValidator("updatedAt", false, true),
   ],

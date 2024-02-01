@@ -19,13 +19,29 @@ describe("Providers Routes", function () {
   const setHeaders = { headers: {} }
   const providerObject = {
     type: "object",
-    required: ["id", "name", "address", "createdAt", "updatedAt", "orders"],
+    required: [
+      "id",
+      "name",
+      "address",
+      "email",
+      "createdAt",
+      "updatedAt",
+      "orders",
+    ],
     properties: {
       orders: {
         type: "array",
         items: {
           type: "object",
-          required: ["id", "providerId", "cost", "expectedAt", "actualAt"],
+          required: [
+            "id",
+            "providerId",
+            "cost",
+            "tax",
+            "shipment",
+            "expectedAt",
+            "actualAt",
+          ],
         },
       },
     },
@@ -70,7 +86,7 @@ describe("Providers Routes", function () {
 
   describe("Get /:providerId", function () {
     it("When an existing provider id is given, Then the response is the provider", async function () {
-      const providerId = Math.ceil(Math.random() * 3)
+      const providerId = Math.ceil(Math.random() * 2)
 
       const { status, data } = await client.get(
         "/providers/" + providerId,
@@ -109,152 +125,117 @@ describe("Providers Routes", function () {
   describe("Get /", function () {
     const allProviders = [
       {
-        id: 4,
-        name: "Marshalls",
-        address: "41090 Jaime Springs",
-        phoneNumber: "3718802186",
-        createdAt: "2024-11-11T00:00:00.000Z",
-        updatedAt: "2024-11-11T00:00:00.000Z",
-        orders: [],
-      },
-      {
-        id: 3,
-        name: "JCPenny",
-        address: "84506 Deangelo Cliff",
-        phoneNumber: "6192621956",
-        createdAt: "2024-11-11T00:00:00.000Z",
-        updatedAt: "2024-11-11T00:00:00.000Z",
-        orders: [
-          {
-            actualAt: "2024-11-09T00:00:00.000Z",
-            cost: 500,
-            createdAt: "2024-11-11T00:00:00.000Z",
-            expectedAt: "2024-11-02T00:00:00.000Z",
-            id: 1,
-            providerId: 3,
-            updatedAt: "2024-11-11T00:00:00.000Z",
-          },
-        ],
-      },
-      {
         id: 2,
         name: "Ebay",
         address: "0000 online",
         phoneNumber: "5125869601",
-        createdAt: "2024-11-11T00:00:00.000Z",
-        updatedAt: "2024-11-11T00:00:00.000Z",
-        orders: [],
+        email: "",
+        createdAt: "2025-01-01T00:00:00.000Z",
+        updatedAt: "2025-01-01T00:00:00.000Z",
+        orders: [
+          {
+            id: 2,
+            providerId: 2,
+            cost: 959.59,
+            tax: 89.59,
+            shipment: 20,
+            expectedAt: "2025-01-09T00:00:00.000Z",
+            actualAt: "2025-01-09T00:00:00.000Z",
+            createdAt: "2025-01-01T00:00:00.000Z",
+            updatedAt: "2025-01-17T00:00:00.000Z",
+          },
+        ],
       },
       {
         id: 1,
         name: "Amazon",
         address: "0000 online",
         phoneNumber: "1632474734",
-        createdAt: "2024-11-11T00:00:00.000Z",
-        updatedAt: "2024-11-11T00:00:00.000Z",
+        email: "derick_kertzmann@amazon.support.com",
+        createdAt: "2025-01-01T00:00:00.000Z",
+        updatedAt: "2025-01-01T00:00:00.000Z",
         orders: [
           {
-            actualAt: null,
-            cost: 110,
-            createdAt: "2024-11-11T00:00:00.000Z",
-            expectedAt: "2024-11-02T00:00:00.000Z",
-            id: 2,
+            id: 1,
             providerId: 1,
-            updatedAt: "2024-11-11T00:00:00.000Z",
+            cost: 3413.65,
+            tax: 283.65,
+            shipment: 50,
+            expectedAt: "2025-01-08T00:00:00.000Z",
+            actualAt: "2025-01-09T00:00:00.000Z",
+            createdAt: "2025-01-01T00:00:00.000Z",
+            updatedAt: "2025-01-01T00:00:00.000Z",
           },
         ],
       },
     ]
 
-    it("When no inputs is provided, Then default query search is returned ", async function () {
-      const expectedProviders = allProviders
+    async function getProvidersIt(
+      requestBody,
+      expectedProviders = [],
+      isPrinted = false
+    ) {
+      expectedProviders = Array.isArray(expectedProviders)
+        ? expectedProviders
+        : [expectedProviders]
+      const config = structuredClone(setHeaders)
+      config.data = requestBody
 
-      const { status, data: providers } = await client.get(
-        "/providers",
-        setHeaders
-      )
+      const { status, data: providers } = await client.get("/providers", config)
+
+      if (isPrinted) {
+        console.log("[")
+
+        for (const provider of providers) console.log(provider, "\n,")
+
+        console.log("]")
+      }
 
       expect(status).to.equal(OK)
       expect(providers).to.be.jsonSchema(providersSchema)
       expect(providers).to.eql(expectedProviders)
+    }
+
+    it("When no inputs is provided, Then default query search is returned ", async function () {
+      await getProvidersIt({}, allProviders)
     })
 
     it("When name is the only input, Then response all providers with the a name that includes the subtring entered", async function () {
-      const expectedProviders = [allProviders[2]]
-      const config = structuredClone(setHeaders)
-      config.data = { name: "ebay" }
-
-      const { status, data: providers } = await client.get("/providers", config)
-
-      expect(status).to.equal(OK)
-      expect(providers).to.be.jsonSchema(providersSchema)
-      expect(providers).to.eql(expectedProviders)
+      await getProvidersIt({ name: "ebay" }, allProviders[0])
     })
 
     it("When address is the only input, Then response all providers with the a address that includes the subtring entered", async function () {
-      const expectedProviders = [allProviders[0]]
-      const config = structuredClone(setHeaders)
-      config.data = { address: "0 jaim" }
-
-      const { status, data: providers } = await client.get("/providers", config)
-
-      expect(status).to.equal(OK)
-      expect(providers).to.be.jsonSchema(providersSchema)
-      expect(providers).to.eql(expectedProviders)
+      await getProvidersIt({ address: "0 on" }, allProviders)
     })
 
     it("When a valid and full phone number is the only input, Then response all providers with the given phone number", async function () {
-      const expectedProviders = [allProviders[1]]
-      const config = structuredClone(setHeaders)
-      config.data = { phoneNumber: "6192621956" }
+      await getProvidersIt({ phoneNumber: "1632474734" }, allProviders[1])
+    })
 
-      const { status, data: providers } = await client.get("/providers", config)
-
-      expect(status).to.equal(OK)
-      expect(providers).to.be.jsonSchema(providersSchema)
-      expect(providers).to.eql(expectedProviders)
+    it("When email is the only input, Then response all providers with the a email that includes the subtring entered", async function () {
+      await getProvidersIt({ email: "amazon.support" }, allProviders[1])
     })
 
     it("When a created at date is given, Then response is all providers within that same month and year", async function () {
-      const expectedProviders = allProviders
-      const config = structuredClone(setHeaders)
-      config.data = { createdAt: new Date("2024-11-11") }
-
-      const { status, data: providers } = await client.get("/providers", config)
-
-      expect(status).to.equal(OK)
-      expect(providers).to.be.jsonSchema(providersSchema)
-      expect(providers).to.eql(expectedProviders)
+      await getProvidersIt({ createdAt: "2025-01-11" }, allProviders)
     })
 
     it("When a updated at date is given, Then response is all providers within that same month and year", async function () {
-      const expectedProviders = []
-      const config = structuredClone(setHeaders)
-      config.data = { updatedAt: new Date("2024-12-10") }
-
-      const { status, data: providers } = await client.get("/providers", config)
-
-      expect(status).to.equal(OK)
-      expect(providers).to.be.jsonSchema(providersSchema)
-      expect(providers).to.eql(expectedProviders)
+      await getProvidersIt({ updatedAt: new Date("2024-12-11") })
     })
 
     it("When multiple inputs are given, Then response is all providers that satisfy the input comparisons", async function () {
-      const expectedProviders = [allProviders[2]]
-      const config = structuredClone(setHeaders)
-      config.data = {
-        name: "bay",
-        address: "0000",
-        phoneNumber: "5125869601",
-        createdAt: "2024-11-02",
-        updatedAt: "2024-11-02",
-      }
-
-      const { status, data: providers } = await client.get("/providers", config)
-
-      expect(status).to.equal(OK)
-      expect(providers).to.be.jsonSchema(providersSchema)
-      expect(providers).to.eql(expectedProviders)
+      await getProvidersIt(
+        {
+          name: "bay",
+          address: "0000",
+          phoneNumber: "5125869601",
+          email: "",
+          createdAt: "2025-01-11",
+          updatedAt: "2025-01-11",
+        },
+        allProviders[0]
+      )
     })
   })
 
@@ -264,6 +245,7 @@ describe("Providers Routes", function () {
         name: faker.person.fullName(),
         address: faker.location.streetAddress(),
         phoneNumber: fakerPhoneNumber(),
+        email: "elvis88@hotmail.com",
       }
 
       const { status, data } = await client.post(
@@ -310,6 +292,7 @@ describe("Providers Routes", function () {
         name: faker.company.name(),
         address: faker.location.streetAddress(),
         phoneNumber: fakerPhoneNumber().replace(/\D/g, ""),
+        email: faker.internet.email(),
       }
       const providerBeforeCreated = await models.Providers.create(newProvider)
       const providerBefore = providerBeforeCreated.dataValues
@@ -327,6 +310,7 @@ describe("Providers Routes", function () {
       )
 
       requestBody.phoneNumber = requestBody.phoneNumber.replace(/\D/g, "")
+      delete requestBody.email
       const providerAfterSearched = await models.Providers.findOne({
         where: { id: providerId },
       })

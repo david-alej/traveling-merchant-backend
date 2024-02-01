@@ -162,8 +162,8 @@ describe("Clients Routes", function () {
           name: "Lynch PLC",
           address: "38 Lafayette St.",
           phoneNumber: "9103623505",
-          createdAt: "2024-11-02T00:00:00.000Z",
-          updatedAt: "2024-11-02T00:00:00.000Z",
+          createdAt: "2025-01-13T00:00:00.000Z",
+          updatedAt: "2025-01-13T00:00:00.000Z",
         },
       },
       {
@@ -194,8 +194,8 @@ describe("Clients Routes", function () {
           name: "Deckow and Sons",
           address: "245 John Drive",
           phoneNumber: "7644084620",
-          createdAt: "2024-11-02T00:00:00.000Z",
-          updatedAt: "2024-11-02T00:00:00.000Z",
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
         },
       },
       {
@@ -226,8 +226,8 @@ describe("Clients Routes", function () {
           name: "Hamill, Denesik and Davis",
           address: "38 Galvin Ave.",
           phoneNumber: "9075554011",
-          createdAt: "2024-11-02T00:00:00.000Z",
-          updatedAt: "2024-12-02T00:00:00.000Z",
+          createdAt: "2025-01-01T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
         },
       },
       {
@@ -245,8 +245,8 @@ describe("Clients Routes", function () {
           name: "Hamill, Denesik and Davis",
           address: "38 Galvin Ave.",
           phoneNumber: "9075554011",
-          createdAt: "2024-11-02T00:00:00.000Z",
-          updatedAt: "2024-12-02T00:00:00.000Z",
+          createdAt: "2025-01-01T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
         },
       },
     ]
