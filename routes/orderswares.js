@@ -15,7 +15,7 @@ orderswaresRouter.get(
     integerValidator("orderId", false, true),
     integerValidator("wareId", false, true),
     integerValidator("amount", false, true),
-    floatValidator("cost", false, true),
+    floatValidator("unitPrice", false, true),
     integerValidator("returned", false, true, false),
     dateValidator("createdAt", false, true),
     dateValidator("updatedAt", false, true),
@@ -29,7 +29,7 @@ orderswaresRouter.post(
     integerValidator("orderId"),
     integerValidator("wareId"),
     integerValidator("amount"),
-    floatValidator("cost"),
+    floatValidator("unitPrice"),
     integerValidator("returned", false, true, false),
   ],
   orderswaresControllers.postOrdersWare
@@ -39,7 +39,7 @@ orderswaresRouter.put(
   "/:orderId/:wareId",
   [
     integerValidator("amount", false, true),
-    floatValidator("cost", false, true),
+    floatValidator("unitPrice", false, true),
     integerValidator("returned", false, true, false),
   ],
   orderswaresControllers.putOrdersWare

@@ -20,6 +20,18 @@ const ticketsInclusion = {
 const waresInclusion = {
   model: models.Wares,
   as: "ware",
+  attributes: {
+    include: [
+      [
+        models.Sequelize.literal(
+          // eslint-disable-next-line quotes
+          '(SELECT "amount" - "returned" + COALESCE("sold"."returned"  - "sold"."amount", 0) FROM "OrdersWares" LEFT OUTER JOIN "Orders" ON "OrdersWares"."orderId" = "Orders"."id" WHERE "wareId" = "Wares"."id" AND "Orders"."actualAt" IS NOT NULL)'
+        ),
+        "stock",
+      ],
+      "unitPrice",
+    ],
+  },
 }
 
 const findWaresTicketQuery = {

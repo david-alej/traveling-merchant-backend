@@ -17,7 +17,8 @@ transactionsRouter.get(
   "/",
   [
     integerValidator("ticketId", false, true),
-    floatValidator("payment", false, true),
+    integerValidator("orderId", false, true),
+    floatValidator("payment", false, true, false, true),
     textValidator("paymentType", false, true),
     dateValidator("paidAt", false, true),
     dateValidator("createdAt", false, true),
@@ -29,11 +30,13 @@ transactionsRouter.get(
 transactionsRouter.post(
   "/",
   [
-    integerValidator("ticketId"),
-    floatValidator("payment"),
+    integerValidator("ticketId", false, true),
+    integerValidator("orderId", false, true),
+    floatValidator("payment", false, false, false, true),
     textValidator("paymentType"),
     dateValidator("paidAt"),
   ],
+  transactionsControllers.foreignKeyValidation,
   transactionsControllers.postTransaction
 )
 
@@ -41,10 +44,12 @@ transactionsRouter.put(
   "/:transactionId",
   [
     integerValidator("ticketId", false, true),
-    floatValidator("payment", false, true),
+    integerValidator("orderId", false, true),
+    floatValidator("payment", false, true, false, true),
     textValidator("paymentType", false, true),
     dateValidator("paidAt", false, true),
   ],
+  transactionsControllers.foreignKeyValidation,
   transactionsControllers.putTransaction
 )
 

@@ -23,12 +23,12 @@ describe("OrdersWares Routes", function () {
       "orderId",
       "wareId",
       "amount",
-      "cost",
+      "unitPrice",
       "returned",
       "createdAt",
       "updatedAt",
       "order",
-      "wareBought",
+      "ware",
     ],
     properties: {
       order: {
@@ -37,6 +37,8 @@ describe("OrdersWares Routes", function () {
           "id",
           "providerId",
           "cost",
+          "tax",
+          "shipment",
           "expectedAt",
           "actualAt",
           "createdAt",
@@ -50,8 +52,7 @@ describe("OrdersWares Routes", function () {
           "name",
           "type",
           "tags",
-          "stock",
-          "cost",
+          "unitPrice",
           "createdAt",
           "updatedAt",
         ],
@@ -140,92 +141,162 @@ describe("OrdersWares Routes", function () {
   describe("Get /", function () {
     const allOrdersWares = [
       {
-        wareId: 1,
-        orderId: 1,
-        amount: 1,
-        cost: 130,
-        returned: 0,
-        createdAt: "2024-11-11T00:00:00.000Z",
-        updatedAt: "2024-11-11T00:00:00.000Z",
-        order: {
-          id: 1,
-          providerId: 3,
-          cost: 500,
-          expectedAt: "2024-11-02T00:00:00.000Z",
-          actualAt: "2024-11-09T00:00:00.000Z",
-          createdAt: "2024-11-11T00:00:00.000Z",
-          updatedAt: "2024-11-11T00:00:00.000Z",
-        },
-        wareBought: {
-          id: 1,
-          name: "Loewe 001 Woman Perfume",
-          type: "perfume",
-          tags: ["women", "1-pc"],
-          stock: 1,
-          cost: 155,
-          createdAt: "2024-11-11T00:00:00.000Z",
-          updatedAt: "2024-11-11T00:00:00.000Z",
-        },
-      },
-      {
-        wareId: 3,
-        orderId: 1,
-        amount: 1,
-        cost: 350,
-        returned: 0,
-        createdAt: "2024-11-11T00:00:00.000Z",
-        updatedAt: "2024-11-11T00:00:00.000Z",
-        order: {
-          id: 1,
-          providerId: 3,
-          cost: 500,
-          expectedAt: "2024-11-02T00:00:00.000Z",
-          actualAt: "2024-11-09T00:00:00.000Z",
-          createdAt: "2024-11-11T00:00:00.000Z",
-          updatedAt: "2024-11-11T00:00:00.000Z",
-        },
-        wareBought: {
-          id: 3,
-          name: "The Leather Medium Tote Bag",
-          type: "bag",
-          tags: ["women"],
-          stock: 2,
-          cost: 450,
-          createdAt: "2024-11-11T00:00:00.000Z",
-          updatedAt: "2024-11-11T00:00:00.000Z",
-        },
-      },
-      {
+        id: 5,
         wareId: 5,
         orderId: 2,
-        amount: 1,
-        cost: 100,
+        unitPrice: 10,
+        amount: 10,
         returned: 0,
-        createdAt: "2024-11-11T00:00:00.000Z",
-        updatedAt: "2024-11-11T00:00:00.000Z",
+        createdAt: "2025-01-01T00:00:00.000Z",
+        updatedAt: "2025-01-01T00:00:00.000Z",
         order: {
           id: 2,
-          providerId: 1,
-          cost: 110,
-          expectedAt: "2024-11-02T00:00:00.000Z",
-          actualAt: null,
-          createdAt: "2024-11-11T00:00:00.000Z",
-          updatedAt: "2024-11-11T00:00:00.000Z",
+          providerId: 2,
+          cost: 959.59,
+          tax: 89.59,
+          shipment: 20,
+          expectedAt: "2025-01-09T00:00:00.000Z",
+          actualAt: "2025-01-09T00:00:00.000Z",
+          createdAt: "2025-01-01T00:00:00.000Z",
+          updatedAt: "2025-01-17T00:00:00.000Z",
         },
-        wareBought: {
+        ware: {
           id: 5,
           name: "Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle",
           type: "braclet",
           tags: ["unisex"],
-          stock: 4,
-          cost: 14,
-          createdAt: "2024-11-11T00:00:00.000Z",
-          updatedAt: "2024-11-11T00:00:00.000Z",
+          unitPrice: 14,
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
+        },
+      },
+      {
+        id: 4,
+        wareId: 4,
+        orderId: 2,
+        unitPrice: 150,
+        amount: 5,
+        returned: 0,
+        createdAt: "2025-01-01T00:00:00.000Z",
+        updatedAt: "2025-01-01T00:00:00.000Z",
+        order: {
+          id: 2,
+          providerId: 2,
+          cost: 959.59,
+          tax: 89.59,
+          shipment: 20,
+          expectedAt: "2025-01-09T00:00:00.000Z",
+          actualAt: "2025-01-09T00:00:00.000Z",
+          createdAt: "2025-01-01T00:00:00.000Z",
+          updatedAt: "2025-01-17T00:00:00.000Z",
+        },
+        ware: {
+          id: 4,
+          name: "Versace Men's 4-Pc. Eros Eau de Toilette Gift Set",
+          type: "perfume",
+          tags: ["men", "4-pc"],
+          unitPrice: 176,
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
+        },
+      },
+      {
+        id: 3,
+        wareId: 3,
+        orderId: 1,
+        unitPrice: 415,
+        amount: 2,
+        returned: 0,
+        createdAt: "2025-01-01T00:00:00.000Z",
+        updatedAt: "2025-01-01T00:00:00.000Z",
+        order: {
+          id: 1,
+          providerId: 1,
+          cost: 3413.65,
+          tax: 283.65,
+          shipment: 50,
+          expectedAt: "2025-01-08T00:00:00.000Z",
+          actualAt: "2025-01-09T00:00:00.000Z",
+          createdAt: "2025-01-01T00:00:00.000Z",
+          updatedAt: "2025-01-01T00:00:00.000Z",
+        },
+        ware: {
+          id: 3,
+          name: "The Leather Medium Tote Bag",
+          type: "bag",
+          tags: ["women"],
+          unitPrice: 450,
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
+        },
+      },
+      {
+        id: 2,
+        wareId: 2,
+        orderId: 1,
+        unitPrice: 160,
+        amount: 5,
+        returned: 0,
+        createdAt: "2025-01-01T00:00:00.000Z",
+        updatedAt: "2025-01-01T00:00:00.000Z",
+        order: {
+          id: 1,
+          providerId: 1,
+          cost: 3413.65,
+          tax: 283.65,
+          shipment: 50,
+          expectedAt: "2025-01-08T00:00:00.000Z",
+          actualAt: "2025-01-09T00:00:00.000Z",
+          createdAt: "2025-01-01T00:00:00.000Z",
+          updatedAt: "2025-01-01T00:00:00.000Z",
+        },
+        ware: {
+          id: 2,
+          name: "DIOR 3-Pc. J'dore Eau de Parfum Gift Set",
+          type: "perfume",
+          tags: ["women", "3-pc"],
+          unitPrice: 178,
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
+        },
+      },
+      {
+        id: 1,
+        wareId: 1,
+        orderId: 1,
+        unitPrice: 145,
+        amount: 10,
+        returned: 10,
+        createdAt: "2025-01-01T00:00:00.000Z",
+        updatedAt: "2025-01-01T00:00:00.000Z",
+        order: {
+          id: 1,
+          providerId: 1,
+          cost: 3413.65,
+          tax: 283.65,
+          shipment: 50,
+          expectedAt: "2025-01-08T00:00:00.000Z",
+          actualAt: "2025-01-09T00:00:00.000Z",
+          createdAt: "2025-01-01T00:00:00.000Z",
+          updatedAt: "2025-01-01T00:00:00.000Z",
+        },
+        ware: {
+          id: 1,
+          name: "Loewe 001 Woman Perfume",
+          type: "perfume",
+          tags: ["women", "1-pc"],
+          unitPrice: 155,
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
         },
       },
     ]
 
-    async function getOrdersWaresIt(requestBody, expectedOrdersWares = []) {
+    async function getOrdersWaresIt(
+      requestBody,
+      expectedOrdersWares = [],
+      isPrinted = false
+    ) {
       expectedOrdersWares = Array.isArray(expectedOrdersWares)
         ? expectedOrdersWares
         : [expectedOrdersWares]
@@ -236,7 +307,7 @@ describe("OrdersWares Routes", function () {
         "/orderswares",
         config
       )
-
+      if (isPrinted) console.log(orderswares)
       expect(status).to.equal(OK)
       expect(orderswares).to.be.jsonSchema(orderswaresSchema)
       expect(orderswares).to.eql(expectedOrdersWares)
@@ -247,16 +318,24 @@ describe("OrdersWares Routes", function () {
     })
 
     it("When order id is the only input, Then response all orders with the same provider id", async function () {
-      await getOrdersWaresIt({ orderId: 1 }, allOrdersWares.slice(0, -1))
+      await getOrdersWaresIt({ orderId: 1 }, allOrdersWares.slice(2))
     })
 
-    it("When ware id is the only input, Then response all orders with the same provider id", async function () {
-      await getOrdersWaresIt({ wareId: 3 }, allOrdersWares[1])
+    it("When ware id is the only input, Then response all orders with the same ware id", async function () {
+      await getOrdersWaresIt({ wareId: 3 }, allOrdersWares[2])
+    })
+
+    it("When unitPrice is the only input, Then response all orders with the same unitPrice", async function () {
+      await getOrdersWaresIt({ unitPrice: 10 }, allOrdersWares[0])
+    })
+
+    it("When returned is the only input, Then response all orders with the same returned", async function () {
+      await getOrdersWaresIt({ returned: 10 }, allOrdersWares[4])
     })
 
     it("When a created at date is given, Then response is all orderswares within that same month and year", async function () {
       await getOrdersWaresIt(
-        { createdAt: new Date("2024-11-11") },
+        { createdAt: new Date("2025-01-11") },
         allOrdersWares
       )
     })
@@ -270,13 +349,13 @@ describe("OrdersWares Routes", function () {
         {
           orderId: 1,
           wareId: 1,
-          cost: 130,
-          amount: 1,
-          returned: null,
-          createdAt: "2024-11-11",
-          updatedAt: "2024-11-11",
+          unitPrice: 145,
+          amount: 10,
+          returned: 10,
+          createdAt: "2025-01-02",
+          updatedAt: "2025-01-02",
         },
-        allOrdersWares[0]
+        allOrdersWares[4]
       )
     })
   })
@@ -286,11 +365,8 @@ describe("OrdersWares Routes", function () {
       const orderId = Math.ceil(Math.random() * 2)
       const requestBody = {
         orderId,
-        wareId:
-          orderId === 1
-            ? [2, 4][Math.floor(Math.random() * 2)]
-            : Math.ceil(Math.random() * 4),
-        cost: round(Math.random() * 750) + 250,
+        wareId: orderId === 1 ? [4, 5][Math.floor(Math.random() * 2)] : 2,
+        unitPrice: round(Math.random() * 750) + 250,
         amount: Math.ceil(Math.random() * 3),
       }
 
@@ -334,27 +410,29 @@ describe("OrdersWares Routes", function () {
     })
 
     it("When inputs are given, Then ordersware has the respective information updated", async function () {
-      const newOrder = await models.Orders.create({
+      const newOrderCreated = await models.Orders.create({
         providerId: Math.ceil(Math.random() * 4),
         cost: round(Math.random() * 300) + 500,
+        tax: round(Math.random() * 40 + 60),
+        shipment: round(Math.random() * 10 + 5),
         expectedAt: faker.date.future().toISOString(),
-        actualAt: null,
       })
-
-      const orderId = newOrder.dataValues.id
-      const wareId = Math.ceil(Math.random() * 4)
+      const newOrder = JSON.parse(JSON.stringify(newOrderCreated))
+      const orderId = newOrder.id
+      const wareId = Math.ceil(Math.random() * 2) + 3
       const newOrdersWare = {
         orderId,
         wareId,
-        cost: round(Math.random() * 750) + 250,
+        cost: round(Math.random() * 7) + 150,
         amount: Math.ceil(Math.random() * 3),
+        unitPrice: round(Math.random() * 40 + 50),
       }
       const orderswareBeforeCreated = await models.OrdersWares.create(
         newOrdersWare
       )
       const orderswareBefore = orderswareBeforeCreated.dataValues
       const requestBody = {
-        cost: round(Math.random() * 750) + 250,
+        unitPrice: round(Math.random() * 750) + 250,
         amount: Math.ceil(Math.random() * 3) + 1,
         returned: 1,
       }
@@ -365,13 +443,20 @@ describe("OrdersWares Routes", function () {
         setHeaders
       )
 
-      const orderswareAfterSearched = await models.OrdersWares.findOne({
+      const orderAfterSearched = await models.Orders.findOne({
         where: {
-          orderId,
-          wareId,
+          id: orderId,
+        },
+        include: { model: models.OrdersWares, as: "waresBought" },
+      })
+      const orderAfter = JSON.parse(JSON.stringify(orderAfterSearched))
+      const orderswareAfter = orderAfter.waresBought[0]
+      delete orderAfter.waresBought
+      const ordersDeleted = await models.Orders.destroy({
+        where: {
+          id: orderId,
         },
       })
-      const orderswareAfter = orderswareAfterSearched.dataValues
       const orderswareDeleted = await models.OrdersWares.destroy({
         where: {
           orderId,
@@ -385,11 +470,13 @@ describe("OrdersWares Routes", function () {
         .and.string(
           ` ordersware with order id = ${orderId} and ware id of ${wareId} was updated`
         )
+      expect(newOrder).to.include(orderAfter)
       expect(orderswareAfter).to.include(requestBody)
       expect(new Date(orderswareBefore.updatedAt)).to.be.beforeTime(
         new Date(orderswareAfter.updatedAt)
       )
-      expect(orderswareDeleted).to.equal(1)
+      expect(ordersDeleted).to.equal(1)
+      expect(orderswareDeleted).to.equal(0)
     })
   })
 
@@ -406,7 +493,7 @@ describe("OrdersWares Routes", function () {
       await models.OrdersWares.create({
         orderId,
         wareId,
-        cost: round(Math.random() * 750) + 250,
+        unitPrice: round(Math.random() * 750) + 250,
         amount: Math.ceil(Math.random() * 3),
       })
 
@@ -418,6 +505,9 @@ describe("OrdersWares Routes", function () {
       const afterOrdersWareSearched = await models.OrdersWares.findOne({
         where: { orderId, wareId },
       })
+      const orderDeleted = await models.Orders.destroy({
+        where: { id: orderId },
+      })
 
       expect(status).to.equal(OK)
       expect(data)
@@ -426,6 +516,7 @@ describe("OrdersWares Routes", function () {
           ` has deleted a ordersware with order id = ${orderId} and ware id of ${wareId}.`
         )
       expect(afterOrdersWareSearched).to.equal(null)
+      expect(orderDeleted).to.equal(1)
     })
   })
 
@@ -461,13 +552,13 @@ describe("OrdersWares Routes", function () {
       await models.OrdersWares.create({
         orderId,
         wareId: Math.ceil(Math.random() * 2),
-        cost: round(Math.random() * 750) + 250,
+        unitPrice: round(Math.random() * 750) + 250,
         amount: Math.ceil(Math.random() * 3),
       })
       await models.OrdersWares.create({
         orderId,
         wareId: Math.ceil(Math.random() * 2) + 2,
-        cost: round(Math.random() * 750) + 250,
+        unitPrice: round(Math.random() * 750) + 250,
         amount: Math.ceil(Math.random() * 3),
       })
       const config = structuredClone(setHeaders)
@@ -478,12 +569,16 @@ describe("OrdersWares Routes", function () {
       const afterOrdersWareSearched = await models.OrdersWares.findAll({
         where: { orderId },
       })
+      const orderDeleted = await models.Orders.destroy({
+        where: { id: orderId },
+      })
 
       expect(status).to.equal(OK)
       expect(data)
         .to.include.string(preMerchantMsg)
         .and.string(` has deleted a ordersware with order id = ${orderId}.`)
       expect(afterOrdersWareSearched).to.eql([])
+      expect(orderDeleted).to.equal(1)
     })
   })
 })

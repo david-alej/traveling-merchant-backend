@@ -40,7 +40,13 @@ exports.getWares = async (req, res, next) => {
   const merchant = req.session.merchant
 
   try {
-    const { afterMsg, query } = await parseWareInputs(req)
+    const {
+      afterMsg,
+      query,
+      inputsObject: { stock },
+    } = await parseWareInputs(req)
+
+    if (stock) delete query.where.stock
 
     const searched = await models.Wares.findAll(query)
 
@@ -51,7 +57,19 @@ exports.getWares = async (req, res, next) => {
       )
     }
 
-    res.json(searched)
+    let wares = searched
+
+    if (stock) {
+      wares = []
+
+      searched.forEach((wareSearched) => {
+        const ware = wareSearched.dataValues
+
+        if (ware.stock === stock) wares.push(ware)
+      })
+    }
+
+    res.json(wares)
   } catch (err) {
     next(err)
   }

@@ -206,8 +206,8 @@ describe("Orders Routes", function () {
               type: "perfume",
               tags: ["men", "4-pc"],
               unitPrice: 176,
-              createdAt: "2024-11-11T00:00:00.000Z",
-              updatedAt: "2024-11-11T00:00:00.000Z",
+              createdAt: "2025-01-09T00:00:00.000Z",
+              updatedAt: "2025-01-09T00:00:00.000Z",
               sold: [],
               stock: 5,
             },
@@ -227,8 +227,8 @@ describe("Orders Routes", function () {
               type: "braclet",
               tags: ["unisex"],
               unitPrice: 14,
-              createdAt: "2024-11-11T00:00:00.000Z",
-              updatedAt: "2024-11-11T00:00:00.000Z",
+              createdAt: "2025-01-09T00:00:00.000Z",
+              updatedAt: "2025-01-09T00:00:00.000Z",
               sold: [
                 {
                   amount: 2,
@@ -279,8 +279,8 @@ describe("Orders Routes", function () {
               type: "perfume",
               tags: ["women", "1-pc"],
               unitPrice: 155,
-              createdAt: "2024-11-11T00:00:00.000Z",
-              updatedAt: "2024-11-11T00:00:00.000Z",
+              createdAt: "2025-01-09T00:00:00.000Z",
+              updatedAt: "2025-01-09T00:00:00.000Z",
               sold: [
                 {
                   ticketId: 1,
@@ -317,8 +317,8 @@ describe("Orders Routes", function () {
               type: "perfume",
               tags: ["women", "3-pc"],
               unitPrice: 178,
-              createdAt: "2024-11-11T00:00:00.000Z",
-              updatedAt: "2024-11-11T00:00:00.000Z",
+              createdAt: "2025-01-09T00:00:00.000Z",
+              updatedAt: "2025-01-09T00:00:00.000Z",
               sold: [
                 {
                   amount: 1,
@@ -347,8 +347,8 @@ describe("Orders Routes", function () {
               type: "bag",
               tags: ["women"],
               unitPrice: 450,
-              createdAt: "2024-11-11T00:00:00.000Z",
-              updatedAt: "2024-11-11T00:00:00.000Z",
+              createdAt: "2025-01-09T00:00:00.000Z",
+              updatedAt: "2025-01-09T00:00:00.000Z",
               sold: [
                 {
                   amount: 1,

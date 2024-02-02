@@ -9,16 +9,51 @@ const ticketsInclusion = {
       [
         models.Sequelize.literal(
           // eslint-disable-next-line quotes
-          '(SELECT "ticket"."cost" - COALESCE(SUM("payment"), 0) FROM "Transactions" WHERE "ticketId" = "ticket"."id")'
+          '(SELECT COALESCE(SUM("payment"), 0) FROM "Transactions" WHERE "ticketId" = "ticket"."id")'
         ),
-        "owed",
+        "paid",
+      ],
+      [
+        models.Sequelize.literal(
+          // eslint-disable-next-line quotes
+          `(
+          SELECT
+            SUM("returned" * "ware"."unitPrice")
+          FROM
+            "WaresTickets"
+          LEFT OUTER JOIN 
+            "Wares" AS "ware" ON "wareId" = "ware"."id" 
+          WHERE 
+            "ticketId" = "ticket"."id" 
+          )`
+        ),
+        "returned",
+      ],
+      [
+        models.Sequelize.literal(
+          // eslint-disable-next-line quotes
+          `( SELECT
+            SUM("returned" * "ware"."unitPrice")
+          FROM
+            "WaresTickets"
+          LEFT OUTER JOIN 
+            "Wares" AS "ware" ON "wareId" = "ware"."id" 
+          WHERE 
+            "ticketId" = "ticket"."id" )`
+        ),
+        "returned",
       ],
     ],
   },
 }
 
+const ordersInlcusion = {
+  model: models.Orders,
+  as: "order",
+}
+
 const findTransactionQuery = {
-  include: [ticketsInclusion],
+  include: [ticketsInclusion, ordersInlcusion],
   order: [["id", "DESC"]],
 }
 

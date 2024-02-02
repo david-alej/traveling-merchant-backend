@@ -26,7 +26,18 @@ exports.paramTransactionId = async (req, res, next, transactionId) => {
       )
     }
 
-    req.targetTransaction = searched.dataValues
+    const transaction = JSON.parse(JSON.stringify(searched))
+
+    const ticket = transaction.ticket
+
+    if (ticket) {
+      ticket.owed =
+        Math.round((ticket.cost - ticket.paid - ticket.returned) * 100) / 100
+
+      ticket.paid = Math.round(ticket.paid * 100) / 100
+    }
+
+    req.targetTransaction = transaction
 
     next()
   } catch (err) {
@@ -51,7 +62,46 @@ exports.getTransactions = async (req, res, next) => {
       )
     }
 
-    res.json(searched)
+    const transactions = JSON.parse(JSON.stringify(searched))
+
+    transactions.forEach((transaction) => {
+      const ticket = transaction.ticket
+
+      if (ticket) {
+        ticket.owed =
+          Math.round((ticket.cost - ticket.paid - ticket.returned) * 100) / 100
+
+        ticket.paid = Math.round(ticket.paid * 100) / 100
+      }
+    })
+
+    res.json(transactions)
+  } catch (err) {
+    next(err)
+  }
+}
+
+exports.foreignKeyValidation = async (req, res, next) => {
+  const merchant = req.session.merchant
+  const { orderId, ticketId } = req.body
+
+  try {
+    if (orderId && ticketId) {
+      throw new Api400Error(
+        merchant.preMsg +
+          " cannot input orderId and ticketId at the same time.",
+        "Bad input request."
+      )
+    }
+
+    if (!orderId && !ticketId) {
+      throw new Api400Error(
+        merchant.preMsg + " has to input either orderId or ticketId.",
+        "Bad input request."
+      )
+    }
+
+    next()
   } catch (err) {
     next(err)
   }
@@ -82,6 +132,7 @@ exports.postTransaction = async (req, res, next) => {
 exports.putTransaction = async (req, res, next) => {
   const merchant = req.session.merchant
   const targetTransaction = req.targetTransaction
+  const { orderId } = req.body
 
   try {
     const { afterMsg, inputsObject: newValues } = await parseTransactionInputs(
@@ -95,6 +146,10 @@ exports.putTransaction = async (req, res, next) => {
         "Bad input request."
       )
     }
+
+    const nullForeignKey = orderId ? "ticketId" : "orderId"
+
+    newValues[String(nullForeignKey)] = null
 
     const updated = await models.Transactions.update(newValues, {
       where: { id: targetTransaction.id },

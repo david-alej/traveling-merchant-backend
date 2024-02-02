@@ -8,18 +8,21 @@ const ordersInclusion = {
 
 const waresInclusion = {
   model: models.Wares,
-  as: "wareBought",
+  as: "ware",
 }
 
-exports.findOrdersWareQuery = {
+const findOrdersWareQuery = {
   include: [ordersInclusion, waresInclusion],
+  order: [
+    ["orderId", "DESC"],
+    ["wareId", "DESC"],
+  ],
 }
+exports.findOrdersWareQuery = findOrdersWareQuery
 
 exports.parseOrdersWareInputs = (
   req,
-  otherOptions = {
-    include: [ordersInclusion, waresInclusion],
-  },
+  otherOptions = findOrdersWareQuery,
   modelName = "OrdersWares"
 ) => {
   return parseInputs(req, otherOptions, modelName)

@@ -23,12 +23,12 @@ describe("Wares Routes", function () {
       "name",
       "type",
       "tags",
-      "stock",
-      "cost",
+      "unitPrice",
       "createdAt",
       "updatedAt",
       "bought",
       "sold",
+      "stock",
     ],
     properties: {
       bought: {
@@ -39,7 +39,7 @@ describe("Wares Routes", function () {
             "wareId",
             "orderId",
             "amount",
-            "cost",
+            "unitPrice",
             "returned",
             "createdAt",
             "updatedAt",
@@ -136,29 +136,30 @@ describe("Wares Routes", function () {
         name: "Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle",
         type: "braclet",
         tags: ["unisex"],
-        stock: 4,
-        cost: 14,
-        createdAt: "2024-11-11T00:00:00.000Z",
-        updatedAt: "2024-11-11T00:00:00.000Z",
+        unitPrice: 14,
+        createdAt: "2025-01-09T00:00:00.000Z",
+        updatedAt: "2025-01-09T00:00:00.000Z",
+        stock: 8,
         bought: [
           {
+            id: 5,
             wareId: 5,
             orderId: 2,
-            amount: 1,
-            cost: 100,
+            unitPrice: 10,
+            amount: 10,
             returned: 0,
-            createdAt: "2024-11-11T00:00:00.000Z",
-            updatedAt: "2024-11-11T00:00:00.000Z",
+            createdAt: "2025-01-01T00:00:00.000Z",
+            updatedAt: "2025-01-01T00:00:00.000Z",
           },
         ],
         sold: [
           {
-            wareId: null,
-            ticketId: null,
-            amount: null,
-            returned: null,
-            createdAt: null,
-            updatedAt: null,
+            wareId: 5,
+            ticketId: 1,
+            amount: 2,
+            returned: 0,
+            createdAt: "2025-01-09T00:00:00.000Z",
+            updatedAt: "2025-01-09T00:00:00.000Z",
           },
         ],
       },
@@ -167,60 +168,53 @@ describe("Wares Routes", function () {
         name: "Versace Men's 4-Pc. Eros Eau de Toilette Gift Set",
         type: "perfume",
         tags: ["men", "4-pc"],
-        stock: 4,
-        cost: 176,
-        createdAt: "2024-11-11T00:00:00.000Z",
-        updatedAt: "2024-11-11T00:00:00.000Z",
+        unitPrice: 176,
+        createdAt: "2025-01-09T00:00:00.000Z",
+        updatedAt: "2025-01-09T00:00:00.000Z",
+        stock: 5,
         bought: [
           {
-            wareId: null,
-            orderId: null,
-            amount: null,
-            cost: null,
-            returned: null,
-            createdAt: null,
-            updatedAt: null,
+            id: 4,
+            wareId: 4,
+            orderId: 2,
+            unitPrice: 150,
+            amount: 5,
+            returned: 0,
+            createdAt: "2025-01-01T00:00:00.000Z",
+            updatedAt: "2025-01-01T00:00:00.000Z",
           },
         ],
-        sold: [
-          {
-            wareId: null,
-            ticketId: null,
-            amount: null,
-            returned: null,
-            createdAt: null,
-            updatedAt: null,
-          },
-        ],
+        sold: [],
       },
       {
         id: 3,
         name: "The Leather Medium Tote Bag",
         type: "bag",
         tags: ["women"],
-        stock: 2,
-        cost: 450,
-        createdAt: "2024-11-11T00:00:00.000Z",
-        updatedAt: "2024-11-11T00:00:00.000Z",
+        unitPrice: 450,
+        createdAt: "2025-01-09T00:00:00.000Z",
+        updatedAt: "2025-01-09T00:00:00.000Z",
+        stock: 1,
         bought: [
           {
+            id: 3,
             wareId: 3,
             orderId: 1,
-            amount: 1,
-            cost: 350,
+            unitPrice: 415,
+            amount: 2,
             returned: 0,
-            createdAt: "2024-11-11T00:00:00.000Z",
-            updatedAt: "2024-11-11T00:00:00.000Z",
+            createdAt: "2025-01-01T00:00:00.000Z",
+            updatedAt: "2025-01-01T00:00:00.000Z",
           },
         ],
         sold: [
           {
             wareId: 3,
-            ticketId: 1,
+            ticketId: 2,
             amount: 1,
             returned: 0,
-            createdAt: "2024-11-11T00:00:00.000Z",
-            updatedAt: "2024-11-11T00:00:00.000Z",
+            createdAt: "2025-01-09T00:00:00.000Z",
+            updatedAt: "2025-01-09T00:00:00.000Z",
           },
         ],
       },
@@ -229,29 +223,30 @@ describe("Wares Routes", function () {
         name: "DIOR 3-Pc. J'dore Eau de Parfum Gift Set",
         type: "perfume",
         tags: ["women", "3-pc"],
-        stock: 2,
-        cost: 178,
-        createdAt: "2024-11-11T00:00:00.000Z",
-        updatedAt: "2024-11-11T00:00:00.000Z",
+        unitPrice: 178,
+        createdAt: "2025-01-09T00:00:00.000Z",
+        updatedAt: "2025-01-09T00:00:00.000Z",
+        stock: 4,
         bought: [
           {
-            wareId: null,
-            orderId: null,
-            amount: null,
-            cost: null,
-            returned: null,
-            createdAt: null,
-            updatedAt: null,
+            id: 2,
+            wareId: 2,
+            orderId: 1,
+            unitPrice: 160,
+            amount: 5,
+            returned: 0,
+            createdAt: "2025-01-01T00:00:00.000Z",
+            updatedAt: "2025-01-01T00:00:00.000Z",
           },
         ],
         sold: [
           {
-            wareId: null,
-            ticketId: null,
-            amount: null,
-            returned: null,
-            createdAt: null,
-            updatedAt: null,
+            wareId: 2,
+            ticketId: 1,
+            amount: 1,
+            returned: 0,
+            createdAt: "2025-01-09T00:00:00.000Z",
+            updatedAt: "2025-01-09T00:00:00.000Z",
           },
         ],
       },
@@ -260,35 +255,48 @@ describe("Wares Routes", function () {
         name: "Loewe 001 Woman Perfume",
         type: "perfume",
         tags: ["women", "1-pc"],
-        stock: 1,
-        cost: 155,
-        createdAt: "2024-11-11T00:00:00.000Z",
-        updatedAt: "2024-11-11T00:00:00.000Z",
+        unitPrice: 155,
+        createdAt: "2025-01-09T00:00:00.000Z",
+        updatedAt: "2025-01-09T00:00:00.000Z",
+        stock: 0,
         bought: [
           {
+            id: 1,
             wareId: 1,
             orderId: 1,
-            amount: 1,
-            cost: 130,
-            returned: 0,
-            createdAt: "2024-11-11T00:00:00.000Z",
-            updatedAt: "2024-11-11T00:00:00.000Z",
+            unitPrice: 145,
+            amount: 10,
+            returned: 10,
+            createdAt: "2025-01-01T00:00:00.000Z",
+            updatedAt: "2025-01-01T00:00:00.000Z",
           },
         ],
         sold: [
           {
             wareId: 1,
-            ticketId: 2,
+            ticketId: 3,
             amount: 1,
-            returned: 0,
-            createdAt: "2024-11-11T00:00:00.000Z",
-            updatedAt: "2024-11-11T00:00:00.000Z",
+            returned: 1,
+            createdAt: "2025-01-13T00:00:00.000Z",
+            updatedAt: "2025-01-13T00:00:00.000Z",
+          },
+          {
+            wareId: 1,
+            ticketId: 1,
+            amount: 1,
+            returned: 1,
+            createdAt: "2025-01-09T00:00:00.000Z",
+            updatedAt: "2025-01-09T00:00:00.000Z",
           },
         ],
       },
     ]
 
-    async function getWaresIt(requestBody, expectedWares = []) {
+    async function getWaresIt(
+      requestBody,
+      expectedWares = [],
+      isPrinted = false
+    ) {
       expectedWares = Array.isArray(expectedWares)
         ? expectedWares
         : [expectedWares]
@@ -296,6 +304,12 @@ describe("Wares Routes", function () {
       config.data = requestBody
 
       const { status, data: wares } = await client.get("/wares", config)
+
+      if (isPrinted) {
+        for (const ware of wares) {
+          console.log(ware, ",")
+        }
+      }
 
       expect(status).to.equal(OK)
       expect(wares).to.be.jsonSchema(waresSchema)
@@ -323,15 +337,15 @@ describe("Wares Routes", function () {
     })
 
     it("When stock is the only input, Then response all orders with the same stock", async function () {
-      await getWaresIt({ stock: 4 }, [allWares[0], allWares[1]])
+      await getWaresIt({ stock: 4 }, allWares[3])
     })
 
-    it("When cost is the only input, Then response all orders with the same cost", async function () {
-      await getWaresIt({ cost: 155 }, allWares[4])
+    it("When unitPrice is the only input, Then response all orders with the same unitPrice", async function () {
+      await getWaresIt({ unitPrice: 155 }, allWares[4])
     })
 
     it("When a created at date is given, Then response is all wares within that same month and year", async function () {
-      await getWaresIt({ createdAt: new Date("2024-11-11") }, allWares)
+      await getWaresIt({ createdAt: new Date("2025-01-09") }, allWares)
     })
 
     it("When a updated at date is given, Then response is all wares within that same month and year", async function () {
@@ -345,10 +359,10 @@ describe("Wares Routes", function () {
           name: "Eymi",
           type: "brac",
           tags: ["unisex"],
-          stock: 4,
-          cost: 14,
-          createdAt: "2024-11-11",
-          updatedAt: "2024-11-11",
+          stock: 8,
+          unitPrice: 14,
+          createdAt: "2025-01-09",
+          updatedAt: "2025-01-09",
         },
         allWares[0]
       )
@@ -362,8 +376,7 @@ describe("Wares Routes", function () {
         name: "Baccarat Rouge 540 Maison Francis Kurkdjian Extrait De Parfum",
         type: "perfume",
         tags,
-        stock: Math.ceil(Math.random() * 2),
-        cost: round(Math.random() * 30) + 90,
+        unitPrice: round(Math.random() * 30) + 90,
       }
 
       const { status, data } = await client.post(
@@ -412,8 +425,7 @@ describe("Wares Routes", function () {
         name: "Men's 4.0mm Solid Foxtail Chain Bracelet in Stainless Steel - 9.0\"",
         type: "bracelet",
         tags,
-        stock: Math.ceil(Math.random() * 2),
-        cost: round(Math.random() * 4) + 48,
+        unitPrice: round(Math.random() * 4) + 48,
       })
       const wareBefore = wareBeforeCreated.dataValues
       const wareId = wareBefore.id
@@ -421,8 +433,7 @@ describe("Wares Routes", function () {
       const requestBody = {
         name: "Men's 4.0mm Solid Foxtail Chain Bracelet in Silver - 9.0\"",
         tags,
-        stock: Math.ceil(Math.random() * 2) + 2,
-        cost: round(Math.random() * 4) + 68,
+        unitPrice: round(Math.random() * 4) + 68,
       }
 
       const { status, data } = await client.put(
@@ -459,8 +470,7 @@ describe("Wares Routes", function () {
         name: "Bombshell Mini Fragrance Duo",
         type: "bracelet",
         tags: ["women", "2-pc"],
-        stock: Math.ceil(Math.random() * 2),
-        cost: round(Math.random() * 4) + 48,
+        unitPrice: round(Math.random() * 4) + 48,
       })
       const newWare = wareCreated.dataValues
       const wareId = newWare.id

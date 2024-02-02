@@ -274,7 +274,7 @@ describe("Providers Routes", function () {
 
   describe("Put /:providerId", function () {
     it("When there are no inputs, Then response is bad request", async function () {
-      const providerId = Math.ceil(Math.random() * 3)
+      const providerId = Math.ceil(Math.random() * 2)
       const requestBody = {}
 
       const { status, data } = await client.put(

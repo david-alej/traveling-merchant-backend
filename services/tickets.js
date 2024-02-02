@@ -27,7 +27,7 @@ const waresTicketsInclusion = {
         [
           models.Sequelize.literal(
             // eslint-disable-next-line quotes
-            '(SELECT "amount" + "waresSold"."returned" - "returned" - "waresSold"."amount" FROM "OrdersWares" WHERE "wareId" = "waresSold"."wareId")'
+            '(SELECT "amount" - "returned" + COALESCE("waresSold"."returned"  - "waresSold"."amount", 0) FROM "OrdersWares" LEFT OUTER JOIN "Orders" ON "OrdersWares"."orderId" = "Orders"."id" WHERE "wareId" = "waresSold->ware"."id" AND "Orders"."actualAt" IS NOT NULL)'
           ),
           "stock",
         ],
@@ -44,7 +44,7 @@ exports.findWaresQuery = (wareId) => ({
       [
         models.Sequelize.literal(
           // eslint-disable-next-line quotes
-          '(SELECT "amount" + "sold"."returned" - "returned" - "sold"."amount" FROM "OrdersWares" WHERE "wareId" = "Wares"."id")'
+          '(SELECT "amount" - "returned" + COALESCE("sold"."returned"  - "sold"."amount", 0) FROM "OrdersWares" LEFT OUTER JOIN "Orders" ON "OrdersWares"."orderId" = "Orders"."id" WHERE "wareId" = "Wares"."id" AND "Orders"."actualAt" IS NOT NULL)'
         ),
         "stock",
       ],

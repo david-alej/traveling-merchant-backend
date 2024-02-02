@@ -116,23 +116,25 @@ const floatValidator = (
   input,
   inputIsParam = false,
   optional = false,
-  excludeZero = true
+  excludeZero = true,
+  canBeNegative = false
 ) => {
   const { head, inputName } = basicValidator(input, inputIsParam, optional)
 
   return head
-    .isFloat({ min: 0 })
+    .isFloat()
     .withMessage(inputName + " must be an float number.")
     .custom((float) => {
       let errorMsg = " must be greater than or equal to zero."
       let floatIsZero = false
+      let isNegative = canBeNegative ? false : float < 0
 
       if (excludeZero) {
         floatIsZero = float === 0
         errorMsg = " must be greater than zero."
       }
 
-      if (float < 0 || floatIsZero) {
+      if (isNegative || floatIsZero) {
         throw new Error(inputName + errorMsg)
       }
 
