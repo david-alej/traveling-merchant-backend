@@ -40,7 +40,18 @@ exports.paramTicketId = async (req, res, next, ticketId) => {
       )
     }
 
-    req.targetWaresTicket = searched.dataValues
+    const waresTicket = searched.get({ plain: true, clone: true })
+
+    const ticket = waresTicket.ticket
+
+    ticket.returned = Math.round(ticket.returned * 100) / 100
+
+    ticket.paid = Math.round(ticket.paid * 100) / 100
+
+    ticket.owed =
+      Math.round((ticket.cost - ticket.paid - ticket.returned) * 100) / 100
+
+    req.targetWaresTicket = waresTicket
 
     next()
   } catch (err) {
@@ -65,7 +76,22 @@ exports.getWaresTickets = async (req, res, next) => {
       )
     }
 
-    res.json(searched)
+    const waresTickets = searched.map((waresTicket) => {
+      waresTicket = waresTicket.get({ plain: true, clone: true })
+
+      const ticket = waresTicket.ticket
+
+      ticket.returned = Math.round(ticket.returned * 100) / 100
+
+      ticket.paid = Math.round(ticket.paid * 100) / 100
+
+      ticket.owed =
+        Math.round((ticket.cost - ticket.paid - ticket.returned) * 100) / 100
+
+      return waresTicket
+    })
+
+    res.json(waresTickets)
   } catch (err) {
     next(err)
   }

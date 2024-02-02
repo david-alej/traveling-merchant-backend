@@ -9,9 +9,28 @@ const ticketsInclusion = {
       [
         models.Sequelize.literal(
           // eslint-disable-next-line quotes
-          '(SELECT "ticket"."cost" - COALESCE(SUM("payment"), 0) FROM "Transactions" WHERE "ticketId" = "ticket"."id")'
+          `( SELECT
+            SUM("returned" * "ware"."unitPrice")
+          FROM
+            "WaresTickets"
+          LEFT OUTER JOIN 
+            "Wares" AS "ware" ON "wareId" = "ware"."id" 
+          WHERE 
+            "ticketId" = "ticket"."id" )`
         ),
-        "owed",
+        "returned",
+      ],
+      [
+        models.Sequelize.literal(
+          // eslint-disable-next-line quotes
+          `( SELECT 
+            COALESCE(SUM("payment"), 0)
+          FROM 
+            "Transactions" 
+          WHERE 
+            "ticketId" = "ticket"."id" )`
+        ),
+        "paid",
       ],
     ],
   },
@@ -25,27 +44,27 @@ const waresInclusion = {
       [
         models.Sequelize.literal(
           // eslint-disable-next-line quotes
-          '(SELECT "amount" - "returned" + COALESCE("sold"."returned"  - "sold"."amount", 0) FROM "OrdersWares" LEFT OUTER JOIN "Orders" ON "OrdersWares"."orderId" = "Orders"."id" WHERE "wareId" = "Wares"."id" AND "Orders"."actualAt" IS NOT NULL)'
+          '(SELECT "amount" - "returned" + COALESCE("WaresTickets"."returned"  - "WaresTickets"."amount", 0) FROM "OrdersWares" LEFT OUTER JOIN "Orders" ON "OrdersWares"."orderId" = "Orders"."id" WHERE "wareId" = "ware"."id" AND "Orders"."actualAt" IS NOT NULL)'
         ),
         "stock",
       ],
-      "unitPrice",
     ],
   },
 }
 
 const findWaresTicketQuery = {
   include: [ticketsInclusion, waresInclusion],
+  order: [
+    ["ticketId", "DESC"],
+    ["wareId", "DESC"],
+  ],
 }
 
 exports.findWaresTicketQuery = findWaresTicketQuery
 
 exports.parseWaresTicketInputs = (
   req,
-  otherOptions = {
-    include: findWaresTicketQuery.include,
-    order: [["ticketId", "DESC"]],
-  },
+  otherOptions = findWaresTicketQuery,
   modelName = "WaresTickets"
 ) => {
   return parseInputs(req, otherOptions, modelName)

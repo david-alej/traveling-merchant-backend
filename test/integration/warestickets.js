@@ -38,6 +38,8 @@ describe("WaresTickets Routes", function () {
           "description",
           "createdAt",
           "updatedAt",
+          "returned",
+          "paid",
           "owed",
         ],
       },
@@ -48,10 +50,10 @@ describe("WaresTickets Routes", function () {
           "name",
           "type",
           "tags",
-          "stock",
-          "cost",
+          "unitPrice",
           "createdAt",
           "updatedAt",
+          "stock",
         ],
       },
     },
@@ -96,10 +98,11 @@ describe("WaresTickets Routes", function () {
 
   describe("Get /:waresticketId", function () {
     it("When an existing waresticket id is given, Then the response is the waresticket", async function () {
-      const [wareId, ticketId] = [
+      const [ticketId, wareId] = [
+        [1, [1, 2, 5][Math.floor(Math.random() * 3)]],
+        [2, 3],
         [3, 1],
-        [1, 2],
-      ][Math.floor(Math.random() * 2)]
+      ][Math.floor(Math.random() * 3)]
 
       const { status, data } = await client.get(
         `/warestickets/${wareId}/${ticketId}`,
@@ -141,19 +144,21 @@ describe("WaresTickets Routes", function () {
     const allWaresTickets = [
       {
         wareId: 1,
-        ticketId: 2,
+        ticketId: 3,
         amount: 1,
-        returned: 0,
-        createdAt: "2024-11-11T00:00:00.000Z",
-        updatedAt: "2024-11-11T00:00:00.000Z",
+        returned: 1,
+        createdAt: "2025-01-13T00:00:00.000Z",
+        updatedAt: "2025-01-13T00:00:00.000Z",
         ticket: {
-          id: 2,
-          clientId: 2,
-          cost: 155,
-          paymentPlan: "weekly",
-          description: null,
-          createdAt: "2024-11-11T00:00:00.000Z",
-          updatedAt: "2024-11-11T00:00:00.000Z",
+          id: 3,
+          clientId: 4,
+          cost: 168.27,
+          paymentPlan: "lump sum",
+          description: "",
+          createdAt: "2025-01-13T00:00:00.000Z",
+          updatedAt: "2025-01-13T00:00:00.000Z",
+          returned: 155,
+          paid: 13.27,
           owed: 0,
         },
         ware: {
@@ -161,38 +166,130 @@ describe("WaresTickets Routes", function () {
           name: "Loewe 001 Woman Perfume",
           type: "perfume",
           tags: ["women", "1-pc"],
-          stock: 1,
-          cost: 155,
-          createdAt: "2024-11-11T00:00:00.000Z",
-          updatedAt: "2024-11-11T00:00:00.000Z",
+          unitPrice: 155,
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
+          stock: 0,
         },
       },
       {
         wareId: 3,
-        ticketId: 1,
+        ticketId: 2,
         amount: 1,
         returned: 0,
-        createdAt: "2024-11-11T00:00:00.000Z",
-        updatedAt: "2024-11-11T00:00:00.000Z",
+        createdAt: "2025-01-09T00:00:00.000Z",
+        updatedAt: "2025-01-09T00:00:00.000Z",
         ticket: {
-          id: 1,
-          clientId: 1,
-          cost: 450,
+          id: 2,
+          clientId: 3,
+          cost: 488.52,
           paymentPlan: "biweekly",
-          description: null,
-          createdAt: "2024-11-11T00:00:00.000Z",
-          updatedAt: "2024-11-11T00:00:00.000Z",
-          owed: 300,
+          description: "",
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
+          returned: 0,
+          paid: 200,
+          owed: 288.52,
         },
         ware: {
           id: 3,
           name: "The Leather Medium Tote Bag",
           type: "bag",
           tags: ["women"],
-          stock: 2,
-          cost: 450,
-          createdAt: "2024-11-11T00:00:00.000Z",
-          updatedAt: "2024-11-11T00:00:00.000Z",
+          unitPrice: 450,
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
+          stock: 1,
+        },
+      },
+      {
+        wareId: 5,
+        ticketId: 1,
+        amount: 2,
+        returned: 0,
+        createdAt: "2025-01-09T00:00:00.000Z",
+        updatedAt: "2025-01-09T00:00:00.000Z",
+        ticket: {
+          id: 1,
+          clientId: 2,
+          cost: 391.9,
+          paymentPlan: "weekly",
+          description: "",
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
+          returned: 155,
+          paid: 236.9,
+          owed: 0,
+        },
+        ware: {
+          id: 5,
+          name: "Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle",
+          type: "braclet",
+          tags: ["unisex"],
+          unitPrice: 14,
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
+          stock: 8,
+        },
+      },
+      {
+        wareId: 2,
+        ticketId: 1,
+        amount: 1,
+        returned: 0,
+        createdAt: "2025-01-09T00:00:00.000Z",
+        updatedAt: "2025-01-09T00:00:00.000Z",
+        ticket: {
+          id: 1,
+          clientId: 2,
+          cost: 391.9,
+          paymentPlan: "weekly",
+          description: "",
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
+          returned: 155,
+          paid: 236.9,
+          owed: 0,
+        },
+        ware: {
+          id: 2,
+          name: "DIOR 3-Pc. J'dore Eau de Parfum Gift Set",
+          type: "perfume",
+          tags: ["women", "3-pc"],
+          unitPrice: 178,
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
+          stock: 4,
+        },
+      },
+      {
+        wareId: 1,
+        ticketId: 1,
+        amount: 1,
+        returned: 1,
+        createdAt: "2025-01-09T00:00:00.000Z",
+        updatedAt: "2025-01-09T00:00:00.000Z",
+        ticket: {
+          id: 1,
+          clientId: 2,
+          cost: 391.9,
+          paymentPlan: "weekly",
+          description: "",
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
+          returned: 155,
+          paid: 236.9,
+          owed: 0,
+        },
+        ware: {
+          id: 1,
+          name: "Loewe 001 Woman Perfume",
+          type: "perfume",
+          tags: ["women", "1-pc"],
+          unitPrice: 155,
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
+          stock: 0,
         },
       },
     ]
@@ -231,11 +328,14 @@ describe("WaresTickets Routes", function () {
     })
 
     it("When ware id is the only input, Then response is all orders with the same ware id", async function () {
-      await getWaresTicketsIt({ wareId: 1 }, allWaresTickets[0])
+      await getWaresTicketsIt({ wareId: 1 }, [
+        allWaresTickets[0],
+        allWaresTickets[4],
+      ])
     })
 
     it("When ticket id is the only input, Then response is all orders with the same ticket id", async function () {
-      await getWaresTicketsIt({ ticketId: 1 }, allWaresTickets[1])
+      await getWaresTicketsIt({ ticketId: 1 }, allWaresTickets.slice(2))
     })
 
     it("When amount is the only input, Then response is all orders with the same amount of a ware sold on the ticket", async function () {
@@ -248,7 +348,7 @@ describe("WaresTickets Routes", function () {
 
     it("When a created at date is given, Then response is all warestickets within that same month and year", async function () {
       await getWaresTicketsIt(
-        { createdAt: new Date("2024-11-11") },
+        { createdAt: new Date("2025-01-12") },
         allWaresTickets
       )
     })
@@ -260,23 +360,28 @@ describe("WaresTickets Routes", function () {
     it("When multiple inputs are given, Then response is all warestickets that satisfy the input comparisons", async function () {
       await getWaresTicketsIt(
         {
-          wareId: 3,
           ticketId: 1,
+          wareId: 2,
           amount: 1,
           returned: 0,
-          createdAt: "2024-11-11",
-          updatedAt: "2024-11-11",
+          createdAt: "2025-01-09",
+          updatedAt: "2025-01-09",
         },
-        allWaresTickets[1]
+        allWaresTickets[3]
       )
     })
   })
 
   describe("Post /", function () {
     it("When merchant inputs required values, Then waresticket is created ", async function () {
+      const [ticketId, wareId] = [
+        [1, [3, 4][Math.floor(Math.random() * 2)]],
+        [2, [1, 2, 4, 5][Math.floor(Math.random() * 4)]],
+        [3, [2, 3, 4, 5][Math.floor(Math.random() * 4)]],
+      ][Math.floor(Math.random() * 3)]
       const requestBody = {
-        wareId: [2, 4][Math.floor(Math.random() * 2)],
-        ticketId: Math.ceil(Math.random() * 2),
+        wareId,
+        ticketId,
         amount: Math.ceil(Math.random() * 3),
         returned: Math.ceil(Math.random() * 2),
       }
@@ -306,10 +411,11 @@ describe("WaresTickets Routes", function () {
 
   describe("Put /:waresticketId", function () {
     it("When there are no inputs, Then response is bad request", async function () {
-      const [wareId, ticketId] = [
+      const [ticketId, wareId] = [
+        [1, [1, 2, 5][Math.floor(Math.random() * 3)]],
+        [2, 3],
         [3, 1],
-        [1, 2],
-      ][Math.floor(Math.random() * 2)]
+      ][Math.floor(Math.random() * 3)]
       const requestBody = {}
 
       const { status, data } = await client.put(
@@ -323,10 +429,11 @@ describe("WaresTickets Routes", function () {
     })
 
     it("When inputs are given, Then waresticket has the respective information updated", async function () {
-      const [wareId, ticketId] = [
-        [2, 4][Math.floor(Math.random() * 2)],
-        Math.ceil(Math.random() * 2),
-      ]
+      const [ticketId, wareId] = [
+        [1, [3, 4][Math.floor(Math.random() * 2)]],
+        [2, [1, 2, 4, 5][Math.floor(Math.random() * 4)]],
+        [3, [2, 3, 4, 5][Math.floor(Math.random() * 4)]],
+      ][Math.floor(Math.random() * 3)]
       const waresticketBeforeCreated = await models.WaresTickets.create({
         wareId,
         ticketId,
@@ -369,10 +476,11 @@ describe("WaresTickets Routes", function () {
 
   describe("Delete /:waresticketId", function () {
     it("When taget waresticket id exists, Then respective waresticket is deleted ", async function () {
-      const [wareId, ticketId] = [
-        [2, 4][Math.floor(Math.random() * 2)],
-        Math.ceil(Math.random() * 2),
-      ]
+      const [ticketId, wareId] = [
+        [1, [3, 4][Math.floor(Math.random() * 2)]],
+        [2, [1, 2, 4, 5][Math.floor(Math.random() * 4)]],
+        [3, [2, 3, 4, 5][Math.floor(Math.random() * 4)]],
+      ][Math.floor(Math.random() * 3)]
       await models.WaresTickets.create({
         wareId,
         ticketId,
