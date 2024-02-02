@@ -26,7 +26,9 @@ exports.paramTicketId = async (req, res, next, ticketId) => {
       )
     }
 
-    const ticket = JSON.parse(JSON.stringify(searched))
+    const ticket = searched.dataValues
+
+    ticket.returned = Math.round(ticket.returned * 100) / 100
 
     ticket.paid = Math.round(ticket.paid * 100) / 100
 
@@ -44,7 +46,7 @@ exports.paramTicketId = async (req, res, next, ticketId) => {
 exports.getTicket = async (req, res) => res.json(req.targetTicket)
 
 const sortForPending = async (tickets) => {
-  tickets.sort((a, b) => b.owed - a.owed)
+  tickets.sort((a, b) => b.dataValues.owed - a.dataValues.owed)
 }
 
 exports.getTickets = async (req, res, next) => {
@@ -62,18 +64,20 @@ exports.getTickets = async (req, res, next) => {
       )
     }
 
-    const tickets = JSON.parse(JSON.stringify(searched))
+    searched.forEach((ticket) => {
+      ticket = ticket.dataValues
 
-    for (const ticket of tickets) {
+      ticket.returned = Math.round(ticket.returned * 100) / 100
+
       ticket.paid = Math.round(ticket.paid * 100) / 100
 
       ticket.owed =
         Math.round((ticket.cost - ticket.returned - ticket.paid) * 100) / 100
-    }
+    })
 
-    if (inputsObject.pending === true) await sortForPending(tickets)
+    if (inputsObject.pending === true) await sortForPending(searched)
 
-    res.json(tickets)
+    res.json(searched)
   } catch (err) {
     next(err)
   }
@@ -129,14 +133,12 @@ const parseNewWaresTickets = async (waresTickets, merchantPreMsg) => {
 
   const waresSearched = await models.Wares.findAll(findWaresQuery(wareIds))
 
-  const wares = JSON.parse(JSON.stringify(waresSearched))
-
   let totalCost = 0
 
   waresTickets.forEach((waresTicket) => {
     const index = wareIds.indexOf(waresTicket.wareId)
 
-    const ware = wares[parseInt(index)]
+    const ware = waresSearched[parseInt(index)].dataValues
 
     if (typeof ware !== "object" || ware.id !== waresTicket.wareId) {
       throw new Api404Error(

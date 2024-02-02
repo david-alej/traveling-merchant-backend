@@ -26,15 +26,17 @@ exports.paramTransactionId = async (req, res, next, transactionId) => {
       )
     }
 
-    const transaction = JSON.parse(JSON.stringify(searched))
+    const transaction = searched.dataValues
 
-    const ticket = transaction.ticket
+    if (transaction.ticket) {
+      const ticket = transaction.ticket.dataValues
 
-    if (ticket) {
-      ticket.owed =
-        Math.round((ticket.cost - ticket.paid - ticket.returned) * 100) / 100
+      ticket.returned = Math.round(ticket.returned * 100) / 100
 
       ticket.paid = Math.round(ticket.paid * 100) / 100
+
+      ticket.owed =
+        Math.round((ticket.cost - ticket.paid - ticket.returned) * 100) / 100
     }
 
     req.targetTransaction = transaction
@@ -62,20 +64,22 @@ exports.getTransactions = async (req, res, next) => {
       )
     }
 
-    const transactions = JSON.parse(JSON.stringify(searched))
+    searched.forEach((transaction) => {
+      transaction = transaction.dataValues
 
-    transactions.forEach((transaction) => {
-      const ticket = transaction.ticket
+      if (transaction.ticket) {
+        const ticket = transaction.ticket.dataValues
 
-      if (ticket) {
-        ticket.owed =
-          Math.round((ticket.cost - ticket.paid - ticket.returned) * 100) / 100
+        ticket.returned = Math.round(ticket.returned * 100) / 100
 
         ticket.paid = Math.round(ticket.paid * 100) / 100
+
+        ticket.owed =
+          Math.round((ticket.cost - ticket.paid - ticket.returned) * 100) / 100
       }
     })
 
-    res.json(transactions)
+    res.json(searched)
   } catch (err) {
     next(err)
   }

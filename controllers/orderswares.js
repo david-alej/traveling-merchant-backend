@@ -42,7 +42,7 @@ exports.paramWareId = async (req, res, next, wareId) => {
       )
     }
 
-    req.targetOrdersWare = JSON.parse(JSON.stringify(searched))
+    req.targetOrdersWare = searched.dataValues
 
     next()
   } catch (err) {

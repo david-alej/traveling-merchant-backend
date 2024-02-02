@@ -13,6 +13,17 @@ const ordersWaresInclusion = {
   include: {
     model: models.Wares,
     as: "ware",
+    attributes: {
+      include: [
+        [
+          models.Sequelize.literal(
+            // eslint-disable-next-line quotes
+            '(SELECT "amount" - "returned" + COALESCE("waresBought->ware->sold"."returned"  - "waresBought->ware->sold"."amount", 0) FROM "OrdersWares" LEFT OUTER JOIN "Orders" ON "OrdersWares"."orderId" = "Orders"."id" WHERE "wareId" = "waresBought->ware"."id" AND "Orders"."actualAt" IS NOT NULL)'
+          ),
+          "stock",
+        ],
+      ],
+    },
     include: {
       model: models.WaresTickets,
       as: "sold",

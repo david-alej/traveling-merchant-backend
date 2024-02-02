@@ -30,9 +30,13 @@ exports.paramClientId = async (req, res, next, clientId) => {
       )
     }
 
-    const client = JSON.parse(JSON.stringify(searched))
+    const client = searched.dataValues
 
     client.tickets.forEach((ticket) => {
+      ticket = ticket.dataValues
+
+      ticket.returned = Math.round(ticket.returned * 100) / 100
+
       ticket.paid = Math.round(ticket.paid * 100) / 100
 
       ticket.owed =
@@ -65,9 +69,13 @@ exports.getClients = async (req, res, next) => {
     }
 
     const clients = searched.map((client) => {
-      client = JSON.parse(JSON.stringify(client))
+      client = client.dataValues
 
       client.tickets.forEach((ticket) => {
+        ticket = ticket.dataValues
+
+        ticket.returned = Math.round(ticket.returned * 100) / 100
+
         ticket.paid = Math.round(ticket.paid * 100) / 100
 
         ticket.owed =

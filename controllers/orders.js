@@ -32,9 +32,11 @@ exports.paramOrderId = async (req, res, next, orderId) => {
       )
     }
 
-    const order = JSON.parse(JSON.stringify(searched))
+    const order = searched.dataValues
 
     order.waresBought.forEach((ordersWare) => {
+      ordersWare = ordersWare.dataValues
+
       const stockBought = ordersWare.amount - ordersWare.returned
       const ware = ordersWare.ware
       const waresTickets = ware.sold
@@ -72,24 +74,7 @@ exports.getOrders = async (req, res, next) => {
       )
     }
 
-    const orders = JSON.parse(JSON.stringify(searched))
-
-    orders.forEach((order) => {
-      order.waresBought.forEach((ordersWare) => {
-        const stockBought = ordersWare.amount - ordersWare.returned
-        const ware = ordersWare.ware
-        const waresTickets = ware.sold
-        let stockSold = 0
-
-        for (const waresTicket of waresTickets) {
-          stockSold += waresTicket.amount - waresTicket.returned
-        }
-
-        ware.stock = stockBought - stockSold
-      })
-    })
-
-    res.json(orders)
+    res.json(searched)
   } catch (err) {
     next(err)
   }
@@ -176,12 +161,10 @@ const parseNewOrdersWares = async (inputsObject, merchantPreMsg) => {
 
   const waresSearched = await models.Wares.findAll(findWaresQuery(wareIds))
 
-  const wares = JSON.parse(JSON.stringify(waresSearched))
-
   ordersWares.forEach((ordersWare) => {
     const index = wareIds.indexOf(ordersWare.wareId)
 
-    const ware = wares[parseInt(index)]
+    const ware = waresSearched[parseInt(index)].dataValues
 
     if (typeof ware !== "object" || ware.id !== ordersWare.wareId) {
       throw new Api404Error(

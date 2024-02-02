@@ -40,9 +40,9 @@ exports.paramTicketId = async (req, res, next, ticketId) => {
       )
     }
 
-    const waresTicket = searched.get({ plain: true, clone: true })
+    const waresTicket = searched.dataValues
 
-    const ticket = waresTicket.ticket
+    const ticket = waresTicket.ticket.dataValues
 
     ticket.returned = Math.round(ticket.returned * 100) / 100
 
@@ -76,10 +76,10 @@ exports.getWaresTickets = async (req, res, next) => {
       )
     }
 
-    const waresTickets = searched.map((waresTicket) => {
-      waresTicket = waresTicket.get({ plain: true, clone: true })
+    searched.forEach((waresTicket) => {
+      waresTicket = waresTicket.dataValues
 
-      const ticket = waresTicket.ticket
+      const ticket = waresTicket.ticket.dataValues
 
       ticket.returned = Math.round(ticket.returned * 100) / 100
 
@@ -91,7 +91,7 @@ exports.getWaresTickets = async (req, res, next) => {
       return waresTicket
     })
 
-    res.json(waresTickets)
+    res.json(searched)
   } catch (err) {
     next(err)
   }

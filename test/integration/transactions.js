@@ -384,11 +384,10 @@ describe("Transactions Routes", function () {
     })
 
     it("When order id is the only input, Then response all providers with the respectived id are returned", async function () {
-      await getTransactionsIt(
-        { orderId: 1 },
-        [allTransactions[0], allTransactions[7]],
-        true
-      )
+      await getTransactionsIt({ orderId: 1 }, [
+        allTransactions[0],
+        allTransactions[7],
+      ])
     })
 
     it("When payment is the only input, Then response all providers with the same payment are returned", async function () {
