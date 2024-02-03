@@ -98,7 +98,7 @@ module.exports = {
         whereOptions[String(inputName)] = input
       } else if (Array.isArray(input)) {
         whereOptions[String(inputName)] = { [Op.contains]: input }
-      } else if (input === true) {
+      } else if (input === true || input === false) {
         break
       } else {
         createStringQuery(inputName, input, whereOptions)

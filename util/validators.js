@@ -92,7 +92,7 @@ const integerValidator = (
 
   return head
     .isInt()
-    .withMessage(inputName + " must be an integer.")
+    .withMessage(inputName + " must be an integer number.")
     .custom((int) => {
       let errorMsg = " must be greater than or equal to zero."
       let intIsZero = false
@@ -237,7 +237,7 @@ const arrayObjectValidator = (
         " array must have at least one element and less than 50 elements."
     )
     .custom((array) => {
-      const arrayHasAllStringElements = array.every((element) => {
+      const arrayHasAllObjectElements = array.every((element) => {
         return (
           typeof element === "object" &&
           !Array.isArray(element) &&
@@ -245,9 +245,9 @@ const arrayObjectValidator = (
         )
       })
 
-      if (!arrayHasAllStringElements) {
+      if (!arrayHasAllObjectElements) {
         throw new Error(
-          ` the given ${inputName} = ${array} is not an array that is made of all string objects.`
+          ` the given ${inputName} = ${array} is not an array that is made of all object elements.`
         )
       }
 
