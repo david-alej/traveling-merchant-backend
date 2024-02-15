@@ -1,21 +1,27 @@
 const clientsRouter = require("express").Router()
 const { clientsControllers } = require("../controllers/index")
-const { integerValidator, textValidator, dateValidator, phoneNumberValidator } =
-  require("../util/index").validators
+const {
+  positiveIntegerValidator,
+  wordValidator,
+  stringValidator,
+  dateValidator,
+  phoneNumberValidator,
+} = require("../util/index").validators
 
 clientsRouter.param("clientId", clientsControllers.paramClientId)
 
 clientsRouter.get("/:clientId", clientsControllers.getClient)
 
-clientsRouter.get(
-  "/",
+clientsRouter.post(
+  "/search",
   [
-    integerValidator("workId", false, true),
-    textValidator("fullname", false, true),
-    textValidator("address", false, true, false),
-    textValidator("description", false, true),
-    dateValidator("createdAt", false, true),
-    dateValidator("updatedAt", false, true),
+    positiveIntegerValidator("workId", true),
+    stringValidator("fullname", true),
+    stringValidator("address", true),
+    stringValidator("description", true),
+    stringValidator("phoneNumber", true),
+    dateValidator("createdAt", true),
+    dateValidator("updatedAt", true),
   ],
   clientsControllers.getClients
 )
@@ -23,10 +29,10 @@ clientsRouter.get(
 clientsRouter.post(
   "/",
   [
-    textValidator("fullname"),
-    textValidator("address"),
+    wordValidator("fullname"),
+    wordValidator("address"),
     phoneNumberValidator(),
-    textValidator("description", false, true),
+    stringValidator("description", true),
   ],
   clientsControllers.workValidation,
   clientsControllers.postClient
@@ -35,11 +41,11 @@ clientsRouter.post(
 clientsRouter.put(
   "/:clientId",
   [
-    integerValidator("workId", false, true),
-    textValidator("fullname", false, true),
-    textValidator("address", false, true),
-    phoneNumberValidator("phoneNumber", false, true),
-    textValidator("description", false, true, false),
+    positiveIntegerValidator("workId", true),
+    wordValidator("fullname", true),
+    wordValidator("address", true),
+    phoneNumberValidator("phoneNumber", true),
+    stringValidator("description", true),
   ],
   clientsControllers.putClient
 )

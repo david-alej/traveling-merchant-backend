@@ -1,8 +1,9 @@
 const {
   validationPerusal,
-  integerValidator,
-  floatValidator,
-  textValidator,
+  positiveIntegerValidator,
+  nonNegativeIntegerValidator,
+  positiveFloatValidator,
+  wordValidator,
   phoneNumberValidator,
   emailValidator,
 } = require("../util/index").validators
@@ -16,7 +17,7 @@ exports.paramOrderId = async (req, res, next, orderId) => {
   const merchant = req.session.merchant
 
   try {
-    await integerValidator("orderId", true).run(req)
+    await positiveIntegerValidator("orderId", false, true).run(req)
 
     validationPerusal(req)
 
@@ -99,25 +100,22 @@ exports.postValidation = async (req, res, next) => {
   }
 
   for (let i = 0; i < ordersWares.length; i++) {
-    await integerValidator(`ordersWares[${i}].wareId`).run(req)
-    await integerValidator(`ordersWares[${i}].amount`).run(req)
-    await floatValidator(`ordersWares[${i}].unitPrice`).run(req)
-    await integerValidator(
-      `ordersWares[${i}].returned`,
-      false,
-      true,
-      false
-    ).run(req)
+    await positiveIntegerValidator(`ordersWares[${i}].wareId`).run(req)
+    await positiveIntegerValidator(`ordersWares[${i}].amount`).run(req)
+    await positiveFloatValidator(`ordersWares[${i}].unitPrice`).run(req)
+    await nonNegativeIntegerValidator(`ordersWares[${i}].returned`, true).run(
+      req
+    )
   }
 
   if (providerId) {
-    await integerValidator("providerId").run(req)
+    await positiveIntegerValidator("providerId").run(req)
   } else {
     const providerValidators = [
-      textValidator("provider.name"),
-      textValidator("provider.address"),
+      wordValidator("provider.name"),
+      wordValidator("provider.address"),
       phoneNumberValidator("provider.phoneNumber"),
-      emailValidator("provider.email", false, true),
+      emailValidator("provider.email", true),
     ]
 
     for (const validator of providerValidators) {
@@ -304,8 +302,7 @@ exports.deleteOrder = async (req, res, next) => {
     }
 
     res.send(
-      merchant.preMsg +
-        ` has deleted a order with id = ${targetOrder.id} and fullname = ${targetOrder.fullname}.`
+      merchant.preMsg + ` has deleted a order with id = ${targetOrder.id}.`
     )
   } catch (err) {
     next(err)

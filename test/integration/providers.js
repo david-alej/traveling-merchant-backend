@@ -122,7 +122,7 @@ describe("Providers Routes", function () {
     })
   })
 
-  describe("Get /", function () {
+  describe("Post /search", function () {
     const allProviders = [
       {
         id: 2,
@@ -178,10 +178,12 @@ describe("Providers Routes", function () {
       expectedProviders = Array.isArray(expectedProviders)
         ? expectedProviders
         : [expectedProviders]
-      const config = structuredClone(setHeaders)
-      config.data = requestBody
 
-      const { status, data: providers } = await client.get("/providers", config)
+      const { status, data: providers } = await client.post(
+        "/providers/search",
+        requestBody,
+        setHeaders
+      )
 
       if (isPrinted) {
         console.log("[")
@@ -354,7 +356,7 @@ describe("Providers Routes", function () {
       expect(data)
         .to.include.string(preMerchantMsg)
         .and.string(
-          ` has deleted a provider with id = ${providerId} and fullname = ${newProvider.fullname}.`
+          ` has deleted a provider with id = ${providerId} and name = ${newProvider.name}.`
         )
       expect(afterProviderSearched).to.equal(null)
     })

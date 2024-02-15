@@ -1,7 +1,12 @@
 const transactionsRouter = require("express").Router()
 const { transactionsControllers } = require("../controllers/index")
-const { integerValidator, floatValidator, textValidator, dateValidator } =
-  require("../util/index").validators
+const {
+  positiveIntegerValidator,
+  floatValidator,
+  wordValidator,
+  stringValidator,
+  dateValidator,
+} = require("../util/index").validators
 
 transactionsRouter.param(
   "transactionId",
@@ -16,13 +21,13 @@ transactionsRouter.get(
 transactionsRouter.get(
   "/",
   [
-    integerValidator("ticketId", false, true),
-    integerValidator("orderId", false, true),
-    floatValidator("payment", false, true, false, true),
-    textValidator("paymentType", false, true),
-    dateValidator("paidAt", false, true),
-    dateValidator("createdAt", false, true),
-    dateValidator("updatedAt", false, true),
+    positiveIntegerValidator("ticketId", true),
+    positiveIntegerValidator("orderId", true),
+    floatValidator("payment", true),
+    stringValidator("paymentType", true),
+    dateValidator("paidAt", true),
+    dateValidator("createdAt", true),
+    dateValidator("updatedAt", true),
   ],
   transactionsControllers.getTransactions
 )
@@ -30,10 +35,10 @@ transactionsRouter.get(
 transactionsRouter.post(
   "/",
   [
-    integerValidator("ticketId", false, true),
-    integerValidator("orderId", false, true),
-    floatValidator("payment", false, false, false, true),
-    textValidator("paymentType"),
+    positiveIntegerValidator("ticketId", true),
+    positiveIntegerValidator("orderId", true),
+    floatValidator("payment"),
+    wordValidator("paymentType"),
     dateValidator("paidAt"),
   ],
   transactionsControllers.foreignKeyValidation,
@@ -43,11 +48,11 @@ transactionsRouter.post(
 transactionsRouter.put(
   "/:transactionId",
   [
-    integerValidator("ticketId", false, true),
-    integerValidator("orderId", false, true),
-    floatValidator("payment", false, true, false, true),
-    textValidator("paymentType", false, true),
-    dateValidator("paidAt", false, true),
+    positiveIntegerValidator("ticketId", true),
+    positiveIntegerValidator("orderId", true),
+    floatValidator("payment", true),
+    wordValidator("paymentType", true),
+    dateValidator("paidAt", true),
   ],
   transactionsControllers.foreignKeyValidation,
   transactionsControllers.putTransaction

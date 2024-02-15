@@ -1,21 +1,26 @@
 const providersRouter = require("express").Router()
 const { providersControllers } = require("../controllers/index")
-const { textValidator, dateValidator, phoneNumberValidator, emailValidator } =
-  require("../util/index").validators
+const {
+  stringValidator,
+  wordValidator,
+  dateValidator,
+  phoneNumberValidator,
+  emailValidator,
+} = require("../util/index").validators
 
 providersRouter.param("providerId", providersControllers.paramProviderId)
 
 providersRouter.get("/:providerId", providersControllers.getProvider)
 
-providersRouter.get(
-  "/",
+providersRouter.post(
+  "/search",
   [
-    textValidator("name", false, true),
-    textValidator("address", false, true, false),
-    textValidator("phoneNumber", false, true, false),
-    textValidator("email", false, true, false),
-    dateValidator("createdAt", false, true),
-    dateValidator("updatedAt", false, true),
+    stringValidator("name", true),
+    stringValidator("address", true),
+    stringValidator("phoneNumber", true),
+    stringValidator("email", true),
+    dateValidator("createdAt", true),
+    dateValidator("updatedAt", true),
   ],
   providersControllers.getProviders
 )
@@ -23,10 +28,10 @@ providersRouter.get(
 providersRouter.post(
   "/",
   [
-    textValidator("name"),
-    textValidator("address"),
+    wordValidator("name"),
+    wordValidator("address"),
     phoneNumberValidator("phoneNumber"),
-    emailValidator("email", false, true),
+    emailValidator("email", true),
   ],
   providersControllers.postProvider
 )
@@ -34,10 +39,10 @@ providersRouter.post(
 providersRouter.put(
   "/:providerId",
   [
-    textValidator("name", false, true),
-    textValidator("address", false, true),
-    phoneNumberValidator("phoneNumber", false, true),
-    emailValidator("email", false, true),
+    wordValidator("name", true),
+    wordValidator("address", true),
+    phoneNumberValidator("phoneNumber", true),
+    emailValidator("email", true),
   ],
   providersControllers.putProvider
 )

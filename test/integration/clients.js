@@ -132,7 +132,7 @@ describe("Clients Routes", function () {
     })
   })
 
-  describe("Get /", function () {
+  describe("Post /search", function () {
     const allClients = [
       {
         id: 4,
@@ -251,93 +251,72 @@ describe("Clients Routes", function () {
       },
     ]
 
-    it("When no inputs is provided, Then default query search is returned ", async function () {
-      const expectedClients = allClients
+    async function getClientsIt(
+      requestBody,
+      expectedClients = [],
+      isPrinted = false
+    ) {
+      expectedClients = Array.isArray(expectedClients)
+        ? expectedClients
+        : [expectedClients]
 
-      const { status, data: clients } = await client.get("/clients", setHeaders)
+      const { status, data: clients } = await client.post(
+        "/clients/search",
+        requestBody,
+        setHeaders
+      )
+
+      if (isPrinted) {
+        for (const client of clients) {
+          console.log(client, ",")
+        }
+      }
 
       expect(status).to.equal(OK)
       expect(clients).to.be.jsonSchema(clientsSchema)
       expect(clients).to.eql(expectedClients)
+    }
+
+    it("When no inputs is provided, Then default query search is returned ", async function () {
+      await getClientsIt({}, allClients)
     })
 
     it("When work id is the only input, Then response all clients with the same work id", async function () {
-      const expectedClients = [allClients[0]]
-      const config = structuredClone(setHeaders)
-      config.data = { workId: 3 }
-
-      const { status, data: clients } = await client.get("/clients", config)
-
-      expect(status).to.equal(OK)
-      expect(clients).to.be.jsonSchema(clientsSchema)
-      expect(clients).to.eql(expectedClients)
+      await getClientsIt({ workId: 3 }, allClients[0])
     })
 
     it("When a created at date is given, Then response is all clients within that same month and year", async function () {
-      const expectedClients = allClients
-      const config = structuredClone(setHeaders)
-      config.data = { createdAt: new Date("2025-01-11") }
-
-      const { status, data: clients } = await client.get("/clients", config)
-
-      expect(status).to.equal(OK)
-      expect(clients).to.be.jsonSchema(clientsSchema)
-      expect(clients).to.eql(expectedClients)
+      await getClientsIt({ createdAt: new Date("2025-01-11") }, allClients)
     })
 
     it("When a updated at date is given, Then response is all clients within that same month and year", async function () {
-      const expectedClients = []
-      const config = structuredClone(setHeaders)
-      config.data = { updatedAt: new Date("2025-02-10") }
-
-      const { status, data: clients } = await client.get("/clients", config)
-
-      expect(status).to.equal(OK)
-      expect(clients).to.be.jsonSchema(clientsSchema)
-      expect(clients).to.eql(expectedClients)
+      await getClientsIt({ updatedAt: new Date("2025-02-01T12:00:00.000Z") })
     })
 
     it("When part of a fullname is given, Then response is all clients that include the given string using case insensitive search", async function () {
-      const expectedClients = [allClients[0]]
-      const config = structuredClone(setHeaders)
-      config.data = { fullname: "ADI" }
-
-      const { status, data: clients } = await client.get("/clients", config)
-
-      expect(status).to.equal(OK)
-      expect(clients).to.be.jsonSchema(clientsSchema)
-      expect(clients).to.eql(expectedClients)
+      await getClientsIt({ fullname: "ADI" }, allClients[0])
     })
 
     it("When part of an address is given, Then response is all clients that include the given string using case insensitive search", async function () {
-      const expectedClients = [allClients[2]]
-      const config = structuredClone(setHeaders)
-      config.data = { address: "TEEL" }
+      await getClientsIt({ address: "TEEL" }, allClients[2])
+    })
 
-      const { status, data: clients } = await client.get("/clients", config)
-
-      expect(status).to.equal(OK)
-      expect(clients).to.be.jsonSchema(clientsSchema)
-      expect(clients).to.eql(expectedClients)
+    it("When part of a phone number is given, Then response is all clients that include the given string using case insensitive search", async function () {
+      await getClientsIt({ phoneNumber: "3424" }, allClients[0])
     })
 
     it("When multiple inputs are given, Then response is all clients that satisfy the input comparisons", async function () {
-      const expectedClients = [allClients[1]]
-      const config = structuredClone(setHeaders)
-      config.data = {
-        workId: 2,
-        fullname: "Pau",
-        address: "1454",
-        phoneNumber: "2543865553",
-        createdAt: "2025-01-11",
-        updatedAt: "2025-01-11",
-      }
-
-      const { status, data: clients } = await client.get("/clients", config)
-
-      expect(status).to.equal(OK)
-      expect(clients).to.be.jsonSchema(clientsSchema)
-      expect(clients).to.eql(expectedClients)
+      await getClientsIt(
+        {
+          workId: 2,
+          fullname: "Pau",
+          address: "1454",
+          phoneNumber: "2543865553",
+          createdAt: "2025-01-11",
+          updatedAt: "2025-01-11",
+        },
+        allClients[1]
+      )
     })
   })
 

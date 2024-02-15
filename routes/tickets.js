@@ -3,10 +3,11 @@ const { ticketsControllers } = require("../controllers/index")
 const {
   arrayObjectValidator,
   booleanValidator,
-  integerValidator,
-  textValidator,
+  positiveIntegerValidator,
+  wordValidator,
+  stringValidator,
   dateValidator,
-  floatValidator,
+  nonNegativeFloatValidator,
 } = require("../util/index").validators
 
 ticketsRouter.param("ticketId", ticketsControllers.paramTicketId)
@@ -16,13 +17,13 @@ ticketsRouter.get("/:ticketId", ticketsControllers.getTicket)
 ticketsRouter.get(
   "/",
   [
-    integerValidator("clientId", false, true),
-    floatValidator("cost", false, true),
-    textValidator("paymentPlan", false, true),
-    textValidator("description", false, true),
-    dateValidator("createdAt", false, true),
-    dateValidator("updatedAt", false, true),
-    booleanValidator("pending", false, true),
+    positiveIntegerValidator("clientId", true),
+    nonNegativeFloatValidator("cost", true),
+    stringValidator("paymentPlan", true),
+    stringValidator("description", true),
+    dateValidator("createdAt", true),
+    dateValidator("updatedAt", true),
+    booleanValidator("pending", true),
   ],
   ticketsControllers.getTickets
 )
@@ -30,10 +31,10 @@ ticketsRouter.get(
 ticketsRouter.post(
   "/",
   [
-    integerValidator("clientId"),
-    floatValidator("cost", false, true),
-    textValidator("paymentPlan"),
-    textValidator("description", false, true),
+    positiveIntegerValidator("clientId"),
+    nonNegativeFloatValidator("cost", true),
+    wordValidator("paymentPlan"),
+    stringValidator("description", true),
     arrayObjectValidator("waresTickets"),
   ],
   ticketsControllers.postValidation,
@@ -43,10 +44,10 @@ ticketsRouter.post(
 ticketsRouter.put(
   "/:ticketId",
   [
-    integerValidator("clientId", false, true),
-    floatValidator("cost", false, true),
-    textValidator("paymentPlan", false, true),
-    textValidator("description", false, true),
+    positiveIntegerValidator("clientId", true),
+    nonNegativeFloatValidator("cost", true),
+    wordValidator("paymentPlan", true),
+    stringValidator("description", true),
   ],
   ticketsControllers.putTicket
 )

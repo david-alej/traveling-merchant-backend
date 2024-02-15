@@ -1,8 +1,8 @@
 const {
   validationPerusal,
-  integerValidator,
+  positiveIntegerValidator,
   phoneNumberValidator,
-  textValidator,
+  wordValidator,
 } = require("../util/index").validators
 const models = require("../database/models")
 const { Api400Error, Api404Error, Api500Error } =
@@ -14,7 +14,7 @@ exports.paramClientId = async (req, res, next, clientId) => {
   const merchant = req.session.merchant
 
   try {
-    await integerValidator("clientId", true).run(req)
+    await positiveIntegerValidator("clientId", false, true).run(req)
 
     validationPerusal(req)
 
@@ -106,11 +106,11 @@ exports.workValidation = async (req, res, next) => {
   }
 
   if (workId) {
-    await integerValidator("workId").run(req)
+    await positiveIntegerValidator("workId").run(req)
   } else {
     const workValidators = [
-      textValidator("work.name"),
-      textValidator("work.address"),
+      wordValidator("work.name"),
+      wordValidator("work.address"),
       phoneNumberValidator("work.phoneNumber"),
     ]
 

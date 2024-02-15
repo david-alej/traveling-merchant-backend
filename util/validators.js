@@ -8,16 +8,12 @@ const sentenceCase = (camelCase) => {
   return result[0].toUpperCase() + result.substring(1).toLowerCase()
 }
 
-const basicCredentialValidator = (
-  input,
-  inputIsParam = false,
-  optional = false
-) => {
+const basicCredentialValidator = (input, optional = false, isParam = false) => {
   const inputName = sentenceCase(input)
-  let requestProperty = inputIsParam ? param : body
+  let requestProperty = isParam ? param : body
   let head = requestProperty(input)
 
-  if (!inputIsParam) {
+  if (!isParam) {
     if (optional) {
       head = head.optional({ nullable: true, checkFalsy: true })
     }
@@ -35,11 +31,11 @@ const basicCredentialValidator = (
 
 const usernameValidator = (
   input = "username",
-  inputIsParam = false,
-  optional = false
+  optional = false,
+  isParam = false
 ) => {
   const inputName = sentenceCase(input)
-  const head = basicCredentialValidator(input, inputIsParam, optional)
+  const head = basicCredentialValidator(input, optional, isParam)
   return head
     .isLength({ min: 4, max: 20 })
     .withMessage(
@@ -51,11 +47,11 @@ exports.usernameValidator = usernameValidator
 
 const passwordValidator = (
   input = "password",
-  inputIsParam = false,
-  optional = false
+  optional = false,
+  isParam = false
 ) => {
   const inputName = sentenceCase(input)
-  const head = basicCredentialValidator(input, inputIsParam, optional)
+  const head = basicCredentialValidator(input, optional, isParam)
 
   return head
     .isLength({ min: 8, max: 20 })
@@ -70,9 +66,9 @@ const passwordValidator = (
 
 exports.passwordValidator = passwordValidator
 
-const basicValidator = (input, inputIsParam = false, optional = false) => {
+const basicValidator = (input, optional = false, isParam = false) => {
   const inputName = sentenceCase(input)
-  const requestProperty = inputIsParam ? param : body
+  const requestProperty = isParam ? param : body
   let head = requestProperty(input)
 
   if (optional) {
@@ -82,27 +78,41 @@ const basicValidator = (input, inputIsParam = false, optional = false) => {
   return { head, inputName }
 }
 
-const integerValidator = (
+exports.positiveIntegerValidator = (
   input,
-  inputIsParam = false,
   optional = false,
-  excludeZero = true
+  isParam = false
 ) => {
-  const { head, inputName } = basicValidator(input, inputIsParam, optional)
+  const { head, inputName } = basicValidator(input, optional, isParam)
+
+  return head
+    .isInt()
+    .withMessage(inputName + " must be an integer number.")
+    .custom((int) => {
+      let errorMsg = " must be greater than zero."
+
+      if (int <= 0) {
+        throw new Error(inputName + errorMsg)
+      }
+
+      return true
+    })
+}
+
+exports.nonNegativeIntegerValidator = (
+  input,
+  optional = false,
+  isParam = false
+) => {
+  const { head, inputName } = basicValidator(input, optional, isParam)
 
   return head
     .isInt()
     .withMessage(inputName + " must be an integer number.")
     .custom((int) => {
       let errorMsg = " must be greater than or equal to zero."
-      let intIsZero = false
 
-      if (excludeZero) {
-        intIsZero = int === 0
-        errorMsg = " must be greater than zero."
-      }
-
-      if (int < 0 || intIsZero) {
+      if (int < 0) {
         throw new Error(inputName + errorMsg)
       }
 
@@ -110,56 +120,56 @@ const integerValidator = (
     })
 }
 
-exports.integerValidator = integerValidator
-
-const floatValidator = (
-  input,
-  inputIsParam = false,
-  optional = false,
-  excludeZero = true,
-  canBeNegative = false
-) => {
-  const { head, inputName } = basicValidator(input, inputIsParam, optional)
+exports.positiveFloatValidator = (input, optional = false, isParam = false) => {
+  const { head, inputName } = basicValidator(input, optional, isParam)
 
   return head
     .isFloat()
     .withMessage(inputName + " must be an float number.")
     .custom((float) => {
-      let errorMsg = " must be greater than or equal to zero."
-      let floatIsZero = false
-      let isNegative = canBeNegative ? false : float < 0
-
-      if (excludeZero) {
-        floatIsZero = float === 0
-        errorMsg = " must be greater than zero."
-      }
-
-      if (isNegative || floatIsZero) {
-        throw new Error(inputName + errorMsg)
+      if (float <= 0) {
+        throw new Error(inputName + " must be greater than zero.")
       }
 
       return true
     })
 }
 
-exports.floatValidator = floatValidator
-
-const textValidator = (
+exports.nonNegativeFloatValidator = (
   input,
-  inputIsParam = false,
   optional = false,
-  includesCharacter = true
+  isParam = false
 ) => {
-  const { head, inputName } = basicValidator(input, inputIsParam, optional)
+  const { head, inputName } = basicValidator(input, optional, isParam)
 
   return head
-    .trim()
-    .notEmpty()
-    .withMessage(inputName + " must not be empty.")
+    .isFloat()
+    .withMessage(inputName + " must be an float number.")
+    .custom((float) => {
+      if (float < 0) {
+        throw new Error(inputName + " must be greater than or equal to zero.")
+      }
+
+      return true
+    })
+}
+
+exports.floatValidator = (input, optional = false, isParam = false) => {
+  const { head, inputName } = basicValidator(input, optional, isParam)
+
+  return head.isFloat().withMessage(inputName + " must be an float number.")
+}
+
+exports.wordValidator = (input, optional = false, isParam = false) => {
+  const { head, inputName } = basicValidator(input, optional, isParam)
+
+  return head
     .isString()
     .withMessage(inputName + " must be a string.")
     .custom((str) => {
-      if (!includesCharacter) return true
+      if (!str.replaceAll(/\s/g, "")) {
+        throw new Error(inputName + " must not be empty.")
+      }
 
       const hasCharacter = /[a-zA-Z]/.test(str)
 
@@ -171,19 +181,30 @@ const textValidator = (
     })
 }
 
-exports.textValidator = textValidator
+exports.stringValidator = (input, optional = false, isParam = false) => {
+  const { head, inputName } = basicValidator(input, optional, isParam)
 
-const booleanValidator = (input, inputIsParam = false, optional = false) => {
-  const { head, inputName } = basicValidator(input, inputIsParam, optional)
+  return head
+    .isString()
+    .withMessage(inputName + " must be a string.")
+    .custom((str) => {
+      if (!str.replaceAll(/\s/g, "")) {
+        throw new Error(inputName + " must not be empty.")
+      }
+
+      return true
+    })
+}
+
+exports.booleanValidator = (input, optional = false, isParam = false) => {
+  const { head, inputName } = basicValidator(input, optional, isParam)
 
   return head
     .isBoolean()
     .withMessage(inputName + " must be either true or false.")
 }
 
-exports.booleanValidator = booleanValidator
-
-const incrementValidator = (input) => {
+exports.incrementValidator = (input) => {
   const { head } = basicValidator(input, false, false)
 
   return head.custom((voteValue) => {
@@ -195,10 +216,8 @@ const incrementValidator = (input) => {
   })
 }
 
-exports.incrementValidator = incrementValidator
-
-const arrayTextValidator = (input, inputIsParam = false, optional = false) => {
-  const { head, inputName } = basicValidator(input, inputIsParam, optional)
+exports.arrayTextValidator = (input, optional = false, isParam = false) => {
+  const { head, inputName } = basicValidator(input, optional, isParam)
 
   return head
     .isArray({ max: 10, min: 1 })
@@ -221,14 +240,8 @@ const arrayTextValidator = (input, inputIsParam = false, optional = false) => {
     })
 }
 
-exports.arrayTextValidator = arrayTextValidator
-
-const arrayObjectValidator = (
-  input,
-  inputIsParam = false,
-  optional = false
-) => {
-  const { head, inputName } = basicValidator(input, inputIsParam, optional)
+exports.arrayObjectValidator = (input, optional = false, isParam = false) => {
+  const { head, inputName } = basicValidator(input, optional, isParam)
 
   return head
     .isArray({ max: 50, min: 1 })
@@ -255,10 +268,8 @@ const arrayObjectValidator = (
     })
 }
 
-exports.arrayObjectValidator = arrayObjectValidator
-
-const dateValidator = (input, inputIsParam = false, optional = false) => {
-  const { head, inputName } = basicValidator(input, inputIsParam, optional)
+exports.dateValidator = (input, optional = false, isParam = false) => {
+  const { head, inputName } = basicValidator(input, optional, isParam)
 
   return head.custom((date) => {
     if (!isNaN(new Date(date))) return true
@@ -267,14 +278,12 @@ const dateValidator = (input, inputIsParam = false, optional = false) => {
   })
 }
 
-exports.dateValidator = dateValidator
-
-const phoneNumberValidator = (
+exports.phoneNumberValidator = (
   input = "phoneNumber",
-  inputIsParam = false,
-  optional = false
+  optional = false,
+  isParam = false
 ) => {
-  const { head, inputName } = basicValidator(input, inputIsParam, optional)
+  const { head, inputName } = basicValidator(input, optional, isParam)
 
   return head
     .custom((phoneNumber) => {
@@ -304,22 +313,18 @@ const phoneNumberValidator = (
     })
 }
 
-exports.phoneNumberValidator = phoneNumberValidator
-
-const emailValidator = (
+exports.emailValidator = (
   input = "email",
-  inputIsParam = false,
-  optional = false
+  optional = false,
+  isParam = false
 ) => {
-  const { head, inputName } = basicValidator(input, inputIsParam, optional)
+  const { head, inputName } = basicValidator(input, optional, isParam)
 
   return head
     .normalizeEmail()
     .isEmail()
     .withMessage(inputName + " must be in email format.")
 }
-
-exports.emailValidator = emailValidator
 
 exports.validationPerusal = (req) => {
   const validationError = validationResult(req).array({
@@ -340,7 +345,7 @@ exports.credentialsValidator = () => {
 
 exports.newCredentialsValidator = () => {
   return [
-    usernameValidator("newUsername", false, true),
-    passwordValidator("newPassword", false, true),
+    usernameValidator("newUsername", true),
+    passwordValidator("newPassword", true),
   ]
 }

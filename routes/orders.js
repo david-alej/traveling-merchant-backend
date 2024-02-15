@@ -1,8 +1,8 @@
 const ordersRouter = require("express").Router()
 const { ordersControllers } = require("../controllers/index")
 const {
-  integerValidator,
-  floatValidator,
+  positiveIntegerValidator,
+  nonNegativeFloatValidator,
   dateValidator,
   arrayObjectValidator,
 } = require("../util/index").validators
@@ -11,17 +11,17 @@ ordersRouter.param("orderId", ordersControllers.paramOrderId)
 
 ordersRouter.get("/:orderId", ordersControllers.getOrder)
 
-ordersRouter.get(
-  "/",
+ordersRouter.post(
+  "/search",
   [
-    integerValidator("providerId", false, true),
-    floatValidator("cost", false, true),
-    floatValidator("tax", false, true),
-    floatValidator("shipment", false, true),
-    dateValidator("expectedAt", false, true),
-    dateValidator("actualAt", false, true),
-    dateValidator("createdAt", false, true),
-    dateValidator("updatedAt", false, true),
+    positiveIntegerValidator("providerId", true),
+    nonNegativeFloatValidator("cost", true),
+    nonNegativeFloatValidator("tax", true),
+    nonNegativeFloatValidator("shipment", true),
+    dateValidator("expectedAt", true),
+    dateValidator("actualAt", true),
+    dateValidator("createdAt", true),
+    dateValidator("updatedAt", true),
   ],
   ordersControllers.getOrders
 )
@@ -29,11 +29,11 @@ ordersRouter.get(
 ordersRouter.post(
   "/",
   [
-    floatValidator("cost"),
-    floatValidator("tax", false, true),
-    floatValidator("shipment", false, true),
+    nonNegativeFloatValidator("cost"),
+    nonNegativeFloatValidator("tax", true),
+    nonNegativeFloatValidator("shipment", true),
     dateValidator("expectedAt"),
-    dateValidator("actualAt", false, true),
+    dateValidator("actualAt", true),
     arrayObjectValidator("ordersWares"),
   ],
   ordersControllers.postValidation,
@@ -43,12 +43,12 @@ ordersRouter.post(
 ordersRouter.put(
   "/:orderId",
   [
-    integerValidator("providerId", false, true),
-    floatValidator("cost", false, true),
-    floatValidator("tax", false, true),
-    floatValidator("shipment", false, true),
-    dateValidator("expectedAt", false, true),
-    dateValidator("actualAt", false, true),
+    positiveIntegerValidator("providerId", true),
+    nonNegativeFloatValidator("cost", true),
+    nonNegativeFloatValidator("tax", true),
+    nonNegativeFloatValidator("shipment", true),
+    dateValidator("expectedAt", true),
+    dateValidator("actualAt", true),
   ],
   ordersControllers.putOrder
 )

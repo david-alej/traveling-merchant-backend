@@ -111,9 +111,22 @@ describe("OrdersWares Routes", function () {
       expect(data).to.be.jsonSchema(orderswareSchema)
     })
 
-    it("When an non-existing id for order id or ware id is given, Then the response is not found #paramOrdersWareId", async function () {
+    it("When an non-existing id for order id is given, Then the response is not found #paramOrdersWareId", async function () {
       const orderId = Math.ceil(Math.random() * 3) + 2
       const wareId = Math.ceil(Math.random() * 4)
+
+      const { status, data } = await client.get(
+        `/orderswares/${orderId}/${wareId}`,
+        setHeaders
+      )
+
+      expect(status).to.equal(NOT_FOUND)
+      expect(data).to.equal("Order not found.")
+    })
+
+    it("When an non-existing id for ware id is given, Then the response is not found #paramOrdersWareId", async function () {
+      const orderId = Math.ceil(Math.random() * 2)
+      const wareId = Math.ceil(Math.random() * 4) + 10
 
       const { status, data } = await client.get(
         `/orderswares/${orderId}/${wareId}`,
@@ -138,7 +151,7 @@ describe("OrdersWares Routes", function () {
     })
   })
 
-  describe("Get /", function () {
+  describe("Post /search", function () {
     const allOrdersWares = [
       {
         id: 5,
@@ -300,12 +313,11 @@ describe("OrdersWares Routes", function () {
       expectedOrdersWares = Array.isArray(expectedOrdersWares)
         ? expectedOrdersWares
         : [expectedOrdersWares]
-      const config = structuredClone(setHeaders)
-      config.data = requestBody
 
-      const { status, data: orderswares } = await client.get(
-        "/orderswares",
-        config
+      const { status, data: orderswares } = await client.post(
+        "/orderswares/search",
+        requestBody,
+        setHeaders
       )
       if (isPrinted) console.log(orderswares)
       expect(status).to.equal(OK)
@@ -468,7 +480,7 @@ describe("OrdersWares Routes", function () {
       expect(data)
         .to.include.string(preMerchantMsg)
         .and.string(
-          ` ordersware with order id = ${orderId} and ware id of ${wareId} was updated`
+          ` ordersware with order id of ${orderId} and ware id of ${wareId} was updated`
         )
       expect(newOrder).to.include(orderAfter)
       expect(orderswareAfter).to.include(requestBody)
@@ -508,34 +520,41 @@ describe("OrdersWares Routes", function () {
       const orderDeleted = await models.Orders.destroy({
         where: { id: orderId },
       })
+      const ordersWaresDeleted = await models.OrdersWares.destroy({
+        where: { orderId },
+      })
 
       expect(status).to.equal(OK)
       expect(data)
         .to.include.string(preMerchantMsg)
         .and.string(
-          ` has deleted a ordersware with order id = ${orderId} and ware id of ${wareId}.`
+          ` has deleted a ordersware with order id of ${orderId} and ware id of ${wareId}.`
         )
       expect(afterOrdersWareSearched).to.equal(null)
       expect(orderDeleted).to.equal(1)
+      expect(ordersWaresDeleted).to.equal(0)
     })
   })
 
-  describe("Delete /", function () {
+  describe("Delete /:orderId", function () {
     it("When order id is not an integer, Then response is bad request ", async function () {
-      const config = structuredClone(setHeaders)
-      config.data = { orderId: "string" }
-
-      const { status, data } = await client.delete("/orderswares/", config)
+      const orderId = "string"
+      const { status, data } = await client.delete(
+        "/orderswares/" + orderId,
+        setHeaders
+      )
 
       expect(status).to.equal(BAD_REQUEST)
       expect(data).to.equal("Bad input request.")
     })
 
     it("When order id does not exists, Then response is not found ", async function () {
-      const config = structuredClone(setHeaders)
-      config.data = { orderId: 10 + Math.ceil(Math.random() * 5) }
+      const orderId = 10 + Math.ceil(Math.random() * 5)
 
-      const { status, data } = await client.delete("/orderswares/", config)
+      const { status, data } = await client.delete(
+        "/orderswares/" + orderId,
+        setHeaders
+      )
 
       expect(status).to.equal(NOT_FOUND)
       expect(data).to.equal("Order not found.")
@@ -561,10 +580,11 @@ describe("OrdersWares Routes", function () {
         unitPrice: round(Math.random() * 750) + 250,
         amount: Math.ceil(Math.random() * 3),
       })
-      const config = structuredClone(setHeaders)
-      config.data = { orderId }
 
-      const { status, data } = await client.delete("/orderswares/", config)
+      const { status, data } = await client.delete(
+        "/orderswares/" + orderId,
+        setHeaders
+      )
 
       const afterOrdersWareSearched = await models.OrdersWares.findAll({
         where: { orderId },
@@ -576,7 +596,7 @@ describe("OrdersWares Routes", function () {
       expect(status).to.equal(OK)
       expect(data)
         .to.include.string(preMerchantMsg)
-        .and.string(` has deleted a ordersware with order id = ${orderId}.`)
+        .and.string(` has deleted all orderswares with order id = ${orderId}.`)
       expect(afterOrdersWareSearched).to.eql([])
       expect(orderDeleted).to.equal(1)
     })

@@ -6,7 +6,7 @@ const { credentialsValidator, newCredentialsValidator } =
 
 merchantRouter.param("merchantId", merchantControllers.paramMerchantId)
 
-merchantRouter.get("/", merchantControllers.getMerchants)
+merchantRouter.get("/:merchantId", merchantControllers.getMerchant)
 
 merchantRouter.put(
   "/:merchantId",

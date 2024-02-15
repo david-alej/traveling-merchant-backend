@@ -1,35 +1,36 @@
 const worksRouter = require("express").Router()
 const { worksControllers } = require("../controllers/index")
-const { textValidator, phoneNumberValidator, dateValidator } =
+const { wordValidator, stringValidator, phoneNumberValidator, dateValidator } =
   require("../util/index").validators
 
 worksRouter.param("workId", worksControllers.paramWorkId)
 
 worksRouter.get("/:workId", worksControllers.getWork)
 
-worksRouter.get(
-  "/",
+worksRouter.post(
+  "/search",
   [
-    textValidator("name", false, true),
-    textValidator("address", false, true, false),
-    dateValidator("createdAt", false, true),
-    dateValidator("updatedAt", false, true),
+    stringValidator("name", true),
+    stringValidator("address", true),
+    stringValidator("phoneNumber", true),
+    dateValidator("createdAt", true),
+    dateValidator("updatedAt", true),
   ],
   worksControllers.getWorks
 )
 
 worksRouter.post(
   "/",
-  [textValidator("name"), textValidator("address"), phoneNumberValidator()],
+  [wordValidator("name"), wordValidator("address"), phoneNumberValidator()],
   worksControllers.postWork
 )
 
 worksRouter.put(
   "/:workId",
   [
-    textValidator("name", false, true),
-    textValidator("address", false, true),
-    phoneNumberValidator("phoneNumber", false, true),
+    wordValidator("name", true),
+    wordValidator("address", true),
+    phoneNumberValidator("phoneNumber", true),
   ],
   worksControllers.putWork
 )

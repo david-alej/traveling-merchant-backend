@@ -12,7 +12,7 @@ const {
   models,
 } = require("../common")
 
-const { OK, BAD_REQUEST } = httpStatusCodes
+const { OK, BAD_REQUEST, NOT_FOUND } = httpStatusCodes
 
 const { passwordHash } = require("../../util/index").passwordHash
 
@@ -45,17 +45,22 @@ describe("Merchant routes", function () {
   })
 
   describe("Get /", function () {
-    it("When valid request is made, then status is ok", async function () {
-      const expected = [
-        {
-          id: 1,
-          username: "missioneros",
-          createdAt: "2024-11-11T00:00:00.000Z",
-          updatedAt: "2024-11-11T00:00:00.000Z",
-        },
-      ]
+    it("When non existing is input, then response is not found ", async function () {
+      const { status, data } = await client.get("/merchant/100", setHeaders)
 
-      const { status, data } = await client.get("/merchant", setHeaders)
+      expect(status).to.equal(NOT_FOUND)
+      expect(data).to.eql("Merchant not found.")
+    })
+
+    it("When valid request is made, then status is ok", async function () {
+      const expected = {
+        id: 1,
+        username: "missioneros",
+        createdAt: "2024-11-11T00:00:00.000Z",
+        updatedAt: "2024-11-11T00:00:00.000Z",
+      }
+
+      const { status, data } = await client.get("/merchant/1", setHeaders)
 
       expect(status).to.equal(OK)
       expect(data).to.eql(expected)
@@ -151,8 +156,8 @@ describe("Merchant routes", function () {
       const { newPassword } = putUserNewCredentials
       const requestBody = { ...merchantCredentials, newPassword }
       const { status: firstSearchStatus, data: oldMerchantData } =
-        await client.get("/merchant/", setHeaders)
-      const oldUpdatedAt = oldMerchantData[0].updatedAt
+        await client.get("/merchant/1", setHeaders)
+      const oldUpdatedAt = oldMerchantData.updatedAt
       const merchantId = 1
       const afterMsg = " has updated either/both their username or password."
 
@@ -186,10 +191,10 @@ describe("Merchant routes", function () {
         }
       )
       const { status: searchStatus, data: newMerchantData } = await client.get(
-        "/merchant/",
+        "/merchant/" + merchantId,
         setHeaders
       )
-      const newUpdatedAt = newMerchantData[0].updatedAt
+      const newUpdatedAt = newMerchantData.updatedAt
 
       expect(firstSearchStatus).to.equal(OK)
       expect(status).to.equal(OK)

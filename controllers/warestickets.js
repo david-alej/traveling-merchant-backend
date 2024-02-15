@@ -1,4 +1,4 @@
-const { validationPerusal, integerValidator } =
+const { validationPerusal, positiveIntegerValidator } =
   require("../util/index").validators
 const models = require("../database/models")
 const { Api400Error, Api404Error, Api500Error } =
@@ -6,11 +6,27 @@ const { Api400Error, Api404Error, Api500Error } =
 const { findWaresTicketQuery, parseWaresTicketInputs } =
   require("../services/index").waresticketsServices
 
-exports.paramWareId = async (req, res, next, wareId) => {
-  try {
-    await integerValidator("wareId", true).run(req)
+exports.paramTicketId = async (req, res, next, ticketId) => {
+  const merchant = req.session.merchant
 
-    req.wareId = wareId
+  try {
+    await positiveIntegerValidator("ticketId", false, true).run(req)
+
+    validationPerusal(req)
+
+    const searched = await models.Tickets.findOne({
+      where: { id: ticketId },
+    })
+
+    if (!searched) {
+      throw new Api404Error(
+        merchant.preMsg +
+          ` target waresticket with ticket id = ${ticketId} not found.`,
+        "Ticket not found."
+      )
+    }
+
+    req.ticketId = ticketId
 
     next()
   } catch (err) {
@@ -18,12 +34,12 @@ exports.paramWareId = async (req, res, next, wareId) => {
   }
 }
 
-exports.paramTicketId = async (req, res, next, ticketId) => {
+exports.paramWareId = async (req, res, next, wareId) => {
   const merchant = req.session.merchant
-  const wareId = req.wareId
+  const ticketId = req.ticketId
 
   try {
-    await integerValidator("ticketId", true).run(req)
+    await positiveIntegerValidator("wareId", false, true).run(req)
 
     validationPerusal(req)
 
@@ -184,23 +200,9 @@ exports.deleteWaresTicket = async (req, res, next) => {
 
 exports.deleteWaresTickets = async (req, res, next) => {
   const merchant = req.session.merchant
+  const ticketId = req.ticketId
 
   try {
-    const {
-      inputsObject: { ticketId },
-    } = await parseWaresTicketInputs(req)
-
-    const ticketSearched = await models.Tickets.findOne({
-      where: { id: ticketId },
-    })
-
-    if (!ticketSearched) {
-      throw new Api404Error(
-        merchant.preMsg + ` order does not exist with ticket id = ${ticketId}.`,
-        "Ticket not found."
-      )
-    }
-
     const deleted = await models.WaresTickets.destroy({
       where: { ticketId },
     })

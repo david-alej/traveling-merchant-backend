@@ -1,4 +1,4 @@
-const { validationPerusal, integerValidator } =
+const { validationPerusal, positiveIntegerValidator } =
   require("../util/index").validators
 const models = require("../database/models")
 const { Api400Error, Api404Error, Api500Error } =
@@ -10,7 +10,7 @@ exports.paramWareId = async (req, res, next, wareId) => {
   const merchant = req.session.merchant
 
   try {
-    await integerValidator("wareId", true).run(req)
+    await positiveIntegerValidator("wareId", false, true).run(req)
 
     validationPerusal(req)
 

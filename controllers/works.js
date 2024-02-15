@@ -1,4 +1,4 @@
-const { validationPerusal, integerValidator } =
+const { validationPerusal, positiveIntegerValidator } =
   require("../util/index").validators
 const models = require("../database/models")
 const { Api400Error, Api404Error, Api500Error } =
@@ -11,7 +11,7 @@ exports.paramWorkId = async (req, res, next, workId) => {
   const merchant = req.session.merchant
 
   try {
-    await integerValidator("workId", true).run(req)
+    await positiveIntegerValidator("workId", false, true).run(req)
 
     validationPerusal(req)
 
@@ -147,7 +147,7 @@ exports.deleteWork = async (req, res, next) => {
 
     res.send(
       merchant.preMsg +
-        ` has deleted a work with id = ${targetWork.id} and fullname = ${targetWork.fullname}.`
+        ` has deleted a work with id = ${targetWork.id} and name = ${targetWork.name}.`
     )
     res.send()
   } catch (err) {

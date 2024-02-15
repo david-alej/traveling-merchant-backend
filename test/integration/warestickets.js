@@ -96,7 +96,7 @@ describe("WaresTickets Routes", function () {
     await stopWebServer()
   })
 
-  describe("Get /:waresticketId", function () {
+  describe("Get /:ticketId/:wareId", function () {
     it("When an existing waresticket id is given, Then the response is the waresticket", async function () {
       const [ticketId, wareId] = [
         [1, [1, 2, 5][Math.floor(Math.random() * 3)]],
@@ -105,7 +105,7 @@ describe("WaresTickets Routes", function () {
       ][Math.floor(Math.random() * 3)]
 
       const { status, data } = await client.get(
-        `/warestickets/${wareId}/${ticketId}`,
+        `/warestickets/${ticketId}/${wareId}`,
         setHeaders
       )
 
@@ -113,7 +113,7 @@ describe("WaresTickets Routes", function () {
       expect(data).to.be.jsonSchema(waresticketSchema)
     })
 
-    it("When an non-existing waresticket id is given, Then the response is not found #paramWaresTicketId", async function () {
+    it("When an non-existing ticket id is given, Then the response is not found #paramWaresTicketId", async function () {
       const wareId = Math.ceil(Math.random() * 10) + 3
       const ticketId = Math.floor(Math.random() * 3) + 3
 
@@ -123,7 +123,7 @@ describe("WaresTickets Routes", function () {
       )
 
       expect(status).to.equal(NOT_FOUND)
-      expect(data).to.equal("WaresTicket not found.")
+      expect(data).to.equal("Ticket not found.")
     })
 
     it("When waresticket id given is not an integer, Then the response is not found #integerValidator #paramWaresTicketId", async function () {
@@ -409,7 +409,7 @@ describe("WaresTickets Routes", function () {
     })
   })
 
-  describe("Put /:waresticketId", function () {
+  describe("Put /:ticketId/:wareId", function () {
     it("When there are no inputs, Then response is bad request", async function () {
       const [ticketId, wareId] = [
         [1, [1, 2, 5][Math.floor(Math.random() * 3)]],
@@ -419,7 +419,7 @@ describe("WaresTickets Routes", function () {
       const requestBody = {}
 
       const { status, data } = await client.put(
-        `/warestickets/${wareId}/${ticketId}`,
+        `/warestickets/${ticketId}/${wareId}`,
         requestBody,
         setHeaders
       )
@@ -447,7 +447,7 @@ describe("WaresTickets Routes", function () {
       }
 
       const { status, data } = await client.put(
-        `/warestickets/${wareId}/${ticketId}`,
+        `/warestickets/${ticketId}/${wareId}`,
         requestBody,
         setHeaders
       )
@@ -474,7 +474,7 @@ describe("WaresTickets Routes", function () {
     })
   })
 
-  describe("Delete /:waresticketId", function () {
+  describe("Delete /:ticketId/:wareId", function () {
     it("When taget waresticket id exists, Then respective waresticket is deleted ", async function () {
       const [ticketId, wareId] = [
         [1, [3, 4][Math.floor(Math.random() * 2)]],
@@ -489,7 +489,7 @@ describe("WaresTickets Routes", function () {
       })
 
       const { status, data } = await client.delete(
-        `/warestickets/${wareId}/${ticketId}`,
+        `/warestickets/${ticketId}/${wareId}`,
         setHeaders
       )
 
@@ -507,22 +507,26 @@ describe("WaresTickets Routes", function () {
     })
   })
 
-  describe("Delete /", function () {
+  describe("Delete /:ticketId", function () {
     it("When taget ticket id is not an integer, Then response is bad request ", async function () {
-      const config = structuredClone(setHeaders)
-      config.data = { ticketId: "string" }
+      const ticketId = "string"
 
-      const { status, data } = await client.delete("/warestickets/", config)
+      const { status, data } = await client.delete(
+        `/warestickets/${ticketId}`,
+        setHeaders
+      )
 
       expect(status).to.equal(BAD_REQUEST)
       expect(data).to.equal("Bad input request.")
     })
 
     it("When taget ticket id does not exists, Then response is not found ", async function () {
-      const config = structuredClone(setHeaders)
-      config.data = { ticketId: Math.ceil(Math.random() * 5) + 5 }
+      const ticketId = Math.ceil(Math.random() * 5) + 5
 
-      const { status, data } = await client.delete("/warestickets/", config)
+      const { status, data } = await client.delete(
+        `/warestickets/${ticketId}`,
+        setHeaders
+      )
 
       expect(status).to.equal(NOT_FOUND)
       expect(data).to.equal("Ticket not found.")
@@ -549,10 +553,11 @@ describe("WaresTickets Routes", function () {
         amount: Math.ceil(Math.random() * 3),
         returned: Math.ceil(Math.random() * 2),
       })
-      const config = structuredClone(setHeaders)
-      config.data = { ticketId }
 
-      const { status, data } = await client.delete("/warestickets/", config)
+      const { status, data } = await client.delete(
+        `/warestickets/${ticketId}`,
+        setHeaders
+      )
 
       const afterWaresTicketSearched = await models.WaresTickets.findOne({
         where: { ticketId },

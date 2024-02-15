@@ -1,4 +1,4 @@
-const { validationPerusal, integerValidator } =
+const { validationPerusal, positiveIntegerValidator } =
   require("../util/index").validators
 const models = require("../database/models")
 const { Api400Error, Api404Error, Api500Error } =
@@ -7,8 +7,23 @@ const { findOrdersWareQuery, parseOrdersWareInputs } =
   require("../services/index").orderswaresServices
 
 exports.paramOrderId = async (req, res, next, orderId) => {
+  const merchant = req.session.merchant
+
   try {
-    await integerValidator("orderId", true).run(req)
+    await positiveIntegerValidator("orderId", false, true).run(req)
+
+    validationPerusal(req)
+
+    const orderSearched = await models.Orders.findOne({
+      where: { id: orderId },
+    })
+
+    if (!orderSearched) {
+      throw new Api404Error(
+        merchant.preMsg + ` order does not exist with order id = ${orderId}.`,
+        "Order not found."
+      )
+    }
 
     req.orderId = orderId
 
@@ -22,7 +37,7 @@ exports.paramWareId = async (req, res, next, wareId) => {
   const merchant = req.session.merchant
 
   try {
-    await integerValidator("wareId", true).run(req)
+    await positiveIntegerValidator("wareId", false, true).run(req)
 
     validationPerusal(req)
 
@@ -126,7 +141,7 @@ exports.putOrdersWare = async (req, res, next) => {
 
     res.send(
       merchant.preMsg +
-        ` ordersware with order id = ${orderId} and ware id of ${wareId} was updated` +
+        ` ordersware with order id of ${orderId} and ware id of ${wareId} was updated` +
         afterMsg
     )
   } catch (err) {
@@ -155,7 +170,7 @@ exports.deleteOrdersWare = async (req, res, next) => {
 
     res.send(
       merchant.preMsg +
-        ` has deleted a ordersware with order id = ${orderId} and ware id of ${wareId}.`
+        ` has deleted a ordersware with order id of ${orderId} and ware id of ${wareId}.`
     )
   } catch (err) {
     next(err)
@@ -164,23 +179,9 @@ exports.deleteOrdersWare = async (req, res, next) => {
 
 exports.deleteOrdersWares = async (req, res, next) => {
   const merchant = req.session.merchant
+  const orderId = req.orderId
 
   try {
-    const {
-      inputsObject: { orderId },
-    } = await parseOrdersWareInputs(req)
-
-    const orderSearched = await models.Orders.findOne({
-      where: { id: orderId },
-    })
-
-    if (!orderSearched) {
-      throw new Api404Error(
-        merchant.preMsg + ` order does not exist with order id = ${orderId}.`,
-        "Order not found."
-      )
-    }
-
     const deleted = await models.OrdersWares.destroy({ where: { orderId } })
 
     if (!deleted) {
@@ -192,7 +193,8 @@ exports.deleteOrdersWares = async (req, res, next) => {
     }
 
     res.send(
-      merchant.preMsg + ` has deleted a ordersware with order id = ${orderId}.`
+      merchant.preMsg +
+        ` has deleted all orderswares with order id = ${orderId}.`
     )
   } catch (err) {
     next(err)

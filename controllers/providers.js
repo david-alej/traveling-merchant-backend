@@ -1,4 +1,4 @@
-const { validationPerusal, integerValidator } =
+const { validationPerusal, positiveIntegerValidator } =
   require("../util/index").validators
 const models = require("../database/models")
 const { Api400Error, Api404Error, Api500Error } =
@@ -10,7 +10,7 @@ exports.paramProviderId = async (req, res, next, providerId) => {
   const merchant = req.session.merchant
 
   try {
-    await integerValidator("providerId", true).run(req)
+    await positiveIntegerValidator("providerId", false, true).run(req)
 
     validationPerusal(req)
 
@@ -134,7 +134,7 @@ exports.deleteProvider = async (req, res, next) => {
 
     res.send(
       merchant.preMsg +
-        ` has deleted a provider with id = ${targetProvider.id} and fullname = ${targetProvider.fullname}.`
+        ` has deleted a provider with id = ${targetProvider.id} and name = ${targetProvider.name}.`
     )
   } catch (err) {
     next(err)

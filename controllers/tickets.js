@@ -1,5 +1,8 @@
-const { validationPerusal, integerValidator } =
-  require("../util/index").validators
+const {
+  validationPerusal,
+  positiveIntegerValidator,
+  nonNegativeIntegerValidator,
+} = require("../util/index").validators
 const models = require("../database/models")
 const { Api400Error, Api404Error, Api500Error } =
   require("../util/index").apiErrors
@@ -10,7 +13,7 @@ exports.paramTicketId = async (req, res, next, ticketId) => {
   const merchant = req.session.merchant
 
   try {
-    await integerValidator("ticketId", true).run(req)
+    await positiveIntegerValidator("ticketId", false, true).run(req)
 
     validationPerusal(req)
 
@@ -89,14 +92,11 @@ exports.postValidation = async (req, res, next) => {
   if (!Array.isArray(waresTickets)) return next()
 
   for (let i = 0; i < waresTickets.length; i++) {
-    await integerValidator(`waresTickets[${i}].wareId`).run(req)
-    await integerValidator(`waresTickets[${i}].amount`).run(req)
-    await integerValidator(
-      `waresTickets[${i}].returned`,
-      false,
-      true,
-      false
-    ).run(req)
+    await positiveIntegerValidator(`waresTickets[${i}].wareId`).run(req)
+    await positiveIntegerValidator(`waresTickets[${i}].amount`).run(req)
+    await nonNegativeIntegerValidator(`waresTickets[${i}].returned`, true).run(
+      req
+    )
   }
 
   next()

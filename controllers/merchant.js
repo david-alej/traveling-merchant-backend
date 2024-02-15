@@ -1,4 +1,4 @@
-const { validationPerusal, integerValidator } =
+const { validationPerusal, positiveIntegerValidator } =
   require("../util/index").validators
 const models = require("../database/models")
 const { authenticate } = require("../util/index").authenticate
@@ -16,7 +16,7 @@ exports.paramMerchantId = async (req, res, next, merchantId) => {
   const merchant = req.session.merchant
 
   try {
-    await integerValidator("merchantId", true).run(req)
+    await positiveIntegerValidator("merchantId", false, true).run(req)
 
     validationPerusal(req)
 
@@ -27,7 +27,8 @@ exports.paramMerchantId = async (req, res, next, merchantId) => {
 
     if (!searched) {
       throw new Api404Error(
-        merchant.preMsg + ` target merchant ${merchantId} not found.`
+        merchant.preMsg + ` target merchant ${merchantId} not found.`,
+        "Merchant not found."
       )
     }
 
@@ -39,17 +40,7 @@ exports.paramMerchantId = async (req, res, next, merchantId) => {
   }
 }
 
-exports.getMerchants = async (req, res, next) => {
-  try {
-    const searched = await models.Merchant.findAll({
-      ...otherOptions,
-    })
-
-    res.json(searched)
-  } catch (err) {
-    next(err)
-  }
-}
+exports.getMerchant = async (req, res) => res.json(req.targetMerchant)
 
 exports.putMerchant = async (req, res, next) => {
   const merchant = req.session.merchant

@@ -3,9 +3,10 @@ const { waresControllers } = require("../controllers/index")
 const {
   arrayTextValidator,
   dateValidator,
-  floatValidator,
-  textValidator,
-  integerValidator,
+  positiveFloatValidator,
+  wordValidator,
+  stringValidator,
+  nonNegativeIntegerValidator,
 } = require("../util/index").validators
 
 waresRouter.param("wareId", waresControllers.paramWareId)
@@ -15,13 +16,13 @@ waresRouter.get("/:wareId", waresControllers.getWare)
 waresRouter.get(
   "/",
   [
-    textValidator("name", false, true),
-    textValidator("type", false, true),
-    arrayTextValidator("tags", false, true),
-    floatValidator("unitPrice", false, true),
-    dateValidator("createdAt", false, true),
-    dateValidator("updatedAt", false, true),
-    integerValidator("stock", false, true),
+    stringValidator("name", true),
+    stringValidator("type", true),
+    arrayTextValidator("tags", true),
+    positiveFloatValidator("unitPrice", true),
+    dateValidator("createdAt", true),
+    dateValidator("updatedAt", true),
+    nonNegativeIntegerValidator("stock", true),
   ],
   waresControllers.getWares
 )
@@ -29,10 +30,10 @@ waresRouter.get(
 waresRouter.post(
   "/",
   [
-    textValidator("name"),
-    textValidator("type"),
-    arrayTextValidator("tags", false, true),
-    floatValidator("unitPrice"),
+    wordValidator("name"),
+    wordValidator("type"),
+    arrayTextValidator("tags", true),
+    positiveFloatValidator("unitPrice"),
   ],
   waresControllers.postWare
 )
@@ -40,10 +41,10 @@ waresRouter.post(
 waresRouter.put(
   "/:wareId",
   [
-    textValidator("name", false, true),
-    textValidator("type", false, true),
-    arrayTextValidator("tags", false, true),
-    floatValidator("unitPrice", false, true),
+    wordValidator("name", true),
+    wordValidator("type", true),
+    arrayTextValidator("tags", true),
+    positiveFloatValidator("unitPrice", true),
   ],
   waresControllers.putWare
 )

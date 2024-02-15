@@ -15,6 +15,202 @@ const {
 
 const { OK, NOT_FOUND, BAD_REQUEST, CREATED } = httpStatusCodes
 
+const allOrders = [
+  {
+    id: 2,
+    providerId: 2,
+    cost: 959.59,
+    tax: 89.59,
+    shipment: 20,
+    expectedAt: "2025-01-09T00:00:00.000Z",
+    actualAt: "2025-01-09T00:00:00.000Z",
+    createdAt: "2025-01-01T00:00:00.000Z",
+    updatedAt: "2025-01-17T00:00:00.000Z",
+    provider: {
+      id: 2,
+      name: "Ebay",
+      address: "0000 online",
+      phoneNumber: "5125869601",
+      email: "",
+      createdAt: "2025-01-01T00:00:00.000Z",
+      updatedAt: "2025-01-01T00:00:00.000Z",
+    },
+    waresBought: [
+      {
+        id: 4,
+        wareId: 4,
+        orderId: 2,
+        unitPrice: 150,
+        amount: 5,
+        returned: 0,
+        createdAt: "2025-01-01T00:00:00.000Z",
+        updatedAt: "2025-01-01T00:00:00.000Z",
+        ware: {
+          id: 4,
+          name: "Versace Men's 4-Pc. Eros Eau de Toilette Gift Set",
+          type: "perfume",
+          tags: ["men", "4-pc"],
+          unitPrice: 176,
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
+          sold: [],
+          stock: 5,
+        },
+      },
+      {
+        id: 5,
+        wareId: 5,
+        orderId: 2,
+        unitPrice: 10,
+        amount: 10,
+        returned: 0,
+        createdAt: "2025-01-01T00:00:00.000Z",
+        updatedAt: "2025-01-01T00:00:00.000Z",
+        ware: {
+          id: 5,
+          name: "Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle",
+          type: "braclet",
+          tags: ["unisex"],
+          unitPrice: 14,
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
+          sold: [
+            {
+              amount: 2,
+              createdAt: "2025-01-09T00:00:00.000Z",
+              returned: 0,
+              ticketId: 1,
+              updatedAt: "2025-01-09T00:00:00.000Z",
+              wareId: 5,
+            },
+          ],
+          stock: 8,
+        },
+      },
+    ],
+  },
+  {
+    id: 1,
+    providerId: 1,
+    cost: 3413.65,
+    tax: 283.65,
+    shipment: 50,
+    actualAt: "2025-01-09T00:00:00.000Z",
+    expectedAt: "2025-01-08T00:00:00.000Z",
+    createdAt: "2025-01-01T00:00:00.000Z",
+    updatedAt: "2025-01-01T00:00:00.000Z",
+    provider: {
+      id: 1,
+      name: "Amazon",
+      address: "0000 online",
+      phoneNumber: "1632474734",
+      email: "derick_kertzmann@amazon.support.com",
+      createdAt: "2025-01-01T00:00:00.000Z",
+      updatedAt: "2025-01-01T00:00:00.000Z",
+    },
+    waresBought: [
+      {
+        id: 1,
+        wareId: 1,
+        orderId: 1,
+        unitPrice: 145,
+        amount: 10,
+        returned: 10,
+        createdAt: "2025-01-01T00:00:00.000Z",
+        updatedAt: "2025-01-01T00:00:00.000Z",
+        ware: {
+          id: 1,
+          name: "Loewe 001 Woman Perfume",
+          type: "perfume",
+          tags: ["women", "1-pc"],
+          unitPrice: 155,
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
+          sold: [
+            {
+              ticketId: 1,
+              wareId: 1,
+              amount: 1,
+              returned: 1,
+              createdAt: "2025-01-09T00:00:00.000Z",
+              updatedAt: "2025-01-09T00:00:00.000Z",
+            },
+            {
+              ticketId: 3,
+              wareId: 1,
+              amount: 1,
+              returned: 1,
+              createdAt: "2025-01-13T00:00:00.000Z",
+              updatedAt: "2025-01-13T00:00:00.000Z",
+            },
+          ],
+          stock: 0,
+        },
+      },
+      {
+        id: 2,
+        wareId: 2,
+        orderId: 1,
+        unitPrice: 160,
+        amount: 5,
+        returned: 0,
+        createdAt: "2025-01-01T00:00:00.000Z",
+        updatedAt: "2025-01-01T00:00:00.000Z",
+        ware: {
+          id: 2,
+          name: "DIOR 3-Pc. J'dore Eau de Parfum Gift Set",
+          type: "perfume",
+          tags: ["women", "3-pc"],
+          unitPrice: 178,
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
+          sold: [
+            {
+              amount: 1,
+              createdAt: "2025-01-09T00:00:00.000Z",
+              returned: 0,
+              ticketId: 1,
+              updatedAt: "2025-01-09T00:00:00.000Z",
+              wareId: 2,
+            },
+          ],
+          stock: 4,
+        },
+      },
+      {
+        id: 3,
+        wareId: 3,
+        orderId: 1,
+        unitPrice: 415,
+        amount: 2,
+        returned: 0,
+        createdAt: "2025-01-01T00:00:00.000Z",
+        updatedAt: "2025-01-01T00:00:00.000Z",
+        ware: {
+          id: 3,
+          name: "The Leather Medium Tote Bag",
+          type: "bag",
+          tags: ["women"],
+          unitPrice: 450,
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
+          sold: [
+            {
+              amount: 1,
+              createdAt: "2025-01-09T00:00:00.000Z",
+              returned: 0,
+              ticketId: 2,
+              updatedAt: "2025-01-09T00:00:00.000Z",
+              wareId: 3,
+            },
+          ],
+          stock: 1,
+        },
+      },
+    ],
+  },
+]
+
 describe("Orders Routes", function () {
   let client
   const setHeaders = { headers: {} }
@@ -133,7 +329,7 @@ describe("Orders Routes", function () {
 
   describe("Get /:orderId", function () {
     it("When an existing order id is given, Then the response is the order", async function () {
-      const orderId = 1 //Math.ceil(Math.random() * 2)
+      const orderId = Math.ceil(Math.random() * 2)
 
       const { status, data } = await client.get(
         "/orders/" + orderId,
@@ -169,203 +365,7 @@ describe("Orders Routes", function () {
     })
   })
 
-  describe("Get /", function () {
-    const allOrders = [
-      {
-        id: 2,
-        providerId: 2,
-        cost: 959.59,
-        tax: 89.59,
-        shipment: 20,
-        expectedAt: "2025-01-09T00:00:00.000Z",
-        actualAt: "2025-01-09T00:00:00.000Z",
-        createdAt: "2025-01-01T00:00:00.000Z",
-        updatedAt: "2025-01-17T00:00:00.000Z",
-        provider: {
-          id: 2,
-          name: "Ebay",
-          address: "0000 online",
-          phoneNumber: "5125869601",
-          email: "",
-          createdAt: "2025-01-01T00:00:00.000Z",
-          updatedAt: "2025-01-01T00:00:00.000Z",
-        },
-        waresBought: [
-          {
-            id: 4,
-            wareId: 4,
-            orderId: 2,
-            unitPrice: 150,
-            amount: 5,
-            returned: 0,
-            createdAt: "2025-01-01T00:00:00.000Z",
-            updatedAt: "2025-01-01T00:00:00.000Z",
-            ware: {
-              id: 4,
-              name: "Versace Men's 4-Pc. Eros Eau de Toilette Gift Set",
-              type: "perfume",
-              tags: ["men", "4-pc"],
-              unitPrice: 176,
-              createdAt: "2025-01-09T00:00:00.000Z",
-              updatedAt: "2025-01-09T00:00:00.000Z",
-              sold: [],
-              stock: 5,
-            },
-          },
-          {
-            id: 5,
-            wareId: 5,
-            orderId: 2,
-            unitPrice: 10,
-            amount: 10,
-            returned: 0,
-            createdAt: "2025-01-01T00:00:00.000Z",
-            updatedAt: "2025-01-01T00:00:00.000Z",
-            ware: {
-              id: 5,
-              name: "Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle",
-              type: "braclet",
-              tags: ["unisex"],
-              unitPrice: 14,
-              createdAt: "2025-01-09T00:00:00.000Z",
-              updatedAt: "2025-01-09T00:00:00.000Z",
-              sold: [
-                {
-                  amount: 2,
-                  createdAt: "2025-01-09T00:00:00.000Z",
-                  returned: 0,
-                  ticketId: 1,
-                  updatedAt: "2025-01-09T00:00:00.000Z",
-                  wareId: 5,
-                },
-              ],
-              stock: 8,
-            },
-          },
-        ],
-      },
-      {
-        id: 1,
-        providerId: 1,
-        cost: 3413.65,
-        tax: 283.65,
-        shipment: 50,
-        actualAt: "2025-01-09T00:00:00.000Z",
-        expectedAt: "2025-01-08T00:00:00.000Z",
-        createdAt: "2025-01-01T00:00:00.000Z",
-        updatedAt: "2025-01-01T00:00:00.000Z",
-        provider: {
-          id: 1,
-          name: "Amazon",
-          address: "0000 online",
-          phoneNumber: "1632474734",
-          email: "derick_kertzmann@amazon.support.com",
-          createdAt: "2025-01-01T00:00:00.000Z",
-          updatedAt: "2025-01-01T00:00:00.000Z",
-        },
-        waresBought: [
-          {
-            id: 1,
-            wareId: 1,
-            orderId: 1,
-            unitPrice: 145,
-            amount: 10,
-            returned: 10,
-            createdAt: "2025-01-01T00:00:00.000Z",
-            updatedAt: "2025-01-01T00:00:00.000Z",
-            ware: {
-              id: 1,
-              name: "Loewe 001 Woman Perfume",
-              type: "perfume",
-              tags: ["women", "1-pc"],
-              unitPrice: 155,
-              createdAt: "2025-01-09T00:00:00.000Z",
-              updatedAt: "2025-01-09T00:00:00.000Z",
-              sold: [
-                {
-                  ticketId: 1,
-                  wareId: 1,
-                  amount: 1,
-                  returned: 1,
-                  createdAt: "2025-01-09T00:00:00.000Z",
-                  updatedAt: "2025-01-09T00:00:00.000Z",
-                },
-                {
-                  ticketId: 3,
-                  wareId: 1,
-                  amount: 1,
-                  returned: 1,
-                  createdAt: "2025-01-13T00:00:00.000Z",
-                  updatedAt: "2025-01-13T00:00:00.000Z",
-                },
-              ],
-              stock: 0,
-            },
-          },
-          {
-            id: 2,
-            wareId: 2,
-            orderId: 1,
-            unitPrice: 160,
-            amount: 5,
-            returned: 0,
-            createdAt: "2025-01-01T00:00:00.000Z",
-            updatedAt: "2025-01-01T00:00:00.000Z",
-            ware: {
-              id: 2,
-              name: "DIOR 3-Pc. J'dore Eau de Parfum Gift Set",
-              type: "perfume",
-              tags: ["women", "3-pc"],
-              unitPrice: 178,
-              createdAt: "2025-01-09T00:00:00.000Z",
-              updatedAt: "2025-01-09T00:00:00.000Z",
-              sold: [
-                {
-                  amount: 1,
-                  createdAt: "2025-01-09T00:00:00.000Z",
-                  returned: 0,
-                  ticketId: 1,
-                  updatedAt: "2025-01-09T00:00:00.000Z",
-                  wareId: 2,
-                },
-              ],
-              stock: 4,
-            },
-          },
-          {
-            id: 3,
-            wareId: 3,
-            orderId: 1,
-            unitPrice: 415,
-            amount: 2,
-            returned: 0,
-            createdAt: "2025-01-01T00:00:00.000Z",
-            updatedAt: "2025-01-01T00:00:00.000Z",
-            ware: {
-              id: 3,
-              name: "The Leather Medium Tote Bag",
-              type: "bag",
-              tags: ["women"],
-              unitPrice: 450,
-              createdAt: "2025-01-09T00:00:00.000Z",
-              updatedAt: "2025-01-09T00:00:00.000Z",
-              sold: [
-                {
-                  amount: 1,
-                  createdAt: "2025-01-09T00:00:00.000Z",
-                  returned: 0,
-                  ticketId: 2,
-                  updatedAt: "2025-01-09T00:00:00.000Z",
-                  wareId: 3,
-                },
-              ],
-              stock: 1,
-            },
-          },
-        ],
-      },
-    ]
-
+  describe("Post /search", function () {
     async function getOrdersIt(
       requestBody,
       expectedOrders = [],
@@ -374,10 +374,12 @@ describe("Orders Routes", function () {
       expectedOrders = Array.isArray(expectedOrders)
         ? expectedOrders
         : [expectedOrders]
-      const config = structuredClone(setHeaders)
-      config.data = requestBody
 
-      const { status, data: orders } = await client.get("/orders", config)
+      const { status, data: orders } = await client.post(
+        "/orders/search",
+        requestBody,
+        setHeaders
+      )
 
       if (isPrinted) {
         for (const order of orders) {
@@ -419,7 +421,7 @@ describe("Orders Routes", function () {
     })
 
     it("When a created at date is given, Then response is all orders within that same month and year", async function () {
-      await getOrdersIt({ actualAt: new Date("2025-02-11") })
+      await getOrdersIt({ createdAt: new Date("2025-02-11") })
     })
 
     it("When a updated at date is given, Then response is all orders within that same month and year", async function () {
@@ -820,9 +822,7 @@ describe("Orders Routes", function () {
       expect(status).to.equal(OK)
       expect(data)
         .to.include.string(preMerchantMsg)
-        .and.string(
-          ` has deleted a order with id = ${orderId} and fullname = ${newOrder.fullname}.`
-        )
+        .and.string(` has deleted a order with id = ${orderId}.`)
       expect(afterOrderSearched).to.equal(null)
     })
   })

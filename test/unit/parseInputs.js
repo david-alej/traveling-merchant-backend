@@ -4,12 +4,12 @@ const { expect } = require("../common")
 
 const { parseInputs } = require("../../util/index").parseInputs
 const {
-  integerValidator,
+  positiveIntegerValidator,
   floatValidator,
   arrayTextValidator,
   arrayObjectValidator,
   booleanValidator,
-  textValidator,
+  wordValidator,
   dateValidator,
 } = require("../../util/index").validators
 const { Api400Error } = require("../../util/index").apiErrors
@@ -72,14 +72,14 @@ describe("Parsing Inputs", function () {
 
   describe("Integers", function () {
     it("When input is not an integer, Then error is thrown", async function () {
-      await errorIt("int", "string", integerValidator, "integer")
+      await errorIt("int", "string", positiveIntegerValidator, "integer")
     })
 
     it("When input is an integer, Then response is an object with properties that include input", async function () {
       await numbersParsingIt(
         "int",
         Math.ceil(Math.random() * 10),
-        integerValidator
+        positiveIntegerValidator
       )
     })
   })
@@ -195,7 +195,7 @@ describe("Parsing Inputs", function () {
       await errorIt(
         "str",
         ["string"],
-        textValidator,
+        wordValidator,
         null,
         " Str must be a string."
       )
@@ -207,7 +207,7 @@ describe("Parsing Inputs", function () {
       const expectedQuery = { where: {}, ...otherOptions }
       expectedQuery.where[String(key)] = { [Op.iLike]: "%" + value + "%" }
 
-      await textValidator(key).run(req)
+      await wordValidator(key).run(req)
 
       const { afterMsg, inputsObject, query } = await parseInputs(
         req,

@@ -114,7 +114,7 @@ describe("Works Routes", function () {
     })
   })
 
-  describe("Get /", function () {
+  describe("Post /search", function () {
     const allWorks = [
       {
         id: 3,
@@ -196,10 +196,12 @@ describe("Works Routes", function () {
       expectedWorks = Array.isArray(expectedWorks)
         ? expectedWorks
         : [expectedWorks]
-      const config = structuredClone(setHeaders)
-      config.data = requestBody
 
-      const { status, data: works } = await client.get("/works", config)
+      const { status, data: works } = await client.post(
+        "/works/search",
+        requestBody,
+        setHeaders
+      )
 
       if (isPrinted) {
         for (const work of works) {
@@ -226,6 +228,10 @@ describe("Works Routes", function () {
 
     it("When a address is given, Then all works that have their address include the given string using case insensitive search are returned", async function () {
       await getWorksIt({ address: "gal" }, allWorks[2])
+    })
+
+    it("When a phone number is given, Then all works that have their address include the given string using case insensitive search are returned", async function () {
+      await getWorksIt({ phoneNumber: "10362" }, allWorks[0])
     })
 
     it("When address and name are given, Then respective works that match the strings inclusions are returned", async function () {
@@ -343,7 +349,7 @@ describe("Works Routes", function () {
       expect(data)
         .to.include.string(preMerchantMsg)
         .and.string(
-          ` has deleted a work with id = ${workId} and fullname = ${newWork.fullname}.`
+          ` has deleted a work with id = ${workId} and name = ${newWork.name}.`
         )
       expect(afterWorkSearched).to.equal(null)
     })

@@ -1,25 +1,26 @@
 const waresticketsRouter = require("express").Router()
 const { waresticketsControllers } = require("../controllers/index")
-const { integerValidator, dateValidator } = require("../util/index").validators
-
-waresticketsRouter.param("wareId", waresticketsControllers.paramWareId)
+const { positiveIntegerValidator, nonNegativeIntegerValidator, dateValidator } =
+  require("../util/index").validators
 
 waresticketsRouter.param("ticketId", waresticketsControllers.paramTicketId)
 
+waresticketsRouter.param("wareId", waresticketsControllers.paramWareId)
+
 waresticketsRouter.get(
-  "/:wareId/:ticketId",
+  "/:ticketId/:wareId",
   waresticketsControllers.getWaresTicket
 )
 
 waresticketsRouter.get(
   "/",
   [
-    integerValidator("wareId", false, true),
-    integerValidator("ticketId", false, true),
-    integerValidator("amount", false, true),
-    integerValidator("returned", false, true, false),
-    dateValidator("createdAt", false, true),
-    dateValidator("updatedAt", false, true),
+    positiveIntegerValidator("wareId", true),
+    positiveIntegerValidator("ticketId", true),
+    positiveIntegerValidator("amount", true),
+    nonNegativeIntegerValidator("returned", true),
+    dateValidator("createdAt", true),
+    dateValidator("updatedAt", true),
   ],
   waresticketsControllers.getWaresTickets
 )
@@ -27,31 +28,30 @@ waresticketsRouter.get(
 waresticketsRouter.post(
   "/",
   [
-    integerValidator("wareId"),
-    integerValidator("ticketId"),
-    integerValidator("amount"),
-    integerValidator("returned", false, true, false),
+    positiveIntegerValidator("wareId"),
+    positiveIntegerValidator("ticketId"),
+    positiveIntegerValidator("amount"),
+    nonNegativeIntegerValidator("returned", true),
   ],
   waresticketsControllers.postWaresTicket
 )
 
 waresticketsRouter.put(
-  "/:wareId/:ticketId",
+  "/:ticketId/:wareId",
   [
-    integerValidator("amount", false, true),
-    integerValidator("returned", false, true, false),
+    positiveIntegerValidator("amount", true),
+    nonNegativeIntegerValidator("returned", true),
   ],
   waresticketsControllers.putWaresTicket
 )
 
 waresticketsRouter.delete(
-  "/:wareId/:ticketId",
+  "/:ticketId/:wareId",
   waresticketsControllers.deleteWaresTicket
 )
 
 waresticketsRouter.delete(
-  "/",
-  [integerValidator("ticketId")],
+  "/:ticketId",
   waresticketsControllers.deleteWaresTickets
 )
 

@@ -8,6 +8,8 @@ const { validationPerusal } = require("./validators")
 const createDateQuery = (inputName, input, whereOptions, tableName) => {
   input = new Date(input)
 
+  input.setHours(input.getHours() + 6)
+
   if (whereOptions[Op.and]) {
     whereOptions[Op.and].push(
       Sequelize.fn(
@@ -54,9 +56,7 @@ module.exports = {
   parseInputs: async (req, otherOptions, modelName) => {
     validationPerusal(req)
 
-    const inputNames = Object.keys(matchedData(req))
-
-    const inputsObject = createSubsetObject(req.body, inputNames)
+    const inputsObject = matchedData(req, { locations: ["body"] })
 
     if (JSON.stringify(inputsObject) === "{}") {
       return {
@@ -64,10 +64,6 @@ module.exports = {
         afterMsg: ".",
         inputsObject: {},
       }
-    }
-
-    if (inputsObject.phoneNumber) {
-      inputsObject.phoneNumber = matchedData(req).phoneNumber
     }
 
     const numberOfInputs = Object.keys(inputsObject).length
