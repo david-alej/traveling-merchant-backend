@@ -14,8 +14,8 @@ ticketsRouter.param("ticketId", ticketsControllers.paramTicketId)
 
 ticketsRouter.get("/:ticketId", ticketsControllers.getTicket)
 
-ticketsRouter.get(
-  "/",
+ticketsRouter.post(
+  "/search",
   [
     positiveIntegerValidator("clientId", true),
     nonNegativeFloatValidator("cost", true),

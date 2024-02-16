@@ -13,8 +13,8 @@ waresRouter.param("wareId", waresControllers.paramWareId)
 
 waresRouter.get("/:wareId", waresControllers.getWare)
 
-waresRouter.get(
-  "/",
+waresRouter.post(
+  "/search",
   [
     stringValidator("name", true),
     stringValidator("type", true),

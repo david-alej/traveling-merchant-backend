@@ -153,7 +153,7 @@ describe("Transactions Routes", function () {
     })
   })
 
-  describe("Get /", function () {
+  describe("Post /search", function () {
     const allTransactions = [
       {
         id: 8,
@@ -346,12 +346,11 @@ describe("Transactions Routes", function () {
       expectedTransactions = Array.isArray(expectedTransactions)
         ? expectedTransactions
         : [expectedTransactions]
-      const config = structuredClone(setHeaders)
-      config.data = requestBody
 
-      const { status, data: transactions } = await client.get(
-        "/transactions",
-        config
+      const { status, data: transactions } = await client.post(
+        "/transactions/search",
+        requestBody,
+        setHeaders
       )
 
       if (isPrinted) {

@@ -129,7 +129,7 @@ describe("Wares Routes", function () {
     })
   })
 
-  describe("Get /", function () {
+  describe("Post /search", function () {
     const allWares = [
       {
         id: 5,
@@ -300,10 +300,12 @@ describe("Wares Routes", function () {
       expectedWares = Array.isArray(expectedWares)
         ? expectedWares
         : [expectedWares]
-      const config = structuredClone(setHeaders)
-      config.data = requestBody
 
-      const { status, data: wares } = await client.get("/wares", config)
+      const { status, data: wares } = await client.post(
+        "/wares/search",
+        requestBody,
+        setHeaders
+      )
 
       if (isPrinted) {
         for (const ware of wares) {

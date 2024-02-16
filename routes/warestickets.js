@@ -12,8 +12,8 @@ waresticketsRouter.get(
   waresticketsControllers.getWaresTicket
 )
 
-waresticketsRouter.get(
-  "/",
+waresticketsRouter.post(
+  "/search",
   [
     positiveIntegerValidator("wareId", true),
     positiveIntegerValidator("ticketId", true),

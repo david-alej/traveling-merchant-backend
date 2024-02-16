@@ -51,7 +51,7 @@ exports.paramWareId = async (req, res, next, wareId) => {
     if (!searched) {
       throw new Api404Error(
         merchant.preMsg +
-          ` target waresticket with ware id = ${wareId} and ticket id = ${ticketId} not found.`,
+          ` target waresticket with ticket id = ${ticketId} and ware id = ${wareId} not found.`,
         "WaresTicket not found."
       )
     }
@@ -164,7 +164,7 @@ exports.putWaresTicket = async (req, res, next) => {
 
     res.send(
       merchant.preMsg +
-        ` waresticket with ware id = ${wareId} and ticket id = ${ticketId} was updated` +
+        ` waresticket with ticket id = ${ticketId} and ware id = ${wareId} was updated` +
         afterMsg
     )
   } catch (err) {
@@ -184,14 +184,14 @@ exports.deleteWaresTicket = async (req, res, next) => {
     if (!deleted) {
       throw new Api500Error(
         merchant.preMsg +
-          ` delete waresticket query did not work with ware id = ${wareId} and ticket id = ${ticketId}.`,
+          ` delete waresticket query did not work with ticket id = ${ticketId} and ware id = ${wareId}.`,
         "Internal server query error."
       )
     }
 
     res.send(
       merchant.preMsg +
-        ` has deleted a waresticket with ware id = ${wareId} and ticket id = ${ticketId}.`
+        ` has deleted a waresticket with ticket id = ${ticketId} and ware id = ${wareId}.`
     )
   } catch (err) {
     next(err)

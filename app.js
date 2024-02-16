@@ -11,11 +11,11 @@ const initializeWebServer = () => {
     server = app.listen(PORT, () => {
       const address = server.address()
 
-      // console.log(`Server is live at http://localhost:${address.port}`)
+      console.log(`Server is live at http://localhost:${address.port}`)
 
-      // console.log(
-      //   `Swagger-ui is available on http://localhost:${address.port}/api-docs`
-      // )
+      console.log(
+        `Swagger-ui is available on http://localhost:${address.port}/api-docs`
+      )
 
       resolve(address)
     })

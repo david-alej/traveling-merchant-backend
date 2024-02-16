@@ -140,7 +140,7 @@ describe("WaresTickets Routes", function () {
     })
   })
 
-  describe("Get /", function () {
+  describe("Post /search", function () {
     const allWaresTickets = [
       {
         wareId: 1,
@@ -302,12 +302,11 @@ describe("WaresTickets Routes", function () {
       expectedWaresTickets = Array.isArray(expectedWaresTickets)
         ? expectedWaresTickets
         : [expectedWaresTickets]
-      const config = structuredClone(setHeaders)
-      config.data = requestBody
 
-      const { status, data: warestickets } = await client.get(
-        "/warestickets",
-        config
+      const { status, data: warestickets } = await client.post(
+        "/warestickets/search",
+        requestBody,
+        setHeaders
       )
 
       if (isPrinted) {
@@ -464,7 +463,7 @@ describe("WaresTickets Routes", function () {
       expect(data)
         .to.include.string(preMerchantMsg)
         .and.string(
-          ` waresticket with ware id = ${wareId} and ticket id = ${ticketId} was updated`
+          ` waresticket with ticket id = ${ticketId} and ware id = ${wareId} was updated`
         )
       expect(waresticketAfter).to.include(requestBody)
       expect(new Date(waresticketBefore.updatedAt)).to.be.beforeTime(
@@ -501,7 +500,7 @@ describe("WaresTickets Routes", function () {
       expect(data)
         .to.include.string(preMerchantMsg)
         .and.string(
-          ` has deleted a waresticket with ware id = ${wareId} and ticket id = ${ticketId}.`
+          ` has deleted a waresticket with ticket id = ${ticketId} and ware id = ${wareId}.`
         )
       expect(afterWaresTicketSearched).to.equal(null)
     })

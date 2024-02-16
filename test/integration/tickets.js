@@ -186,7 +186,7 @@ describe("Tickets Routes", function () {
     })
   })
 
-  describe("Get /", function () {
+  describe("Post /search", function () {
     const allTickets = [
       {
         id: 3,
@@ -440,10 +440,12 @@ describe("Tickets Routes", function () {
       expectedTickets = Array.isArray(expectedTickets)
         ? expectedTickets
         : [expectedTickets]
-      const config = structuredClone(setHeaders)
-      config.data = requestBody
 
-      const { status, data: tickets } = await client.get("/tickets", config)
+      const { status, data: tickets } = await client.post(
+        "/tickets/search",
+        requestBody,
+        setHeaders
+      )
 
       if (isPrinted) {
         console.log("[")

@@ -18,8 +18,8 @@ transactionsRouter.get(
   transactionsControllers.getTransaction
 )
 
-transactionsRouter.get(
-  "/",
+transactionsRouter.post(
+  "/search",
   [
     positiveIntegerValidator("ticketId", true),
     positiveIntegerValidator("orderId", true),
