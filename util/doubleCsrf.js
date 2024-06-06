@@ -5,14 +5,15 @@ const { invalidCsrfTokenError, generateToken, doubleCsrfProtection } =
   doubleCsrf({
     getSecret: (req) => req.secret,
     secret: process.env.CSRF_SECRET,
+    cookieName: process.env.CSRF_COOKIE_NAME,
     cookieOptions: {
-      sameSite: "strict",
-      secure: process.env.NODE_ENV === "production", //set this like this becuase the app I am munually testing endpoints on can only save the cookies if they are secure
-      signed: true,
       maxAge: 1000 * 60 * 30,
+      sameSite: process.env.NODE_ENV === "production", // ? "none" : "lax",
+      secure: process.env.NODE_ENV === "production",
+      signed: true,
     },
   })
-console.log("secure cookies: ", process.env.NODE_ENV === "production")
+
 module.exports = {
   invalidCsrfTokenError,
   generateToken,

@@ -3,10 +3,10 @@ const { parseInputs } = require("../util/index").parseInputs
 
 const ordersWaresInclusion = {
   model: models.OrdersWares,
-  as: "bought",
+  as: "ordersWares",
 }
 
-const waresTicketsInclusion = { model: models.WaresTickets, as: "sold" }
+const waresTicketsInclusion = { model: models.WaresTickets, as: "waresTickets" }
 
 const findWareQuery = {
   include: [ordersWaresInclusion, waresTicketsInclusion],
@@ -15,7 +15,7 @@ const findWareQuery = {
       [
         models.Sequelize.literal(
           // eslint-disable-next-line quotes
-          '(SELECT "amount" - "returned" + COALESCE("sold"."returned"  - "sold"."amount", 0) FROM "OrdersWares" LEFT OUTER JOIN "Orders" ON "OrdersWares"."orderId" = "Orders"."id" WHERE "wareId" = "Wares"."id" AND "Orders"."actualAt" IS NOT NULL)'
+          '(SELECT "amount" - "returned" + COALESCE("waresTickets"."returned"  - "waresTickets"."amount", 0) FROM "OrdersWares" LEFT OUTER JOIN "Orders" ON "OrdersWares"."orderId" = "Orders"."id" WHERE "wareId" = "Wares"."id" AND "Orders"."actualAt" IS NOT NULL)'
         ),
         "stock",
       ],
@@ -23,10 +23,10 @@ const findWareQuery = {
   },
   order: [
     ["id", "DESC"],
-    ["bought", "orderId", "DESC"],
-    ["bought", "wareId", "DESC"],
-    ["sold", "ticketId", "DESC"],
-    ["sold", "wareId", "DESC"],
+    ["ordersWares", "orderId", "DESC"],
+    ["ordersWares", "wareId", "DESC"],
+    ["waresTickets", "ticketId", "DESC"],
+    ["waresTickets", "wareId", "DESC"],
   ],
 }
 

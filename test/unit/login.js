@@ -108,7 +108,6 @@ describe("Rate Limiters Controllers (Beware test suite will take long due to tes
         session: {},
       })
       const results = []
-      const merchantId = 1
 
       for (let i = 0; i < iterations; i++) {
         await postLogin(req, res, next)
@@ -122,7 +121,7 @@ describe("Rate Limiters Controllers (Beware test suite will take long due to tes
 
       expect(lastResult).to.be.an.instanceOf(Api429Error)
       expect(lastResult.description).to.equal(
-        `Merchant: ${merchantId} has made to many request to the original url, /login, next retry is after 1 seconds.`
+        "Client: has made to many request to the original url, /login, next retry is after 1 seconds."
       )
       expect(allResultsBeforeLastResultAreUndefined).is.true
     })
@@ -145,7 +144,6 @@ describe("Rate Limiters Controllers (Beware test suite will take long due to tes
         },
         session: {},
       })
-      const merchantId = 1
 
       for (let i = 0; i < iterations; i++) {
         await postLogin(req, res, next)
@@ -154,7 +152,7 @@ describe("Rate Limiters Controllers (Beware test suite will take long due to tes
 
       expect(lastResult).to.be.an.instanceOf(Api429Error)
       expect(lastResult.description).to.equal(
-        `Merchant: ${merchantId} has made to many request to the original url, /login, next retry is after 1 seconds.`
+        "Client: has made to many request to the original url, /login, next retry is after 1 seconds."
       )
     })
 

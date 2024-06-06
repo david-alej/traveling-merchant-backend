@@ -3,7 +3,7 @@ const { parseInputs } = require("../util/index").parseInputs
 
 const clientsInclusion = {
   model: models.Clients,
-  as: "employees",
+  as: "clients",
   order: [["id", "DESC"]],
 }
 
@@ -15,7 +15,7 @@ exports.parseWorkInputs = (
     include: [clientsInclusion],
     order: [
       ["id", "DESC"],
-      ["employees", "id", "DESC"],
+      ["clients", "id", "DESC"],
     ],
   }
 ) => {

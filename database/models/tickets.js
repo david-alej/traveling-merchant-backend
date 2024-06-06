@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Tickets.hasMany(models.Transactions, {
         foreignKey: "ticketId",
-        as: "payments",
+        as: "transactions",
         onDelete: "CASCADE",
       })
 
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
 
       Tickets.hasMany(models.WaresTickets, {
         foreignKey: "ticketId",
-        as: "waresSold",
+        as: "waresTickets",
         onDelete: "CASCADE",
       })
 

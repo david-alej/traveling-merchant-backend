@@ -35,7 +35,7 @@ const allOrders = [
       createdAt: "2025-01-01T00:00:00.000Z",
       updatedAt: "2025-01-01T00:00:00.000Z",
     },
-    waresBought: [
+    ordersWares: [
       {
         id: 4,
         wareId: 4,
@@ -53,7 +53,7 @@ const allOrders = [
           unitPrice: 176,
           createdAt: "2025-01-09T00:00:00.000Z",
           updatedAt: "2025-01-09T00:00:00.000Z",
-          sold: [],
+          waresTickets: [],
           stock: 5,
         },
       },
@@ -74,7 +74,7 @@ const allOrders = [
           unitPrice: 14,
           createdAt: "2025-01-09T00:00:00.000Z",
           updatedAt: "2025-01-09T00:00:00.000Z",
-          sold: [
+          waresTickets: [
             {
               amount: 2,
               createdAt: "2025-01-09T00:00:00.000Z",
@@ -108,7 +108,7 @@ const allOrders = [
       createdAt: "2025-01-01T00:00:00.000Z",
       updatedAt: "2025-01-01T00:00:00.000Z",
     },
-    waresBought: [
+    ordersWares: [
       {
         id: 1,
         wareId: 1,
@@ -126,7 +126,7 @@ const allOrders = [
           unitPrice: 155,
           createdAt: "2025-01-09T00:00:00.000Z",
           updatedAt: "2025-01-09T00:00:00.000Z",
-          sold: [
+          waresTickets: [
             {
               ticketId: 1,
               wareId: 1,
@@ -164,7 +164,7 @@ const allOrders = [
           unitPrice: 178,
           createdAt: "2025-01-09T00:00:00.000Z",
           updatedAt: "2025-01-09T00:00:00.000Z",
-          sold: [
+          waresTickets: [
             {
               amount: 1,
               createdAt: "2025-01-09T00:00:00.000Z",
@@ -194,7 +194,7 @@ const allOrders = [
           unitPrice: 450,
           createdAt: "2025-01-09T00:00:00.000Z",
           updatedAt: "2025-01-09T00:00:00.000Z",
-          sold: [
+          waresTickets: [
             {
               amount: 1,
               createdAt: "2025-01-09T00:00:00.000Z",
@@ -225,7 +225,7 @@ describe("Orders Routes", function () {
       "createdAt",
       "updatedAt",
       "provider",
-      "waresBought",
+      "ordersWares",
     ],
     properties: {
       provider: {
@@ -239,7 +239,7 @@ describe("Orders Routes", function () {
           "updatedAt",
         ],
       },
-      waresBought: {
+      ordersWares: {
         type: "array",
         items: {
           type: "object",
@@ -265,10 +265,10 @@ describe("Orders Routes", function () {
                 "createdAt",
                 "updatedAt",
                 "stock",
-                "sold",
+                "waresTickets",
               ],
               properties: {
-                sold: {
+                waresTickets: {
                   type: "array",
                   items: {
                     type: "object",
@@ -374,7 +374,7 @@ describe("Orders Routes", function () {
       expectedOrders = Array.isArray(expectedOrders)
         ? expectedOrders
         : [expectedOrders]
-
+      console.log(setHeaders)
       const { status, data: orders } = await client.post(
         "/orders/search",
         requestBody,
@@ -383,7 +383,7 @@ describe("Orders Routes", function () {
 
       if (isPrinted) {
         for (const order of orders) {
-          console.log(order.waresBought, ",")
+          console.log(order.ordersWares, ",")
         }
       }
 
@@ -599,10 +599,10 @@ describe("Orders Routes", function () {
       requestBody.expectedAt = new Date(requestBody.expectedAt).toISOString()
       const newOrderSearched = await models.Orders.findOne({
         where: requestBody,
-        include: [{ model: models.OrdersWares, as: "waresBought" }],
+        include: [{ model: models.OrdersWares, as: "ordersWares" }],
       })
       const newOrder = JSON.parse(JSON.stringify(newOrderSearched))
-      const newOrdersWares = newOrder.waresBought
+      const newOrdersWares = newOrder.ordersWares
       const newOrderDeleted = await models.Orders.destroy({
         where: requestBody,
       })
@@ -702,12 +702,12 @@ describe("Orders Routes", function () {
       const newOrderSearched = await models.Orders.findOne({
         where: requestBody,
         include: [
-          { model: models.OrdersWares, as: "waresBought" },
+          { model: models.OrdersWares, as: "ordersWares" },
           { model: models.Providers, as: "provider" },
         ],
       })
       const newOrder = JSON.parse(JSON.stringify(newOrderSearched))
-      const newOrdersWares = newOrder.waresBought
+      const newOrdersWares = newOrder.ordersWares
       const newProvider = newOrder.provider
       const newOrderDeleted = await models.Orders.destroy({
         where: requestBody,

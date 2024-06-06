@@ -41,7 +41,7 @@ transactionsRouter.post(
     wordValidator("paymentType"),
     dateValidator("paidAt"),
   ],
-  transactionsControllers.foreignKeyValidation,
+  transactionsControllers.foreignKeyValidation(),
   transactionsControllers.postTransaction
 )
 
@@ -54,7 +54,7 @@ transactionsRouter.put(
     wordValidator("paymentType", true),
     dateValidator("paidAt", true),
   ],
-  transactionsControllers.foreignKeyValidation,
+  transactionsControllers.foreignKeyValidation(false),
   transactionsControllers.putTransaction
 )
 

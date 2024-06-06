@@ -8,7 +8,7 @@ module.exports = {
       [
         {
           orderId: 1,
-          ticketId: null,
+          ticketId: 0,
           paidAt: "2025-01-01T20:00:00.000Z",
           payment: 3413.65,
           paymentType: "visa",
@@ -17,7 +17,7 @@ module.exports = {
         },
         {
           orderId: 2,
-          ticketId: null,
+          ticketId: 0,
           paidAt: "2025-01-01T20:00:00.000Z",
           payment: 959.59,
           paymentType: "visa",
@@ -25,7 +25,7 @@ module.exports = {
           updatedAt: new Date("2025-01-01"),
         },
         {
-          orderId: null,
+          orderId: 0,
           ticketId: 1,
           payment: 150,
           paymentType: "cash app",
@@ -34,7 +34,7 @@ module.exports = {
           updatedAt: new Date("2025-01-09"),
         },
         {
-          orderId: null,
+          orderId: 0,
           ticketId: 2,
           payment: 200,
           paymentType: "visa",
@@ -43,7 +43,7 @@ module.exports = {
           updatedAt: new Date("2025-01-09"),
         },
         {
-          orderId: null,
+          orderId: 0,
           ticketId: 3,
           payment: 168.27,
           paymentType: "cash",
@@ -52,7 +52,7 @@ module.exports = {
           updatedAt: new Date("2025-01-13"),
         },
         {
-          orderId: null,
+          orderId: 0,
           ticketId: 1,
           payment: 86.9,
           paymentType: "visa",
@@ -61,7 +61,7 @@ module.exports = {
           updatedAt: new Date("2025-01-16"),
         },
         {
-          orderId: null,
+          orderId: 0,
           ticketId: 3,
           payment: -155,
           paymentType: "cash app",
@@ -71,7 +71,7 @@ module.exports = {
         },
         {
           orderId: 1,
-          ticketId: null,
+          ticketId: 0,
           payment: 1450,
           paymentType: "visa",
           paidAt: new Date("2025-01-17"),

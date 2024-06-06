@@ -27,8 +27,8 @@ app.use(
     saveUninitialized: true,
     cookie: {
       maxAge: 1000 * 60 * 30,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
     },
   })
 )
@@ -37,7 +37,13 @@ app.use(cookieParser(process.env.COOKIES_SECRET))
 
 app.use(helmet())
 
-app.use(cors({ credentials: true }))
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:5173",
+    allowedHeaders: ["x-csrf-token", "content-type"],
+  })
+)
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocumentation))
 

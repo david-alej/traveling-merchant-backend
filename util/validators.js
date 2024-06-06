@@ -62,6 +62,8 @@ const passwordValidator = (
     .withMessage(inputName + " must contain a number.")
     .matches("[A-Z]")
     .withMessage(inputName + " must contain an uppercase letter.")
+    .matches("[a-z]")
+    .withMessage(inputName + " must contain an uppercase letter.")
 }
 
 exports.passwordValidator = passwordValidator

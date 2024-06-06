@@ -12,12 +12,12 @@ const clientsInclusion = {
 
 const transactionsInclusion = {
   model: models.Transactions,
-  as: "payments",
+  as: "transactions",
 }
 
 const waresTicketsInclusion = {
   model: models.WaresTickets,
-  as: "waresSold",
+  as: "waresTickets",
   attributes: { exclude: ["id"] },
   include: {
     model: models.Wares,
@@ -27,7 +27,7 @@ const waresTicketsInclusion = {
         [
           models.Sequelize.literal(
             // eslint-disable-next-line quotes
-            '(SELECT "amount" - "returned" + COALESCE("waresSold"."returned"  - "waresSold"."amount", 0) FROM "OrdersWares" LEFT OUTER JOIN "Orders" ON "OrdersWares"."orderId" = "Orders"."id" WHERE "wareId" = "waresSold->ware"."id" AND "Orders"."actualAt" IS NOT NULL)'
+            '(SELECT "amount" - "returned" + COALESCE("waresTickets"."returned"  - "waresTickets"."amount", 0) FROM "OrdersWares" LEFT OUTER JOIN "Orders" ON "OrdersWares"."orderId" = "Orders"."id" WHERE "wareId" = "waresTickets->ware"."id" AND "Orders"."actualAt" IS NOT NULL)'
           ),
           "stock",
         ],
@@ -44,7 +44,7 @@ exports.findWaresQuery = (wareId) => ({
       [
         models.Sequelize.literal(
           // eslint-disable-next-line quotes
-          '(SELECT "amount" - "returned" + COALESCE("sold"."returned"  - "sold"."amount", 0) FROM "OrdersWares" LEFT OUTER JOIN "Orders" ON "OrdersWares"."orderId" = "Orders"."id" WHERE "wareId" = "Wares"."id" AND "Orders"."actualAt" IS NOT NULL)'
+          '(SELECT "amount" - "returned" + COALESCE("waresTickets"."returned"  - "waresTickets"."amount", 0) FROM "OrdersWares" LEFT OUTER JOIN "Orders" ON "OrdersWares"."orderId" = "Orders"."id" WHERE "wareId" = "Wares"."id" AND "Orders"."actualAt" IS NOT NULL)'
         ),
         "stock",
       ],
@@ -53,11 +53,11 @@ exports.findWaresQuery = (wareId) => ({
   include: [
     {
       model: models.WaresTickets,
-      as: "sold",
+      as: "waresTickets",
     },
     {
       model: models.OrdersWares,
-      as: "bought",
+      as: "ordersWares",
     },
   ],
   order: [["id", "DESC"]],
@@ -97,9 +97,9 @@ const findTicketQuery = {
   include: [waresTicketsInclusion, transactionsInclusion, clientsInclusion],
   order: [
     ["id", "DESC"],
-    ["payments", "id", "DESC"],
-    ["waresSold", "wareId", "DESC"],
-    ["waresSold", "ware", "unitPrice", "DESC"],
+    ["transactions", "id", "DESC"],
+    ["waresTickets", "wareId", "DESC"],
+    ["waresTickets", "ware", "unitPrice", "DESC"],
   ],
 }
 

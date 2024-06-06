@@ -54,9 +54,10 @@ exports.postLogin = async (req, res, next) => {
   const ipAddr = req.ip
   const { username, password } = req.body
   const usernameIPkey = getUsernameIPkey(username, ipAddr)
+  req.session.merchant = { preMsg: "Client:" }
 
   try {
-    validationPerusal(req, "Client:")
+    validationPerusal(req)
 
     const consecutveFailsLimiter = await limiterConsecutiveFailsByUsernameAndIP
     const slowBruteLimiter = await limiterSlowBruteByIP
@@ -86,13 +87,7 @@ exports.postLogin = async (req, res, next) => {
 
     const { merchant, authorized } = await authenticate(username, password)
 
-    if (merchant) {
-      delete merchant.password
-
-      merchant.preMsg = `Merchant: ${merchant.id}`
-
-      req.session.merchant = merchant
-    }
+    if (merchant) delete merchant.password
 
     if (!authorized) {
       let errorMsg = `Client: username ${username} not found.`
@@ -112,6 +107,10 @@ exports.postLogin = async (req, res, next) => {
     if (resUsernameAndIP !== null && resUsernameAndIP.consumedPoints > 0) {
       await consecutveFailsLimiter.delete(usernameIPkey)
     }
+
+    merchant.preMsg = `Merchant: ${merchant.id}`
+
+    req.session.merchant = merchant
 
     req.session.authorized = authorized
 

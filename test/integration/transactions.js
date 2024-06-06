@@ -157,7 +157,7 @@ describe("Transactions Routes", function () {
     const allTransactions = [
       {
         id: 8,
-        ticketId: null,
+        ticketId: 0,
         orderId: 1,
         payment: 1450,
         paymentType: "visa",
@@ -180,7 +180,7 @@ describe("Transactions Routes", function () {
       {
         id: 7,
         ticketId: 3,
-        orderId: null,
+        orderId: 0,
         payment: -155,
         paymentType: "cash app",
         paidAt: "2025-01-17T00:00:00.000Z",
@@ -203,7 +203,7 @@ describe("Transactions Routes", function () {
       {
         id: 6,
         ticketId: 1,
-        orderId: null,
+        orderId: 0,
         payment: 86.9,
         paymentType: "visa",
         paidAt: "2025-01-16T00:00:00.000Z",
@@ -226,7 +226,7 @@ describe("Transactions Routes", function () {
       {
         id: 5,
         ticketId: 3,
-        orderId: null,
+        orderId: 0,
         payment: 168.27,
         paymentType: "cash",
         paidAt: "2025-01-13T00:00:00.000Z",
@@ -249,7 +249,7 @@ describe("Transactions Routes", function () {
       {
         id: 4,
         ticketId: 2,
-        orderId: null,
+        orderId: 0,
         payment: 200,
         paymentType: "visa",
         paidAt: "2025-01-09T00:00:00.000Z",
@@ -272,7 +272,7 @@ describe("Transactions Routes", function () {
       {
         id: 3,
         ticketId: 1,
-        orderId: null,
+        orderId: 0,
         payment: 150,
         paymentType: "cash app",
         paidAt: "2025-01-09T00:00:00.000Z",
@@ -294,7 +294,7 @@ describe("Transactions Routes", function () {
       },
       {
         id: 2,
-        ticketId: null,
+        ticketId: 0,
         orderId: 2,
         payment: 959.59,
         paymentType: "visa",
@@ -316,7 +316,7 @@ describe("Transactions Routes", function () {
       },
       {
         id: 1,
-        ticketId: null,
+        ticketId: 0,
         orderId: 1,
         payment: 3413.65,
         paymentType: "visa",

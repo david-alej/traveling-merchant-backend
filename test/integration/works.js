@@ -26,10 +26,10 @@ describe("Works Routes", function () {
       "phoneNumber",
       "createdAt",
       "updatedAt",
-      "employees",
+      "clients",
     ],
     properties: {
-      employees: {
+      clients: {
         type: "array",
         items: {
           type: "object",
@@ -123,7 +123,7 @@ describe("Works Routes", function () {
         phoneNumber: "9103623505",
         createdAt: "2025-01-13T00:00:00.000Z",
         updatedAt: "2025-01-13T00:00:00.000Z",
-        employees: [
+        clients: [
           {
             id: 4,
             workId: 3,
@@ -143,7 +143,7 @@ describe("Works Routes", function () {
         phoneNumber: "7644084620",
         createdAt: "2025-01-09T00:00:00.000Z",
         updatedAt: "2025-01-09T00:00:00.000Z",
-        employees: [
+        clients: [
           {
             id: 3,
             workId: 2,
@@ -163,7 +163,7 @@ describe("Works Routes", function () {
         phoneNumber: "9075554011",
         createdAt: "2025-01-01T00:00:00.000Z",
         updatedAt: "2025-01-09T00:00:00.000Z",
-        employees: [
+        clients: [
           {
             id: 2,
             workId: 1,

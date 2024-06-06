@@ -8,7 +8,7 @@ const providersInclusion = {
 
 const ordersWaresInclusion = {
   model: models.OrdersWares,
-  as: "waresBought",
+  as: "ordersWares",
   attributes: { exlcude: ["id"] },
   include: {
     model: models.Wares,
@@ -18,7 +18,7 @@ const ordersWaresInclusion = {
         [
           models.Sequelize.literal(
             // eslint-disable-next-line quotes
-            '(SELECT "amount" - "returned" + COALESCE("waresBought->ware->sold"."returned"  - "waresBought->ware->sold"."amount", 0) FROM "OrdersWares" LEFT OUTER JOIN "Orders" ON "OrdersWares"."orderId" = "Orders"."id" WHERE "wareId" = "waresBought->ware"."id" AND "Orders"."actualAt" IS NOT NULL)'
+            '(SELECT "amount" - "returned" + COALESCE("ordersWares->ware->waresTickets"."returned"  - "ordersWares->ware->waresTickets"."amount", 0) FROM "OrdersWares" LEFT OUTER JOIN "Orders" ON "OrdersWares"."orderId" = "Orders"."id" WHERE "wareId" = "ordersWares->ware"."id" AND "Orders"."actualAt" IS NOT NULL)'
           ),
           "stock",
         ],
@@ -26,7 +26,7 @@ const ordersWaresInclusion = {
     },
     include: {
       model: models.WaresTickets,
-      as: "sold",
+      as: "waresTickets",
       attributes: { exlcude: ["id"] },
     },
   },
@@ -37,11 +37,11 @@ exports.findWaresQuery = (wareId) => ({
   include: [
     {
       model: models.WaresTickets,
-      as: "sold",
+      as: "waresTickets",
     },
     {
       model: models.OrdersWares,
-      as: "bought",
+      as: "ordersWares",
     },
   ],
   order: [["id", "DESC"]],

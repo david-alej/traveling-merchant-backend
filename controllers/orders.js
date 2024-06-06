@@ -35,12 +35,12 @@ exports.paramOrderId = async (req, res, next, orderId) => {
 
     const order = searched.dataValues
 
-    order.waresBought.forEach((ordersWare) => {
+    order.ordersWares.forEach((ordersWare) => {
       ordersWare = ordersWare.dataValues
 
       const stockBought = ordersWare.amount - ordersWare.returned
       const ware = ordersWare.ware
-      const waresTickets = ware.sold
+      const waresTickets = ware.waresTickets
       let stockSold = 0
 
       for (const waresTicket of waresTickets) {

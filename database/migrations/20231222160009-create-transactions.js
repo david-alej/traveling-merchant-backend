@@ -11,9 +11,11 @@ module.exports = {
       },
       ticketId: {
         type: Sequelize.INTEGER,
+        defaultValue: 0,
       },
       orderId: {
         type: Sequelize.INTEGER,
+        defaultValue: 0,
       },
       payment: {
         type: Sequelize.FLOAT,

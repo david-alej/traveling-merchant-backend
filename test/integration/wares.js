@@ -26,12 +26,12 @@ describe("Wares Routes", function () {
       "unitPrice",
       "createdAt",
       "updatedAt",
-      "bought",
-      "sold",
+      "ordersWares",
+      "waresTickets",
       "stock",
     ],
     properties: {
-      bought: {
+      ordersWares: {
         type: "array",
         items: {
           type: "object",
@@ -46,7 +46,7 @@ describe("Wares Routes", function () {
           ],
         },
       },
-      sold: {
+      waresTickets: {
         type: "array",
         items: {
           type: "object",
@@ -140,7 +140,7 @@ describe("Wares Routes", function () {
         createdAt: "2025-01-09T00:00:00.000Z",
         updatedAt: "2025-01-09T00:00:00.000Z",
         stock: 8,
-        bought: [
+        ordersWares: [
           {
             id: 5,
             wareId: 5,
@@ -152,7 +152,7 @@ describe("Wares Routes", function () {
             updatedAt: "2025-01-01T00:00:00.000Z",
           },
         ],
-        sold: [
+        waresTickets: [
           {
             wareId: 5,
             ticketId: 1,
@@ -172,7 +172,7 @@ describe("Wares Routes", function () {
         createdAt: "2025-01-09T00:00:00.000Z",
         updatedAt: "2025-01-09T00:00:00.000Z",
         stock: 5,
-        bought: [
+        ordersWares: [
           {
             id: 4,
             wareId: 4,
@@ -184,7 +184,7 @@ describe("Wares Routes", function () {
             updatedAt: "2025-01-01T00:00:00.000Z",
           },
         ],
-        sold: [],
+        waresTickets: [],
       },
       {
         id: 3,
@@ -195,7 +195,7 @@ describe("Wares Routes", function () {
         createdAt: "2025-01-09T00:00:00.000Z",
         updatedAt: "2025-01-09T00:00:00.000Z",
         stock: 1,
-        bought: [
+        ordersWares: [
           {
             id: 3,
             wareId: 3,
@@ -207,7 +207,7 @@ describe("Wares Routes", function () {
             updatedAt: "2025-01-01T00:00:00.000Z",
           },
         ],
-        sold: [
+        waresTickets: [
           {
             wareId: 3,
             ticketId: 2,
@@ -227,7 +227,7 @@ describe("Wares Routes", function () {
         createdAt: "2025-01-09T00:00:00.000Z",
         updatedAt: "2025-01-09T00:00:00.000Z",
         stock: 4,
-        bought: [
+        ordersWares: [
           {
             id: 2,
             wareId: 2,
@@ -239,7 +239,7 @@ describe("Wares Routes", function () {
             updatedAt: "2025-01-01T00:00:00.000Z",
           },
         ],
-        sold: [
+        waresTickets: [
           {
             wareId: 2,
             ticketId: 1,
@@ -259,7 +259,7 @@ describe("Wares Routes", function () {
         createdAt: "2025-01-09T00:00:00.000Z",
         updatedAt: "2025-01-09T00:00:00.000Z",
         stock: 0,
-        bought: [
+        ordersWares: [
           {
             id: 1,
             wareId: 1,
@@ -271,7 +271,7 @@ describe("Wares Routes", function () {
             updatedAt: "2025-01-01T00:00:00.000Z",
           },
         ],
-        sold: [
+        waresTickets: [
           {
             wareId: 1,
             ticketId: 3,

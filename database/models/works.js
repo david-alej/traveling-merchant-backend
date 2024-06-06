@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Works.hasMany(models.Clients, {
         foreignKey: "workId",
-        as: "employees",
+        as: "clients",
       })
     }
   }

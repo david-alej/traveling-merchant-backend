@@ -459,11 +459,11 @@ describe("OrdersWares Routes", function () {
         where: {
           id: orderId,
         },
-        include: { model: models.OrdersWares, as: "waresBought" },
+        include: { model: models.OrdersWares, as: "ordersWares" },
       })
       const orderAfter = JSON.parse(JSON.stringify(orderAfterSearched))
-      const orderswareAfter = orderAfter.waresBought[0]
-      delete orderAfter.waresBought
+      const orderswareAfter = orderAfter.ordersWares[0]
+      delete orderAfter.ordersWares
       const ordersDeleted = await models.Orders.destroy({
         where: {
           id: orderId,

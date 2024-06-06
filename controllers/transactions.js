@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 const { validationPerusal, positiveIntegerValidator } =
   require("../util/index").validators
 const models = require("../database/models")
@@ -85,31 +86,33 @@ exports.getTransactions = async (req, res, next) => {
   }
 }
 
-exports.foreignKeyValidation = async (req, res, next) => {
-  const merchant = req.session.merchant
-  const { orderId, ticketId } = req.body
+exports.foreignKeyValidation =
+  (isPost = true) =>
+  async (req, res, next) => {
+    const merchant = req.session.merchant
+    const { orderId, ticketId } = req.body
 
-  try {
-    if (orderId && ticketId) {
-      throw new Api400Error(
-        merchant.preMsg +
-          " cannot input orderId and ticketId at the same time.",
-        "Bad input request."
-      )
+    try {
+      if (orderId && ticketId) {
+        throw new Api400Error(
+          merchant.preMsg +
+            " cannot input orderId and ticketId at the same time.",
+          "Bad input request."
+        )
+      }
+
+      if (isPost && !orderId && !ticketId) {
+        throw new Api400Error(
+          merchant.preMsg + " has to input either orderId or ticketId.",
+          "Bad input request."
+        )
+      }
+
+      next()
+    } catch (err) {
+      next(err)
     }
-
-    if (!orderId && !ticketId) {
-      throw new Api400Error(
-        merchant.preMsg + " has to input either orderId or ticketId.",
-        "Bad input request."
-      )
-    }
-
-    next()
-  } catch (err) {
-    next(err)
   }
-}
 
 exports.postTransaction = async (req, res, next) => {
   const merchant = req.session.merchant

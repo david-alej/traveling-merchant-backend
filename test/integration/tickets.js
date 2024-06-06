@@ -31,8 +31,8 @@ describe("Tickets Routes", function () {
       "paid",
       "owed",
       "client",
-      "payments",
-      "waresSold",
+      "transactions",
+      "waresTickets",
     ],
     properties: {
       client: {
@@ -62,7 +62,7 @@ describe("Tickets Routes", function () {
           },
         },
       },
-      payments: {
+      transactions: {
         type: "array",
         items: {
           type: "object",
@@ -78,7 +78,7 @@ describe("Tickets Routes", function () {
           ],
         },
       },
-      waresSold: {
+      waresTickets: {
         type: "array",
         items: {
           type: "object",
@@ -199,7 +199,7 @@ describe("Tickets Routes", function () {
         returned: 155,
         paid: 13.27,
         owed: 0,
-        waresSold: [
+        waresTickets: [
           {
             ticketId: 3,
             wareId: 1,
@@ -219,11 +219,11 @@ describe("Tickets Routes", function () {
             },
           },
         ],
-        payments: [
+        transactions: [
           {
             id: 7,
             ticketId: 3,
-            orderId: null,
+            orderId: 0,
             payment: -155,
             paymentType: "cash app",
             paidAt: "2025-01-17T00:00:00.000Z",
@@ -233,7 +233,7 @@ describe("Tickets Routes", function () {
           {
             id: 5,
             ticketId: 3,
-            orderId: null,
+            orderId: 0,
             payment: 168.27,
             paymentType: "cash",
             paidAt: "2025-01-13T00:00:00.000Z",
@@ -271,7 +271,7 @@ describe("Tickets Routes", function () {
         returned: 0,
         paid: 200,
         owed: 288.52,
-        waresSold: [
+        waresTickets: [
           {
             ticketId: 2,
             wareId: 3,
@@ -291,11 +291,11 @@ describe("Tickets Routes", function () {
             },
           },
         ],
-        payments: [
+        transactions: [
           {
             id: 4,
             ticketId: 2,
-            orderId: null,
+            orderId: 0,
             payment: 200,
             paymentType: "visa",
             paidAt: "2025-01-09T00:00:00.000Z",
@@ -333,7 +333,7 @@ describe("Tickets Routes", function () {
         returned: 155,
         paid: 236.9,
         owed: 0,
-        waresSold: [
+        waresTickets: [
           {
             ticketId: 1,
             wareId: 5,
@@ -389,11 +389,11 @@ describe("Tickets Routes", function () {
             },
           },
         ],
-        payments: [
+        transactions: [
           {
             id: 6,
             ticketId: 1,
-            orderId: null,
+            orderId: 0,
             payment: 86.9,
             paymentType: "visa",
             paidAt: "2025-01-16T00:00:00.000Z",
@@ -403,7 +403,7 @@ describe("Tickets Routes", function () {
           {
             id: 3,
             ticketId: 1,
-            orderId: null,
+            orderId: 0,
             payment: 150,
             paymentType: "cash app",
             paidAt: "2025-01-09T00:00:00.000Z",
