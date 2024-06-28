@@ -15,7 +15,7 @@ const findWareQuery = {
       [
         models.Sequelize.literal(
           // eslint-disable-next-line quotes
-          '(SELECT "amount" - "returned" + COALESCE("waresTickets"."returned"  - "waresTickets"."amount", 0) FROM "OrdersWares" LEFT OUTER JOIN "Orders" ON "OrdersWares"."orderId" = "Orders"."id" WHERE "wareId" = "Wares"."id" AND "Orders"."actualAt" IS NOT NULL)'
+          '(SELECT SUM("OrdersWares"."amount" - "OrdersWares"."returned" + COALESCE("WaresTickets"."returned"  - "WaresTickets"."amount", 0) )::integer FROM "OrdersWares" LEFT OUTER JOIN "Orders" ON "OrdersWares"."orderId" = "Orders"."id" LEFT OUTER JOIN "WaresTickets" ON "OrdersWares"."wareId" = "WaresTickets"."wareId"  WHERE "OrdersWares"."wareId" = "Wares"."id" AND "Orders"."actualAt" IS NOT NULL)'
         ),
         "stock",
       ],

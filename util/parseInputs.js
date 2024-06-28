@@ -18,7 +18,6 @@ const createDateQuery = (inputName, input, whereOptions) => {
     whereOptions[String(inputName)] = {}
   }
 
-  console.log(input)
   if (dataType === "string") {
     input = new Date(input).toISOString()
 
@@ -53,7 +52,7 @@ const createDateQuery = (inputName, input, whereOptions) => {
     const endDate = new Date(...times.map((time) => time), 0)
 
     const extrema = [startDate.toISOString(), endDate.toISOString()]
-    console.log(extrema)
+
     whereOptions[String(inputName)] = { [Op.between]: extrema }
   }
 }
@@ -126,6 +125,7 @@ module.exports = {
       query: {
         where: whereOptions,
         ...otherOptions,
+        limit: 1000,
       },
       afterMsg,
       inputsObject,

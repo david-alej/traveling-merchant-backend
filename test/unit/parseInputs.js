@@ -56,7 +56,7 @@ describe("Parsing Inputs", function () {
 
   const numbersParsingIt = async (key, value, validator) => {
     req.body = { [String(key)]: value }
-    const expectedQuery = { where: req.body, ...otherOptions }
+    const expectedQuery = { where: req.body, ...otherOptions, limit: 1000 }
 
     await validator(key).run(req)
 
@@ -112,6 +112,7 @@ describe("Parsing Inputs", function () {
       const expectedQuery = {
         where: { [String(key)]: { [Op.contains]: value } },
         ...otherOptions,
+        limit: 1000,
       }
 
       await arrayTextValidator(key).run(req)
@@ -145,6 +146,7 @@ describe("Parsing Inputs", function () {
       const expectedQuery = {
         where: { [String(key)]: { [Op.contains]: value } },
         ...otherOptions,
+        limit: 1000,
       }
 
       await arrayObjectValidator(key).run(req)
@@ -175,7 +177,7 @@ describe("Parsing Inputs", function () {
     it("When input is a boolean, Then response is an object with properties that include input", async function () {
       const [key, value] = ["bool", false]
       req.body = { [String(key)]: value }
-      const expectedQuery = { where: {}, ...otherOptions }
+      const expectedQuery = { where: {}, ...otherOptions, limit: 1000 }
 
       await booleanValidator(key).run(req)
 
@@ -205,7 +207,7 @@ describe("Parsing Inputs", function () {
     it("When input is a string, Then response is an object with properties that include input", async function () {
       const [key, value] = ["str", "string"]
       req.body = { [String(key)]: value }
-      const expectedQuery = { where: {}, ...otherOptions }
+      const expectedQuery = { where: {}, ...otherOptions, limit: 1000 }
       expectedQuery.where[String(key)] = { [Op.iLike]: "%" + value + "%" }
 
       await wordValidator(key).run(req)
@@ -241,6 +243,7 @@ describe("Parsing Inputs", function () {
           dateAt: value,
         },
         ...otherOptions,
+        limit: 1000,
       }
 
       await searchDateValidator(key).run(req)
@@ -263,6 +266,7 @@ describe("Parsing Inputs", function () {
       const expectedQuery = {
         where: req.body,
         ...otherOptions,
+        limit: 1000,
       }
 
       await dateValidator(key).run(req)

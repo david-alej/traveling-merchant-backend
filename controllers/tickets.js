@@ -55,7 +55,7 @@ exports.getTickets = async (req, res, next) => {
 
   try {
     const { afterMsg, query, inputsObject } = await parseTicketInputs(req)
-
+    console.log(query)
     const searched = await models.Tickets.findAll(query)
 
     if (!searched) {
