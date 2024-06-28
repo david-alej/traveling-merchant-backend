@@ -285,12 +285,12 @@ describe("Clients Routes", function () {
       await getClientsIt({ workId: 3 }, allClients[0])
     })
 
-    it("When a created at date is given, Then response is all clients within that same month and year", async function () {
-      await getClientsIt({ createdAt: new Date("2025-01-11") }, allClients)
+    it("When a createdAt date object is given, Then response is all clients within that same month and year", async function () {
+      await getClientsIt({ createdAt: { year: 2025, month: 0 } }, allClients)
     })
 
-    it("When a updated at date is given, Then response is all clients within that same month and year", async function () {
-      await getClientsIt({ updatedAt: new Date("2025-02-01T12:00:00.000Z") })
+    it("When a updatedAt date string is given, Then response is all clients within that same month and year", async function () {
+      await getClientsIt({ updatedAt: "2025-02-01T12:00:00.000Z" })
     })
 
     it("When part of a fullname is given, Then response is all clients that include the given string using case insensitive search", async function () {
@@ -312,8 +312,8 @@ describe("Clients Routes", function () {
           fullname: "Pau",
           address: "1454",
           phoneNumber: "2543865553",
-          createdAt: "2025-01-11",
-          updatedAt: "2025-01-11",
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
         },
         allClients[1]
       )

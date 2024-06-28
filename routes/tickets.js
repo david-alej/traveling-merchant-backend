@@ -6,8 +6,8 @@ const {
   positiveIntegerValidator,
   wordValidator,
   stringValidator,
-  dateValidator,
   nonNegativeFloatValidator,
+  searchDateValidator,
 } = require("../util/index").validators
 
 ticketsRouter.param("ticketId", ticketsControllers.paramTicketId)
@@ -21,8 +21,8 @@ ticketsRouter.post(
     nonNegativeFloatValidator("cost", true),
     stringValidator("paymentPlan", true),
     stringValidator("description", true),
-    dateValidator("createdAt", true),
-    dateValidator("updatedAt", true),
+    searchDateValidator("createdAt"),
+    searchDateValidator("updatedAt"),
     booleanValidator("pending", true),
   ],
   ticketsControllers.getTickets

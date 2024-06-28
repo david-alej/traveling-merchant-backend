@@ -46,8 +46,7 @@ exports.parseClientInputs = (
   includeOptions = {
     include: [ticketsInclusion, workInclusion],
     order: [["id", "DESC"]],
-  },
-  modelName = "Clients"
+  }
 ) => {
-  return parseInputs(inputsObject, includeOptions, modelName)
+  return parseInputs(inputsObject, includeOptions)
 }

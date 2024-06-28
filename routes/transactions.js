@@ -1,5 +1,6 @@
 const transactionsRouter = require("express").Router()
 const { transactionsControllers } = require("../controllers/index")
+const { searchDateValidator } = require("../util/validators")
 const {
   positiveIntegerValidator,
   floatValidator,
@@ -25,9 +26,9 @@ transactionsRouter.post(
     positiveIntegerValidator("orderId", true),
     floatValidator("payment", true),
     stringValidator("paymentType", true),
-    dateValidator("paidAt", true),
-    dateValidator("createdAt", true),
-    dateValidator("updatedAt", true),
+    searchDateValidator("paidAt"),
+    searchDateValidator("createdAt"),
+    searchDateValidator("updatedAt"),
   ],
   transactionsControllers.getTransactions
 )

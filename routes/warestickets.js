@@ -1,6 +1,7 @@
 const waresticketsRouter = require("express").Router()
 const { waresticketsControllers } = require("../controllers/index")
-const { positiveIntegerValidator, nonNegativeIntegerValidator, dateValidator } =
+const { searchDateValidator } = require("../util/validators")
+const { positiveIntegerValidator, nonNegativeIntegerValidator } =
   require("../util/index").validators
 
 waresticketsRouter.param("ticketId", waresticketsControllers.paramTicketId)
@@ -19,8 +20,8 @@ waresticketsRouter.post(
     positiveIntegerValidator("ticketId", true),
     positiveIntegerValidator("amount", true),
     nonNegativeIntegerValidator("returned", true),
-    dateValidator("createdAt", true),
-    dateValidator("updatedAt", true),
+    searchDateValidator("createdAt", true),
+    searchDateValidator("updatedAt", true),
   ],
   waresticketsControllers.getWaresTickets
 )

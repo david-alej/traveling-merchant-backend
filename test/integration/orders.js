@@ -22,6 +22,9 @@ const allOrders = [
     cost: 959.59,
     tax: 89.59,
     shipment: 20,
+    owed: 0,
+    returned: 0,
+    paid: 959.59,
     expectedAt: "2025-01-09T00:00:00.000Z",
     actualAt: "2025-01-09T00:00:00.000Z",
     createdAt: "2025-01-01T00:00:00.000Z",
@@ -35,28 +38,19 @@ const allOrders = [
       createdAt: "2025-01-01T00:00:00.000Z",
       updatedAt: "2025-01-01T00:00:00.000Z",
     },
-    ordersWares: [
+    transactions: [
       {
-        id: 4,
-        wareId: 4,
+        id: 2,
+        ticketId: null,
         orderId: 2,
-        unitPrice: 150,
-        amount: 5,
-        returned: 0,
+        payment: 959.59,
+        paymentType: "visa",
+        paidAt: "2025-01-01T20:00:00.000Z",
         createdAt: "2025-01-01T00:00:00.000Z",
         updatedAt: "2025-01-01T00:00:00.000Z",
-        ware: {
-          id: 4,
-          name: "Versace Men's 4-Pc. Eros Eau de Toilette Gift Set",
-          type: "perfume",
-          tags: ["men", "4-pc"],
-          unitPrice: 176,
-          createdAt: "2025-01-09T00:00:00.000Z",
-          updatedAt: "2025-01-09T00:00:00.000Z",
-          waresTickets: [],
-          stock: 5,
-        },
       },
+    ],
+    ordersWares: [
       {
         id: 5,
         wareId: 5,
@@ -74,17 +68,27 @@ const allOrders = [
           unitPrice: 14,
           createdAt: "2025-01-09T00:00:00.000Z",
           updatedAt: "2025-01-09T00:00:00.000Z",
-          waresTickets: [
-            {
-              amount: 2,
-              createdAt: "2025-01-09T00:00:00.000Z",
-              returned: 0,
-              ticketId: 1,
-              updatedAt: "2025-01-09T00:00:00.000Z",
-              wareId: 5,
-            },
-          ],
           stock: 8,
+        },
+      },
+      {
+        id: 4,
+        wareId: 4,
+        orderId: 2,
+        unitPrice: 150,
+        amount: 5,
+        returned: 0,
+        createdAt: "2025-01-01T00:00:00.000Z",
+        updatedAt: "2025-01-01T00:00:00.000Z",
+        ware: {
+          id: 4,
+          name: "Versace Men's 4-Pc. Eros Eau de Toilette Gift Set",
+          type: "perfume",
+          tags: ["men", "4-pc"],
+          unitPrice: 176,
+          createdAt: "2025-01-09T00:00:00.000Z",
+          updatedAt: "2025-01-09T00:00:00.000Z",
+          stock: 5,
         },
       },
     ],
@@ -95,6 +99,9 @@ const allOrders = [
     cost: 3413.65,
     tax: 283.65,
     shipment: 50,
+    paid: 1963.65,
+    owed: 0,
+    returned: 1450,
     actualAt: "2025-01-09T00:00:00.000Z",
     expectedAt: "2025-01-08T00:00:00.000Z",
     createdAt: "2025-01-01T00:00:00.000Z",
@@ -108,43 +115,47 @@ const allOrders = [
       createdAt: "2025-01-01T00:00:00.000Z",
       updatedAt: "2025-01-01T00:00:00.000Z",
     },
+    transactions: [
+      {
+        createdAt: "2025-01-17T00:00:00.000Z",
+        id: 8,
+        orderId: 1,
+        paidAt: "2025-01-17T00:00:00.000Z",
+        payment: -1450,
+        paymentType: "visa",
+        ticketId: null,
+        updatedAt: "2025-01-17T00:00:00.000Z",
+      },
+      {
+        createdAt: "2025-01-01T00:00:00.000Z",
+        id: 1,
+        orderId: 1,
+        paidAt: "2025-01-01T20:00:00.000Z",
+        payment: 3413.65,
+        paymentType: "visa",
+        ticketId: null,
+        updatedAt: "2025-01-01T00:00:00.000Z",
+      },
+    ],
     ordersWares: [
       {
-        id: 1,
-        wareId: 1,
+        id: 3,
+        wareId: 3,
         orderId: 1,
-        unitPrice: 145,
-        amount: 10,
-        returned: 10,
+        unitPrice: 415,
+        amount: 2,
+        returned: 0,
         createdAt: "2025-01-01T00:00:00.000Z",
         updatedAt: "2025-01-01T00:00:00.000Z",
         ware: {
-          id: 1,
-          name: "Loewe 001 Woman Perfume",
-          type: "perfume",
-          tags: ["women", "1-pc"],
-          unitPrice: 155,
+          id: 3,
+          name: "The Leather Medium Tote Bag",
+          type: "bag",
+          tags: ["women"],
+          unitPrice: 450,
           createdAt: "2025-01-09T00:00:00.000Z",
           updatedAt: "2025-01-09T00:00:00.000Z",
-          waresTickets: [
-            {
-              ticketId: 1,
-              wareId: 1,
-              amount: 1,
-              returned: 1,
-              createdAt: "2025-01-09T00:00:00.000Z",
-              updatedAt: "2025-01-09T00:00:00.000Z",
-            },
-            {
-              ticketId: 3,
-              wareId: 1,
-              amount: 1,
-              returned: 1,
-              createdAt: "2025-01-13T00:00:00.000Z",
-              updatedAt: "2025-01-13T00:00:00.000Z",
-            },
-          ],
-          stock: 0,
+          stock: 1,
         },
       },
       {
@@ -164,47 +175,27 @@ const allOrders = [
           unitPrice: 178,
           createdAt: "2025-01-09T00:00:00.000Z",
           updatedAt: "2025-01-09T00:00:00.000Z",
-          waresTickets: [
-            {
-              amount: 1,
-              createdAt: "2025-01-09T00:00:00.000Z",
-              returned: 0,
-              ticketId: 1,
-              updatedAt: "2025-01-09T00:00:00.000Z",
-              wareId: 2,
-            },
-          ],
           stock: 4,
         },
       },
       {
-        id: 3,
-        wareId: 3,
+        id: 1,
+        wareId: 1,
         orderId: 1,
-        unitPrice: 415,
-        amount: 2,
-        returned: 0,
+        unitPrice: 145,
+        amount: 10,
+        returned: 10,
         createdAt: "2025-01-01T00:00:00.000Z",
         updatedAt: "2025-01-01T00:00:00.000Z",
         ware: {
-          id: 3,
-          name: "The Leather Medium Tote Bag",
-          type: "bag",
-          tags: ["women"],
-          unitPrice: 450,
+          id: 1,
+          name: "Loewe 001 Woman Perfume",
+          type: "perfume",
+          tags: ["women", "1-pc"],
+          unitPrice: 155,
           createdAt: "2025-01-09T00:00:00.000Z",
           updatedAt: "2025-01-09T00:00:00.000Z",
-          waresTickets: [
-            {
-              amount: 1,
-              createdAt: "2025-01-09T00:00:00.000Z",
-              returned: 0,
-              ticketId: 2,
-              updatedAt: "2025-01-09T00:00:00.000Z",
-              wareId: 3,
-            },
-          ],
-          stock: 1,
+          stock: 0,
         },
       },
     ],
@@ -265,24 +256,7 @@ describe("Orders Routes", function () {
                 "createdAt",
                 "updatedAt",
                 "stock",
-                "waresTickets",
               ],
-              properties: {
-                waresTickets: {
-                  type: "array",
-                  items: {
-                    type: "object",
-                    required: [
-                      "wareId",
-                      "ticketId",
-                      "amount",
-                      "returned",
-                      "createdAt",
-                      "updatedAt",
-                    ],
-                  },
-                },
-              },
             },
           },
         },
@@ -374,7 +348,7 @@ describe("Orders Routes", function () {
       expectedOrders = Array.isArray(expectedOrders)
         ? expectedOrders
         : [expectedOrders]
-      console.log(setHeaders)
+
       const { status, data: orders } = await client.post(
         "/orders/search",
         requestBody,
@@ -412,20 +386,20 @@ describe("Orders Routes", function () {
       await getOrdersIt({ shipment: 20 }, allOrders[0])
     })
 
-    it("When an expected date is given, Then response is all orders within that same month and year", async function () {
-      await getOrdersIt({ expectedAt: "2025-01-08" }, allOrders)
+    it("When an expectedAt date object is given, Then response is all orders within that same month and year", async function () {
+      await getOrdersIt({ expectedAt: { year: 2025, month: 0 } }, allOrders)
     })
 
-    it("When an actual date is given, Then response is all orders within that same month and year", async function () {
-      await getOrdersIt({ actualAt: new Date("2025-01-11") }, allOrders)
+    it("When an actualAt date string is given, Then response is all orders within that same month and year", async function () {
+      await getOrdersIt({ actualAt: { year: 2025, month: 0 } }, allOrders)
     })
 
-    it("When a created at date is given, Then response is all orders within that same month and year", async function () {
+    it("When a createdAt date string is given, Then response is all orders within that same month and year", async function () {
       await getOrdersIt({ createdAt: new Date("2025-02-11") })
     })
 
-    it("When a updated at date is given, Then response is all orders within that same month and year", async function () {
-      await getOrdersIt({ updatedAt: new Date("2025-01-11") }, allOrders)
+    it("When a updatedAt date object is given, Then response is all orders within that same month and year", async function () {
+      await getOrdersIt({ updatedAt: { year: 2025, month: 0 } }, allOrders)
     })
 
     it("When multiple inputs are given, Then response is all orders that satisfy the input comparisons", async function () {
@@ -435,10 +409,10 @@ describe("Orders Routes", function () {
           cost: 959.59,
           tax: 89.59,
           shipment: 20,
-          expectedAt: new Date("2025-01-02"),
-          actualAt: new Date("2025-01-02"),
-          createdAt: "2025-01-11",
-          updatedAt: "2025-01-11",
+          expectedAt: { year: 2025, month: 0 },
+          actualAt: { year: 2025, month: 0 },
+          createdAt: { year: 2025, month: 0 },
+          updatedAt: { year: 2025, month: 0 },
         },
         allOrders[0]
       )

@@ -25,7 +25,6 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       returned: {
-        allowNull: false,
         type: Sequelize.INTEGER,
         defaultValue: 0,
       },

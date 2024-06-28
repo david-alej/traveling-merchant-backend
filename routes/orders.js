@@ -1,5 +1,6 @@
 const ordersRouter = require("express").Router()
 const { ordersControllers } = require("../controllers/index")
+const { booleanValidator, searchDateValidator } = require("../util/validators")
 const {
   positiveIntegerValidator,
   nonNegativeFloatValidator,
@@ -18,10 +19,11 @@ ordersRouter.post(
     nonNegativeFloatValidator("cost", true),
     nonNegativeFloatValidator("tax", true),
     nonNegativeFloatValidator("shipment", true),
-    dateValidator("expectedAt", true),
-    dateValidator("actualAt", true),
-    dateValidator("createdAt", true),
-    dateValidator("updatedAt", true),
+    searchDateValidator("expectedAt", true),
+    searchDateValidator("actualAt", true),
+    searchDateValidator("createdAt", true),
+    searchDateValidator("updatedAt", true),
+    booleanValidator("pending", true),
   ],
   ordersControllers.getOrders
 )

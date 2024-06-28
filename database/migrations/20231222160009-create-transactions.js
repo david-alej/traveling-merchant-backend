@@ -11,11 +11,15 @@ module.exports = {
       },
       ticketId: {
         type: Sequelize.INTEGER,
-        defaultValue: 0,
+        allowNull: true,
+        references: { model: "Tickets", key: "id" },
+        onDelete: "CASCADE",
       },
       orderId: {
         type: Sequelize.INTEGER,
-        defaultValue: 0,
+        allowNull: true,
+        references: { model: "Orders", key: "id" },
+        onDelete: "CASCADE",
       },
       payment: {
         type: Sequelize.FLOAT,

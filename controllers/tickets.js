@@ -48,9 +48,7 @@ exports.paramTicketId = async (req, res, next, ticketId) => {
 
 exports.getTicket = async (req, res) => res.json(req.targetTicket)
 
-const sortForPending = async (tickets) => {
-  tickets.sort((a, b) => b.dataValues.owed - a.dataValues.owed)
-}
+const round = (float) => Math.round(float * 100) / 100
 
 exports.getTickets = async (req, res, next) => {
   const merchant = req.session.merchant
@@ -67,18 +65,21 @@ exports.getTickets = async (req, res, next) => {
       )
     }
 
-    searched.forEach((ticket) => {
-      ticket = ticket.dataValues
+    for (let i = 0; i < searched.length; i++) {
+      const ticket = searched[parseInt(i)].dataValues
+      let { cost, returned, paid } = ticket
+      ticket.returned = round(returned)
+      ticket.paid = round(paid)
 
-      ticket.returned = Math.round(ticket.returned * 100) / 100
+      const owed = round(cost - round(returned) - round(paid))
 
-      ticket.paid = Math.round(ticket.paid * 100) / 100
-
-      ticket.owed =
-        Math.round((ticket.cost - ticket.returned - ticket.paid) * 100) / 100
-    })
-
-    if (inputsObject.pending === true) await sortForPending(searched)
+      if (inputsObject.pending && owed === 0) {
+        searched.splice(i, 1)
+        i--
+      } else {
+        ticket.owed = owed
+      }
+    }
 
     res.json(searched)
   } catch (err) {

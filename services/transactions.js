@@ -59,10 +59,6 @@ const findTransactionQuery = {
 
 exports.findTransactionQuery = findTransactionQuery
 
-exports.parseTransactionInputs = (
-  req,
-  otherOptions = findTransactionQuery,
-  modelName = "Transactions"
-) => {
-  return parseInputs(req, otherOptions, modelName)
+exports.parseTransactionInputs = (req, otherOptions = findTransactionQuery) => {
+  return parseInputs(req, otherOptions)
 }

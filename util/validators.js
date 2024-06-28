@@ -99,6 +99,7 @@ exports.positiveIntegerValidator = (
 
       return true
     })
+    .toInt()
 }
 
 exports.nonNegativeIntegerValidator = (
@@ -120,6 +121,7 @@ exports.nonNegativeIntegerValidator = (
 
       return true
     })
+    .toInt()
 }
 
 exports.positiveFloatValidator = (input, optional = false, isParam = false) => {
@@ -135,6 +137,7 @@ exports.positiveFloatValidator = (input, optional = false, isParam = false) => {
 
       return true
     })
+    .toFloat()
 }
 
 exports.nonNegativeFloatValidator = (
@@ -154,12 +157,16 @@ exports.nonNegativeFloatValidator = (
 
       return true
     })
+    .toFloat()
 }
 
 exports.floatValidator = (input, optional = false, isParam = false) => {
   const { head, inputName } = basicValidator(input, optional, isParam)
 
-  return head.isFloat().withMessage(inputName + " must be an float number.")
+  return head
+    .isFloat()
+    .withMessage(inputName + " must be an float number.")
+    .toFloat()
 }
 
 exports.wordValidator = (input, optional = false, isParam = false) => {
@@ -277,6 +284,70 @@ exports.dateValidator = (input, optional = false, isParam = false) => {
     if (!isNaN(new Date(date))) return true
 
     throw new Error(`the given ${inputName} = ${date} is not a date.`)
+  })
+}
+
+exports.searchDateValidator = (input) => {
+  const [optional, isParam] = [true, false]
+  const { head, inputName } = basicValidator(input, optional, isParam)
+
+  return head.custom((date) => {
+    if (Array.isArray(date)) {
+      if (date.length !== 2) {
+        throw new Error(
+          `the given ${inputName} date array = ${date} does not have two dates.`
+        )
+      }
+
+      date.forEach((el, idx) => {
+        const prefix = idx === 0 ? "minimum" : "maximum"
+        if (isNaN(new Date(el))) {
+          throw new Error(
+            `the given ${prefix} ${inputName} = ${el} is not a date.`
+          )
+        }
+      })
+    } else if (typeof date === "object" && date !== null) {
+      const { year, month, day, hour } = date
+      const times = [year, month, day, hour]
+
+      for (let i = 0; i < times.length - 1; i++) {
+        const value = times[parseInt(i)]
+        const nextValue = times[i + 1]
+
+        const valueCondition =
+          Number.isInteger(value) &&
+          (i === 0
+            ? String(value).length === 4
+            : String(value).length === 2 || String(value).length === 1)
+
+        const nextValueCondition =
+          Number.isInteger(nextValue) &&
+          (String(value).length === 2 || String(value).length === 1)
+
+        if (i === 0 && !valueCondition) {
+          throw new Error(
+            `the given ${inputName} object = ${date} has to have at least a year property.`
+          )
+        }
+
+        if (!valueCondition && nextValueCondition) {
+          throw new Error(
+            `the given ${inputName} object = ${date} must have values from bigger time measures to be exist for smaller time measure to be input, the time measures are from year, month, day, to hour.`
+          )
+        }
+      }
+    } else if (typeof date === "string") {
+      if (isNaN(new Date(date))) {
+        throw new Error(`the given ${inputName} = ${date} is not a date.`)
+      }
+    } else {
+      throw new Error(
+        `the given ${inputName} = ${date} is not an acceptables string date, array of two string dates, or an object containing the year, month, day, or hour.`
+      )
+    }
+
+    return true
   })
 }
 

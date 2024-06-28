@@ -1,40 +1,61 @@
 /* eslint-disable no-useless-escape */
 
-const { Op, Sequelize } = require("sequelize")
+const { Op } = require("sequelize")
 const { matchedData } = require("express-validator")
 // const models = require("../database/models")
 const { validationPerusal } = require("./validators")
 
-const createDateQuery = (inputName, input, whereOptions, tableName) => {
-  input = new Date(input)
+// How to use postgres extract function in sequelize to get date
+// Sequelize.fn(
+//   `EXTRACT(YEAR from \"${tableName}\".\"${inputName}\") =`,
+//   year
+// )
 
-  input.setHours(input.getHours() + 6)
+const createDateQuery = (inputName, input, whereOptions) => {
+  const dataType = typeof input
 
-  if (whereOptions[Op.and]) {
-    whereOptions[Op.and].push(
-      Sequelize.fn(
-        `EXTRACT(MONTH from \"${tableName}\".\"${inputName}\") =`,
-        input.getMonth() + 1
-      ),
-      Sequelize.fn(
-        `EXTRACT(YEAR from \"${tableName}\".\"${inputName}\") =`,
-        input.getFullYear()
-      )
-    )
-
-    return
+  if (typeof whereOptions[String(inputName)] !== "object") {
+    whereOptions[String(inputName)] = {}
   }
 
-  whereOptions[Op.and] = [
-    Sequelize.fn(
-      `EXTRACT(MONTH from \"${tableName}\".\"${inputName}\") =`,
-      input.getMonth() + 1
-    ),
-    Sequelize.fn(
-      `EXTRACT(YEAR from \"${tableName}\".\"${inputName}\") =`,
-      input.getFullYear()
-    ),
-  ]
+  console.log(input)
+  if (dataType === "string") {
+    input = new Date(input).toISOString()
+
+    whereOptions[String(inputName)] = input
+  } else if (Array.isArray("array")) {
+    whereOptions[String(inputName)] = { [Op.between]: input }
+  } else if (dataType === "object" && input !== null) {
+    const { year, month, day, hour } = input
+    const unformattedTimes = [year, month, day, hour]
+    const times = []
+
+    for (let i = 0; i < unformattedTimes.length; i++) {
+      const time = unformattedTimes[parseInt(i)]
+
+      if (
+        !Number.isInteger(time) ||
+        (i === 0
+          ? String(time).length !== 4
+          : String(time).length !== 2 && String(time).length !== 1)
+      ) {
+        break
+      }
+
+      times.push(time)
+    }
+
+    const startDate = new Date(...times.map((time) => time), 0)
+
+    const lastTime = times.pop()
+    times.push(lastTime + 1)
+
+    const endDate = new Date(...times.map((time) => time), 0)
+
+    const extrema = [startDate.toISOString(), endDate.toISOString()]
+    console.log(extrema)
+    whereOptions[String(inputName)] = { [Op.between]: extrema }
+  }
 }
 
 const createStringQuery = (inputName, input, whereOptions) => {
@@ -53,7 +74,7 @@ const createSubsetObject = (obj, keys) => {
 
 module.exports = {
   createSubsetObject,
-  parseInputs: async (req, otherOptions, modelName) => {
+  parseInputs: async (req, otherOptions) => {
     validationPerusal(req)
 
     const inputsObject = matchedData(req, { locations: ["body"] })
@@ -88,14 +109,14 @@ module.exports = {
         afterMsg += `${inputName} = ${input}, `
       }
 
+      if (typeof input === "boolean") continue
+
       if (lastTwoChar === "At") {
-        createDateQuery(inputName, input, whereOptions, modelName)
+        createDateQuery(inputName, input, whereOptions)
       } else if (typeof input === "number") {
         whereOptions[String(inputName)] = input
       } else if (Array.isArray(input)) {
         whereOptions[String(inputName)] = { [Op.contains]: input }
-      } else if (input === true || input === false) {
-        break
       } else {
         createStringQuery(inputName, input, whereOptions)
       }

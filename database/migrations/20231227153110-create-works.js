@@ -19,6 +19,7 @@ module.exports = {
       },
       phoneNumber: {
         type: Sequelize.STRING,
+        defaultValue: "",
       },
       createdAt: {
         allowNull: false,

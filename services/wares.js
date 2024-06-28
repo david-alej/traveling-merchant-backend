@@ -32,10 +32,6 @@ const findWareQuery = {
 
 exports.findWareQuery = findWareQuery
 
-exports.parseWareInputs = (
-  req,
-  otherOptions = findWareQuery,
-  modelName = "Wares"
-) => {
-  return parseInputs(req, otherOptions, modelName)
+exports.parseWareInputs = (req, otherOptions = findWareQuery) => {
+  return parseInputs(req, otherOptions)
 }

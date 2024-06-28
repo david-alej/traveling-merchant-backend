@@ -20,12 +20,11 @@ module.exports = {
       },
       phoneNumber: {
         type: Sequelize.STRING,
-        allowNull: false,
+        defaultValue: "",
       },
       email: {
         type: Sequelize.STRING,
         defaultValue: "",
-        allowNull: false,
       },
       createdAt: {
         allowNull: false,

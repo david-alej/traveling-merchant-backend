@@ -1,5 +1,6 @@
 /* eslint-disable no-useless-escape */
 
+const { searchDateValidator } = require("../../util/validators")
 const { expect } = require("../common")
 
 const { parseInputs } = require("../../util/index").parseInputs
@@ -14,7 +15,7 @@ const {
 } = require("../../util/index").validators
 const { Api400Error } = require("../../util/index").apiErrors
 
-const { Op, Sequelize } = require("sequelize")
+const { Op } = require("sequelize")
 
 describe("Parsing Inputs", function () {
   let req
@@ -233,26 +234,16 @@ describe("Parsing Inputs", function () {
     })
 
     it("When input is a Date, Then response is an object with properties that include input", async function () {
-      const [key, value] = ["dateAt", new Date()]
-      const modelName = "ModelOne"
+      const [key, value] = ["dateAt", "2023-03-21T09:00:00.000Z"]
       req.body = { [String(key)]: value }
       const expectedQuery = {
         where: {
-          [Op.and]: [
-            Sequelize.fn(
-              `EXTRACT(MONTH from \"${modelName}\".\"${key}\") =`,
-              value.getMonth() + 1
-            ),
-            Sequelize.fn(
-              `EXTRACT(YEAR from \"${modelName}\".\"${key}\") =`,
-              value.getFullYear()
-            ),
-          ],
+          dateAt: value,
         },
         ...otherOptions,
       }
 
-      await dateValidator(key).run(req)
+      await searchDateValidator(key).run(req)
 
       const { afterMsg, inputsObject, query } = await parseInputs(
         req,
@@ -266,31 +257,11 @@ describe("Parsing Inputs", function () {
     })
 
     it("When input is a Date but a date was already given earlier, Then response is an object with properties that includes both date inputs", async function () {
-      const [key, value] = ["dateAt", new Date()]
-      const [keyOne, valueOne] = ["dateOneAt", new Date()]
-      const modelName = "ModelOne"
+      const [key, value] = ["dateAt", new Date().toISOString()]
+      const [keyOne, valueOne] = ["dateOneAt", new Date().toISOString()]
       req.body = { [String(key)]: value, [String(keyOne)]: valueOne }
       const expectedQuery = {
-        where: {
-          [Op.and]: [
-            Sequelize.fn(
-              `EXTRACT(MONTH from \"${modelName}\".\"${key}\") =`,
-              value.getMonth() + 1
-            ),
-            Sequelize.fn(
-              `EXTRACT(YEAR from \"${modelName}\".\"${key}\") =`,
-              value.getFullYear()
-            ),
-            Sequelize.fn(
-              `EXTRACT(MONTH from \"${modelName}\".\"${keyOne}\") =`,
-              valueOne.getMonth() + 1
-            ),
-            Sequelize.fn(
-              `EXTRACT(YEAR from \"${modelName}\".\"${keyOne}\") =`,
-              valueOne.getFullYear()
-            ),
-          ],
-        },
+        where: req.body,
         ...otherOptions,
       }
 
@@ -299,8 +270,7 @@ describe("Parsing Inputs", function () {
 
       const { afterMsg, inputsObject, query } = await parseInputs(
         req,
-        otherOptions,
-        "ModelOne"
+        otherOptions
       )
 
       expect(afterMsg).to.equal(

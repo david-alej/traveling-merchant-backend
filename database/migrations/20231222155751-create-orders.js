@@ -19,12 +19,10 @@ module.exports = {
       },
       tax: {
         type: Sequelize.FLOAT,
-        allowNull: false,
         defaultValue: 0,
       },
       shipment: {
         type: Sequelize.FLOAT,
-        allowNull: false,
         defaultValue: 0,
       },
       expectedAt: {
@@ -33,6 +31,7 @@ module.exports = {
       },
       actualAt: {
         type: Sequelize.DATE,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,

@@ -157,9 +157,9 @@ describe("Transactions Routes", function () {
     const allTransactions = [
       {
         id: 8,
-        ticketId: 0,
+        ticketId: null,
         orderId: 1,
-        payment: 1450,
+        payment: -1450,
         paymentType: "visa",
         paidAt: "2025-01-17T00:00:00.000Z",
         createdAt: "2025-01-17T00:00:00.000Z",
@@ -180,7 +180,7 @@ describe("Transactions Routes", function () {
       {
         id: 7,
         ticketId: 3,
-        orderId: 0,
+        orderId: null,
         payment: -155,
         paymentType: "cash app",
         paidAt: "2025-01-17T00:00:00.000Z",
@@ -203,7 +203,7 @@ describe("Transactions Routes", function () {
       {
         id: 6,
         ticketId: 1,
-        orderId: 0,
+        orderId: null,
         payment: 86.9,
         paymentType: "visa",
         paidAt: "2025-01-16T00:00:00.000Z",
@@ -226,7 +226,7 @@ describe("Transactions Routes", function () {
       {
         id: 5,
         ticketId: 3,
-        orderId: 0,
+        orderId: null,
         payment: 168.27,
         paymentType: "cash",
         paidAt: "2025-01-13T00:00:00.000Z",
@@ -249,7 +249,7 @@ describe("Transactions Routes", function () {
       {
         id: 4,
         ticketId: 2,
-        orderId: 0,
+        orderId: null,
         payment: 200,
         paymentType: "visa",
         paidAt: "2025-01-09T00:00:00.000Z",
@@ -272,7 +272,7 @@ describe("Transactions Routes", function () {
       {
         id: 3,
         ticketId: 1,
-        orderId: 0,
+        orderId: null,
         payment: 150,
         paymentType: "cash app",
         paidAt: "2025-01-09T00:00:00.000Z",
@@ -294,7 +294,7 @@ describe("Transactions Routes", function () {
       },
       {
         id: 2,
-        ticketId: 0,
+        ticketId: null,
         orderId: 2,
         payment: 959.59,
         paymentType: "visa",
@@ -316,7 +316,7 @@ describe("Transactions Routes", function () {
       },
       {
         id: 1,
-        ticketId: 0,
+        ticketId: null,
         orderId: 1,
         payment: 3413.65,
         paymentType: "visa",
@@ -401,20 +401,20 @@ describe("Transactions Routes", function () {
       ])
     })
 
-    it("When a paidAt date is given, Then response is all transactions within that same month and year", async function () {
+    it("When a paidAt date object is given, Then response is all transactions within that same month and year", async function () {
       await getTransactionsIt(
-        { paidAt: new Date("2025-01-2") },
+        { paidAt: { year: 2025, month: 0 } },
         allTransactions
       )
     })
 
-    it("When a created at date is given, Then response is all transactions within that same month and year", async function () {
+    it("When a createdAt date string is given, Then response is all transactions that are is the same exact date", async function () {
       await getTransactionsIt({ createdAt: new Date("2024-11-11") })
     })
 
-    it("When a updated at date is given, Then response is all transactions within that same month and year", async function () {
+    it("When a updatedAt date object is given, Then response is all transactions within that same month and year", async function () {
       await getTransactionsIt(
-        { updatedAt: new Date("2025-01-02") },
+        { updatedAt: { year: 2025, month: 0 } },
         allTransactions
       )
     })

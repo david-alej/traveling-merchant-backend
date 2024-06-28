@@ -347,13 +347,13 @@ describe("WaresTickets Routes", function () {
 
     it("When a created at date is given, Then response is all warestickets within that same month and year", async function () {
       await getWaresTicketsIt(
-        { createdAt: new Date("2025-01-12") },
+        { createdAt: { year: 2025, month: 0 } },
         allWaresTickets
       )
     })
 
     it("When a updated at date is given, Then response is all warestickets within that same month and year", async function () {
-      await getWaresTicketsIt({ updatedAt: new Date("2024-12-10") })
+      await getWaresTicketsIt({ updatedAt: { year: 2024, month: 11 } })
     })
 
     it("When multiple inputs are given, Then response is all warestickets that satisfy the input comparisons", async function () {
@@ -363,8 +363,8 @@ describe("WaresTickets Routes", function () {
           wareId: 2,
           amount: 1,
           returned: 0,
-          createdAt: "2025-01-09",
-          updatedAt: "2025-01-09",
+          createdAt: { year: 2025, month: 0, day: 8 },
+          updatedAt: { year: 2025, month: 0, day: 8 },
         },
         allWaresTickets[3]
       )
@@ -536,7 +536,6 @@ describe("WaresTickets Routes", function () {
         clientId: 3,
         cost: Math.ceil(Math.random() * 250) + 500,
         paymentPlan: "biweekly",
-        description: null,
       })
       const newTicket = newTicketCreated.dataValues
       const ticketId = newTicket.id
@@ -561,12 +560,16 @@ describe("WaresTickets Routes", function () {
       const afterWaresTicketSearched = await models.WaresTickets.findOne({
         where: { ticketId },
       })
+      const ticketDeleted = await models.Tickets.destroy({
+        where: { id: ticketId },
+      })
 
       expect(status).to.equal(OK)
       expect(data)
         .to.include.string(preMerchantMsg)
         .and.string(` has deleted a waresticket with ticket id = ${ticketId}.`)
       expect(afterWaresTicketSearched).to.equal(null)
+      expect(ticketDeleted).to.equal(1)
     })
   })
 })

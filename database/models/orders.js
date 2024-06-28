@@ -17,11 +17,13 @@ module.exports = (sequelize, DataTypes) => {
       Orders.hasMany(models.OrdersWares, {
         foreignKey: "orderId",
         as: "ordersWares",
+        onDelete: "CASCADE",
       })
 
       Orders.hasMany(models.Transactions, {
         foreignKey: "orderId",
         as: "transactions",
+        onDelete: "CASCADE",
       })
     }
   }

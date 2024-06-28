@@ -345,14 +345,14 @@ describe("OrdersWares Routes", function () {
       await getOrdersWaresIt({ returned: 10 }, allOrdersWares[4])
     })
 
-    it("When a created at date is given, Then response is all orderswares within that same month and year", async function () {
+    it("When a createdAt date is given, Then response is all orderswares within that same month and year", async function () {
       await getOrdersWaresIt(
-        { createdAt: new Date("2025-01-11") },
+        { createdAt: { year: 2025, month: 0 } },
         allOrdersWares
       )
     })
 
-    it("When a updated at date is given, Then response is all orderswares within that same month and year", async function () {
+    it("When a updatedAt date string is given, Then response is all orderswares with the exact same date down to the hour", async function () {
       await getOrdersWaresIt({ updatedAt: new Date("2024-12-10") })
     })
 
@@ -364,8 +364,8 @@ describe("OrdersWares Routes", function () {
           unitPrice: 145,
           amount: 10,
           returned: 10,
-          createdAt: "2025-01-02",
-          updatedAt: "2025-01-02",
+          createdAt: "2025-01-01T00:00:00.000Z",
+          updatedAt: "2025-01-01T00:00:00.000Z",
         },
         allOrdersWares[4]
       )

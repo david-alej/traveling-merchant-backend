@@ -17,8 +17,7 @@ exports.findProviderQuery = findProviderQuery
 
 exports.parseProviderInputs = (
   inputsObject,
-  otherOptions = findProviderQuery,
-  modelName = "Providers"
+  otherOptions = findProviderQuery
 ) => {
-  return parseInputs(inputsObject, otherOptions, modelName)
+  return parseInputs(inputsObject, otherOptions)
 }

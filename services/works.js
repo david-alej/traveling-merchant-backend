@@ -19,5 +19,5 @@ exports.parseWorkInputs = (
     ],
   }
 ) => {
-  return parseInputs(req, includeOptions, "Works")
+  return parseInputs(req, includeOptions)
 }

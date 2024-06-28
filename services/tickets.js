@@ -105,10 +105,6 @@ const findTicketQuery = {
 
 exports.findTicketQuery = findTicketQuery
 
-exports.parseTicketInputs = (
-  req,
-  otherOptions = findTicketQuery,
-  modelName = "Tickets"
-) => {
-  return parseInputs(req, otherOptions, modelName)
+exports.parseTicketInputs = (req, otherOptions = findTicketQuery) => {
+  return parseInputs(req, otherOptions)
 }

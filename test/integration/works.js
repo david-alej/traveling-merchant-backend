@@ -218,8 +218,8 @@ describe("Works Routes", function () {
       await getWorksIt({}, allWorks)
     })
 
-    it("When a updated at date is given, Then response is all clients within that same month and year", async function () {
-      await getWorksIt({ updatedAt: new Date("2025-01-10") }, allWorks)
+    it("When a updatedAt date object is given, Then response is all clients within that same month and year", async function () {
+      await getWorksIt({ updatedAt: { year: 2025, month: 0 } }, allWorks)
     })
 
     it("When a name is given, Then all works that have their names include the given string using case insensitive search", async function () {

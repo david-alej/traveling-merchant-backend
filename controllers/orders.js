@@ -33,24 +33,7 @@ exports.paramOrderId = async (req, res, next, orderId) => {
       )
     }
 
-    const order = searched.dataValues
-
-    order.ordersWares.forEach((ordersWare) => {
-      ordersWare = ordersWare.dataValues
-
-      const stockBought = ordersWare.amount - ordersWare.returned
-      const ware = ordersWare.ware
-      const waresTickets = ware.waresTickets
-      let stockSold = 0
-
-      for (const waresTicket of waresTickets) {
-        stockSold += waresTicket.amount - waresTicket.returned
-      }
-
-      ware.stock = stockBought - stockSold
-    })
-
-    req.targetOrder = order
+    req.targetOrder = searched
 
     next()
   } catch (err) {
@@ -66,6 +49,10 @@ exports.getOrders = async (req, res, next) => {
   try {
     const { afterMsg, query } = await parseOrderInputs(req)
 
+    if (req.body.pending) {
+      query.where.actualAt = null
+    }
+
     const searched = await models.Orders.findAll(query)
 
     if (!searched) {
@@ -74,6 +61,17 @@ exports.getOrders = async (req, res, next) => {
         "Orders not found."
       )
     }
+
+    searched.forEach((order) => {
+      order = order.dataValues
+
+      order.returned = Math.round(order.returned * 100) / 100
+
+      order.paid = Math.round(order.paid * 100) / 100
+
+      order.owed =
+        Math.round((order.cost - order.returned - order.paid) * 100) / 100
+    })
 
     res.json(searched)
   } catch (err) {

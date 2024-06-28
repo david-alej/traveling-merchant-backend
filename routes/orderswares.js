@@ -1,10 +1,10 @@
 const orderswaresRouter = require("express").Router()
 const { orderswaresControllers } = require("../controllers/index")
+const { searchDateValidator } = require("../util/validators")
 const {
   positiveFloatValidator,
   positiveIntegerValidator,
   nonNegativeIntegerValidator,
-  dateValidator,
 } = require("../util/index").validators
 
 orderswaresRouter.param("orderId", orderswaresControllers.paramOrderId)
@@ -21,8 +21,8 @@ orderswaresRouter.post(
     positiveIntegerValidator("amount", true),
     positiveFloatValidator("unitPrice", true),
     nonNegativeIntegerValidator("returned", true),
-    dateValidator("createdAt", true),
-    dateValidator("updatedAt", true),
+    searchDateValidator("createdAt", true),
+    searchDateValidator("updatedAt", true),
   ],
   orderswaresControllers.getOrdersWares
 )

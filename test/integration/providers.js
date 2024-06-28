@@ -218,11 +218,14 @@ describe("Providers Routes", function () {
       await getProvidersIt({ email: "amazon.support" }, allProviders[1])
     })
 
-    it("When a created at date is given, Then response is all providers within that same month and year", async function () {
-      await getProvidersIt({ createdAt: "2025-01-11" }, allProviders)
+    it("When a createdAt date object is given, Then response is all providers within that same month and year", async function () {
+      await getProvidersIt(
+        { createdAt: { year: 2025, month: 0 } },
+        allProviders
+      )
     })
 
-    it("When a updated at date is given, Then response is all providers within that same month and year", async function () {
+    it("When a updatedAt date string is given, Then response is all providers with the exact date up to the hour", async function () {
       await getProvidersIt({ updatedAt: new Date("2024-12-11") })
     })
 
@@ -233,8 +236,8 @@ describe("Providers Routes", function () {
           address: "0000",
           phoneNumber: "5125869601",
           email: "",
-          createdAt: "2025-01-11",
-          updatedAt: "2025-01-11",
+          createdAt: "2025-01-01T00:00:00.000Z",
+          updatedAt: "2025-01-01T00:00:00.000Z",
         },
         allProviders[0]
       )

@@ -20,10 +20,6 @@ const findOrdersWareQuery = {
 }
 exports.findOrdersWareQuery = findOrdersWareQuery
 
-exports.parseOrdersWareInputs = (
-  req,
-  otherOptions = findOrdersWareQuery,
-  modelName = "OrdersWares"
-) => {
-  return parseInputs(req, otherOptions, modelName)
+exports.parseOrdersWareInputs = (req, otherOptions = findOrdersWareQuery) => {
+  return parseInputs(req, otherOptions)
 }

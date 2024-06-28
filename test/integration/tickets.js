@@ -223,7 +223,7 @@ describe("Tickets Routes", function () {
           {
             id: 7,
             ticketId: 3,
-            orderId: 0,
+            orderId: null,
             payment: -155,
             paymentType: "cash app",
             paidAt: "2025-01-17T00:00:00.000Z",
@@ -233,7 +233,7 @@ describe("Tickets Routes", function () {
           {
             id: 5,
             ticketId: 3,
-            orderId: 0,
+            orderId: null,
             payment: 168.27,
             paymentType: "cash",
             paidAt: "2025-01-13T00:00:00.000Z",
@@ -295,7 +295,7 @@ describe("Tickets Routes", function () {
           {
             id: 4,
             ticketId: 2,
-            orderId: 0,
+            orderId: null,
             payment: 200,
             paymentType: "visa",
             paidAt: "2025-01-09T00:00:00.000Z",
@@ -393,7 +393,7 @@ describe("Tickets Routes", function () {
           {
             id: 6,
             ticketId: 1,
-            orderId: 0,
+            orderId: null,
             payment: 86.9,
             paymentType: "visa",
             paidAt: "2025-01-16T00:00:00.000Z",
@@ -403,7 +403,7 @@ describe("Tickets Routes", function () {
           {
             id: 3,
             ticketId: 1,
-            orderId: 0,
+            orderId: null,
             payment: 150,
             paymentType: "cash app",
             paidAt: "2025-01-09T00:00:00.000Z",
@@ -483,20 +483,16 @@ describe("Tickets Routes", function () {
       await getTicketsIt({ description: "" }, allTickets)
     })
 
-    it("When a created at date is given, Then response is all tickets within that same month and year", async function () {
-      await getTicketsIt({ createdAt: new Date("2025-01-11") }, allTickets)
+    it("When a createdAt date object is given, Then response is all tickets within that same month and year", async function () {
+      await getTicketsIt({ createdAt: { year: 2025, month: 0 } }, allTickets)
     })
 
-    it("When a updated at date is given, Then response is all tickets within that same month and year", async function () {
+    it("When a updatedAt date string is given, Then response is all tickets with the exact date given", async function () {
       await getTicketsIt({ updatedAt: new Date("2025-02-10") })
     })
 
     it("When a pending is given, Then response is all tickets that have not been paid in full are returned", async function () {
-      await getTicketsIt({ pending: true }, [
-        allTickets[1],
-        allTickets[0],
-        allTickets[2],
-      ])
+      await getTicketsIt({ pending: true }, [allTickets[1]])
     })
 
     it("When multiple inputs are given, Then response is all tickets that satisfy the input comparisons", async function () {
@@ -756,6 +752,17 @@ describe("Tickets Routes", function () {
       })
       const newTicket = ticketCreated.dataValues
       const ticketId = newTicket.id
+      await models.WaresTickets.create({
+        ticketId,
+        wareId: 1,
+        amount: 1,
+      })
+      await models.Transactions.create({
+        ticketId,
+        payment: 170,
+        paymentType: "cash app",
+        paidAt: new Date(),
+      })
 
       const { status, data } = await client.delete(
         "/tickets/" + ticketId,
@@ -765,6 +772,12 @@ describe("Tickets Routes", function () {
       const afterTicketSearched = await models.Tickets.findOne({
         where: { id: ticketId },
       })
+      const afterTransactionSearched = await models.Transactions.findOne({
+        where: { ticketId },
+      })
+      const afterWareTicketSearched = await models.WaresTickets.findOne({
+        where: { ticketId },
+      })
 
       expect(status).to.equal(OK)
       expect(data)
@@ -773,6 +786,8 @@ describe("Tickets Routes", function () {
           ` has deleted a ticket with id = ${ticketId} and fullname = ${newTicket.fullname}.`
         )
       expect(afterTicketSearched).to.equal(null)
+      expect(afterTransactionSearched).to.equal(null)
+      expect(afterWareTicketSearched).to.equal(null)
     })
   })
 })

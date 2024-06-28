@@ -1,10 +1,10 @@
 const clientsRouter = require("express").Router()
 const { clientsControllers } = require("../controllers/index")
+const { searchDateValidator } = require("../util/validators")
 const {
   positiveIntegerValidator,
   wordValidator,
   stringValidator,
-  dateValidator,
   phoneNumberValidator,
 } = require("../util/index").validators
 
@@ -20,8 +20,8 @@ clientsRouter.post(
     stringValidator("address", true),
     stringValidator("description", true),
     stringValidator("phoneNumber", true),
-    dateValidator("createdAt", true),
-    dateValidator("updatedAt", true),
+    searchDateValidator("createdAt", true),
+    searchDateValidator("updatedAt", true),
   ],
   clientsControllers.getClients
 )

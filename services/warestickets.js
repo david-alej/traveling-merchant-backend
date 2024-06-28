@@ -62,10 +62,6 @@ const findWaresTicketQuery = {
 
 exports.findWaresTicketQuery = findWaresTicketQuery
 
-exports.parseWaresTicketInputs = (
-  req,
-  otherOptions = findWaresTicketQuery,
-  modelName = "WaresTickets"
-) => {
-  return parseInputs(req, otherOptions, modelName)
+exports.parseWaresTicketInputs = (req, otherOptions = findWaresTicketQuery) => {
+  return parseInputs(req, otherOptions)
 }

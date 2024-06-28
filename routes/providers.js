@@ -3,7 +3,7 @@ const { providersControllers } = require("../controllers/index")
 const {
   stringValidator,
   wordValidator,
-  dateValidator,
+  searchDateValidator,
   phoneNumberValidator,
   emailValidator,
 } = require("../util/index").validators
@@ -19,8 +19,8 @@ providersRouter.post(
     stringValidator("address", true),
     stringValidator("phoneNumber", true),
     stringValidator("email", true),
-    dateValidator("createdAt", true),
-    dateValidator("updatedAt", true),
+    searchDateValidator("createdAt", true),
+    searchDateValidator("updatedAt", true),
   ],
   providersControllers.getProviders
 )
