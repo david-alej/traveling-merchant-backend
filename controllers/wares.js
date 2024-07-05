@@ -47,7 +47,7 @@ exports.getWares = async (req, res, next) => {
     } = await parseWareInputs(req)
 
     if (stock) delete query.where.stock
-    console.log(query)
+
     const searched = await models.Wares.findAll(query)
 
     if (!searched) {

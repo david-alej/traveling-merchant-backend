@@ -1,5 +1,6 @@
 const ticketsRouter = require("express").Router()
 const { ticketsControllers } = require("../controllers/index")
+const { dateValidator } = require("../util/validators")
 const {
   arrayObjectValidator,
   booleanValidator,
@@ -21,6 +22,7 @@ ticketsRouter.post(
     nonNegativeFloatValidator("cost", true),
     stringValidator("paymentPlan", true),
     stringValidator("description", true),
+    searchDateValidator("soldAt"),
     searchDateValidator("createdAt"),
     searchDateValidator("updatedAt"),
     booleanValidator("pending", true),
@@ -35,6 +37,7 @@ ticketsRouter.post(
     nonNegativeFloatValidator("cost", true),
     wordValidator("paymentPlan"),
     stringValidator("description", true),
+    dateValidator("soldAt"),
     arrayObjectValidator("waresTickets"),
   ],
   ticketsControllers.postValidation,
@@ -48,6 +51,7 @@ ticketsRouter.put(
     nonNegativeFloatValidator("cost", true),
     wordValidator("paymentPlan", true),
     stringValidator("description", true),
+    dateValidator("soldAt", true),
   ],
   ticketsControllers.putTicket
 )

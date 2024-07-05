@@ -25,6 +25,7 @@ describe("Tickets Routes", function () {
       "cost",
       "paymentPlan",
       "description",
+      "soldAt",
       "createdAt",
       "updatedAt",
       "returned",
@@ -194,6 +195,7 @@ describe("Tickets Routes", function () {
         cost: 168.27,
         paymentPlan: "lump sum",
         description: "",
+        soldAt: "2025-01-13T06:00:00.000Z",
         createdAt: "2025-01-13T00:00:00.000Z",
         updatedAt: "2025-01-13T00:00:00.000Z",
         returned: 155,
@@ -266,6 +268,7 @@ describe("Tickets Routes", function () {
         cost: 488.52,
         paymentPlan: "biweekly",
         description: "",
+        soldAt: "2025-01-09T00:00:00.000Z",
         createdAt: "2025-01-09T00:00:00.000Z",
         updatedAt: "2025-01-09T00:00:00.000Z",
         returned: 0,
@@ -328,6 +331,7 @@ describe("Tickets Routes", function () {
         cost: 391.9,
         paymentPlan: "weekly",
         description: "",
+        soldAt: "2025-01-09T00:00:00.000Z",
         createdAt: "2025-01-09T00:00:00.000Z",
         updatedAt: "2025-01-09T00:00:00.000Z",
         returned: 155,
@@ -502,6 +506,7 @@ describe("Tickets Routes", function () {
           cost: 488.52,
           paymentPlan: "biweekly",
           description: "",
+          soldAt: "2025-01-09T00:00:00.000Z",
           createdAt: "2025-01-09T00:00:00.000Z",
           updatedAt: "2025-01-09T00:00:00.000Z",
         },
@@ -561,6 +566,7 @@ describe("Tickets Routes", function () {
         clientId: Math.ceil(Math.random() * 3),
         cost: Math.floor(Math.random() * 4) + 50,
         paymentPlan: "weekly",
+        soldAt: new Date("2025-01-23").toISOString(),
         waresTickets,
       }
 
@@ -627,6 +633,7 @@ describe("Tickets Routes", function () {
         clientId: Math.ceil(Math.random() * 3),
         cost: Math.floor(Math.random() * 4) + 50,
         paymentPlan: "weekly",
+        soldAt: new Date("2025-01-23"),
         waresTickets,
       }
 
@@ -645,9 +652,11 @@ describe("Tickets Routes", function () {
         { wareId: 2, amount: 1 },
         { wareId: 5, amount: 2 },
       ]
+      const soldAt = new Date("2025-01-23").toISOString()
       const requestBody = {
         clientId: 3,
         paymentPlan: "weekly",
+        soldAt,
         waresTickets,
       }
 
@@ -658,6 +667,7 @@ describe("Tickets Routes", function () {
       )
 
       delete requestBody.waresTickets
+      delete requestBody.soldAt
       const newTicketSearched = await models.Tickets.findOne({
         where: requestBody,
       })
@@ -680,6 +690,7 @@ describe("Tickets Routes", function () {
         .to.include.string(preMerchantMsg)
         .and.string(" ticket has been created.")
       expect(newTicket).to.include(requestBody)
+      expect(newTicket.soldAt.toISOString()).to.equal(soldAt)
       expect(newWaresTickets[0]).to.include(waresTickets[1])
       expect(newWaresTickets[1]).to.include(waresTickets[0])
       expect(newTicketDeleted).to.equal(1)
@@ -707,6 +718,7 @@ describe("Tickets Routes", function () {
         clientId: Math.ceil(Math.random() * 3),
         cost: round(Math.random() * 5) + 14,
         paymentPlan: ["weekly", "biweekly"][Math.floor(Math.random() * 2)],
+        soldAt: new Date("2023-01-23"),
       })
       const ticketBefore = ticketBeforeCreated.dataValues
       const ticketId = ticketBefore.id
@@ -715,6 +727,7 @@ describe("Tickets Routes", function () {
         cost: round(Math.random() * 5 + 9),
         paymentPlan: ["weekly", "lump-sum"][Math.floor(Math.random() * 2)],
         description: faker.lorem.sentence({ min: 3, max: 10 }),
+        soldAt: new Date("2025-01-23").toISOString(),
       }
 
       const { status, data } = await client.put(
@@ -727,6 +740,7 @@ describe("Tickets Routes", function () {
         where: { id: ticketId },
       })
       const ticketAfter = ticketAfterSearched.dataValues
+      ticketAfter.soldAt = ticketAfter.soldAt.toISOString()
       const ticketDeleted = await models.Tickets.destroy({
         where: { id: ticketId },
       })
@@ -749,6 +763,7 @@ describe("Tickets Routes", function () {
         clientId: Math.ceil(Math.random() * 3),
         cost: round(Math.random() * 50) + 170,
         paymentPlan: ["monthly", "biweekly"][Math.floor(Math.random() * 2)],
+        soldAt: new Date("2025-01-12"),
       })
       const newTicket = ticketCreated.dataValues
       const ticketId = newTicket.id

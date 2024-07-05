@@ -39,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       cost: DataTypes.FLOAT,
       paymentPlan: DataTypes.STRING,
       description: DataTypes.TEXT,
+      soldAt: DataTypes.DATE,
     },
     {
       sequelize,

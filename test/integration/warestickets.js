@@ -155,6 +155,7 @@ describe("WaresTickets Routes", function () {
           cost: 168.27,
           paymentPlan: "lump sum",
           description: "",
+          soldAt: "2025-01-13T06:00:00.000Z",
           createdAt: "2025-01-13T00:00:00.000Z",
           updatedAt: "2025-01-13T00:00:00.000Z",
           returned: 155,
@@ -185,6 +186,7 @@ describe("WaresTickets Routes", function () {
           cost: 488.52,
           paymentPlan: "biweekly",
           description: "",
+          soldAt: "2025-01-09T00:00:00.000Z",
           createdAt: "2025-01-09T00:00:00.000Z",
           updatedAt: "2025-01-09T00:00:00.000Z",
           returned: 0,
@@ -215,6 +217,7 @@ describe("WaresTickets Routes", function () {
           cost: 391.9,
           paymentPlan: "weekly",
           description: "",
+          soldAt: "2025-01-09T00:00:00.000Z",
           createdAt: "2025-01-09T00:00:00.000Z",
           updatedAt: "2025-01-09T00:00:00.000Z",
           returned: 155,
@@ -245,6 +248,7 @@ describe("WaresTickets Routes", function () {
           cost: 391.9,
           paymentPlan: "weekly",
           description: "",
+          soldAt: "2025-01-09T00:00:00.000Z",
           createdAt: "2025-01-09T00:00:00.000Z",
           updatedAt: "2025-01-09T00:00:00.000Z",
           returned: 155,
@@ -275,6 +279,7 @@ describe("WaresTickets Routes", function () {
           cost: 391.9,
           paymentPlan: "weekly",
           description: "",
+          soldAt: "2025-01-09T00:00:00.000Z",
           createdAt: "2025-01-09T00:00:00.000Z",
           updatedAt: "2025-01-09T00:00:00.000Z",
           returned: 155,
@@ -536,6 +541,7 @@ describe("WaresTickets Routes", function () {
         clientId: 3,
         cost: Math.ceil(Math.random() * 250) + 500,
         paymentPlan: "biweekly",
+        soldAt: new Date("2025-01-23"),
       })
       const newTicket = newTicketCreated.dataValues
       const ticketId = newTicket.id
