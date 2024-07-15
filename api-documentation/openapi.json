@@ -38,7 +38,9 @@
             }
           }
         },
-        "tags": ["Api Documentation"]
+        "tags": [
+          "Api Documentation"
+        ]
       }
     },
     "/login": {
@@ -62,7 +64,9 @@
             }
           }
         },
-        "tags": ["Login"]
+        "tags": [
+          "Login"
+        ]
       },
       "post": {
         "summary": "Log into the application.",
@@ -123,7 +127,9 @@
             }
           }
         },
-        "tags": ["Login"]
+        "tags": [
+          "Login"
+        ]
       }
     },
     "/logout": {
@@ -147,7 +153,9 @@
             }
           }
         },
-        "tags": ["Logout"]
+        "tags": [
+          "Logout"
+        ]
       },
       "post": {
         "summary": "Log out the application.",
@@ -167,7 +175,9 @@
             }
           }
         },
-        "tags": ["Logout"]
+        "tags": [
+          "Logout"
+        ]
       }
     },
     "/merchant/{merchantId}": {
@@ -215,7 +225,9 @@
             }
           }
         },
-        "tags": ["Merchant"]
+        "tags": [
+          "Merchant"
+        ]
       },
       "put": {
         "summary": "Update merchant",
@@ -273,7 +285,9 @@
             }
           }
         },
-        "tags": ["Merchant"]
+        "tags": [
+          "Merchant"
+        ]
       }
     },
     "/clients/{clientId}": {
@@ -321,7 +335,9 @@
             }
           }
         },
-        "tags": ["Clients"]
+        "tags": [
+          "Clients"
+        ]
       },
       "put": {
         "summary": "Update client",
@@ -382,7 +398,9 @@
             }
           }
         },
-        "tags": ["Clients"]
+        "tags": [
+          "Clients"
+        ]
       },
       "delete": {
         "summary": "Delete client",
@@ -414,7 +432,9 @@
             }
           }
         },
-        "tags": ["Clients"]
+        "tags": [
+          "Clients"
+        ]
       }
     },
     "/clients/search": {
@@ -428,7 +448,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/clientsPostSearch"
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/clientsPostSearchDateString"
+                  },
+                  {
+                    "$ref": "#/components/schemas/clientsPostSearchDateObject"
+                  }
+                ]
               }
             }
           }
@@ -447,14 +474,19 @@
                     "value": "[{\"id\":4,\"workId\":3,\"fullname\":\"Madilyn Langosh\",\"address\":\"1571 Weekly Street\",\"phoneNumber\":\"2103424367\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"tickets\":[{\"id\":3,\"clientId\":4,\"cost\":168.27,\"paymentPlan\":\"lump sum\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"returned\":155,\"paid\":13.27,\"owed\":0}],\"work\":{\"id\":3,\"name\":\"Lynch PLC\",\"address\":\"38 Lafayette St.\",\"phoneNumber\":\"9103623505\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\"}},{\"id\":3,\"workId\":2,\"fullname\":\"Kellen Paucek\",\"address\":\"1454 Sussex Court\",\"phoneNumber\":\"2543865553\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"tickets\":[{\"id\":2,\"clientId\":3,\"cost\":488.52,\"paymentPlan\":\"biweekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"paid\":200,\"owed\":288.52}],\"work\":{\"id\":2,\"name\":\"Deckow and Sons\",\"address\":\"245 John Drive\",\"phoneNumber\":\"7644084620\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}},{\"id\":2,\"workId\":1,\"fullname\":\"James Moe\",\"address\":\"1823 Steele Street\",\"phoneNumber\":\"9566347775\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"tickets\":[{\"id\":1,\"clientId\":2,\"cost\":391.9,\"paymentPlan\":\"weekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":155,\"paid\":236.9,\"owed\":0}],\"work\":{\"id\":1,\"name\":\"Hamill, Denesik and Davis\",\"address\":\"38 Galvin Ave.\",\"phoneNumber\":\"9075554011\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}},{\"id\":1,\"workId\":1,\"fullname\":\"Defective\",\"address\":\"0000 Street\",\"phoneNumber\":\"0000000000\",\"description\":\"\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"tickets\":[],\"work\":{\"id\":1,\"name\":\"Hamill, Denesik and Davis\",\"address\":\"38 Galvin Ave.\",\"phoneNumber\":\"9075554011\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}]"
                   },
                   "With more than one request body inputs ({\"workId\":2,\"fullname\":\"Pau\",\"address\":\"1454\",\"phoneNumber\":\"2543865553\",\"createdAt\":\"2025-01-11\",\"updatedAt\":\"2025-01-11\"}), this returns all clients that matches all the inputs": {
-                    "value": "{\"id\":3,\"workId\":2,\"fullname\":\"Kellen Paucek\",\"address\":\"1454 Sussex Court\",\"phoneNumber\":\"2543865553\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"tickets\":[{\"id\":2,\"clientId\":3,\"cost\":488.52,\"paymentPlan\":\"biweekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"paid\":200,\"owed\":288.52}],\"work\":{\"id\":2,\"name\":\"Deckow and Sons\",\"address\":\"245 John Drive\",\"phoneNumber\":\"7644084620\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}"
+                    "value": "[{\"id\":3,\"workId\":2,\"fullname\":\"Kellen Paucek\",\"address\":\"1454 Sussex Court\",\"phoneNumber\":\"2543865553\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"tickets\":[{\"id\":2,\"clientId\":3,\"cost\":488.52,\"paymentPlan\":\"biweekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"paid\":200,\"owed\":288.52}],\"work\":{\"id\":2,\"name\":\"Deckow and Sons\",\"address\":\"245 John Drive\",\"phoneNumber\":\"7644084620\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}]"
+                  },
+                  "With date object in the request body ({createdAt: {year: 2024, month: 1, day:11 }}), this returns all clients that have the same year, month, and day": {
+                    "value": "[{\"id\":3,\"workId\":2,\"fullname\":\"Kellen Paucek\",\"address\":\"1454 Sussex Court\",\"phoneNumber\":\"2543865553\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"tickets\":[{\"id\":2,\"clientId\":3,\"cost\":488.52,\"paymentPlan\":\"biweekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"paid\":200,\"owed\":288.52}],\"work\":{\"id\":2,\"name\":\"Deckow and Sons\",\"address\":\"245 John Drive\",\"phoneNumber\":\"7644084620\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}]"
                   }
                 }
               }
             }
           }
         },
-        "tags": ["Clients"]
+        "tags": [
+          "Clients"
+        ]
       }
     },
     "/clients": {
@@ -489,7 +521,9 @@
             }
           }
         },
-        "tags": ["Clients"]
+        "tags": [
+          "Clients"
+        ]
       }
     },
     "/orders/{orderId}": {
@@ -513,12 +547,12 @@
         "operationId": "",
         "responses": {
           "200": {
-            "description": "OK, returns order data with associated provider, waresBought, and expenses.",
+            "description": "OK, returns order data with associated provider, wares bought, and expenses.",
             "content": {
               "application/json": {
                 "examples": {
                   "Order found given order id": {
-                    "value": "{\"id\":2,\"providerId\":2,\"cost\":959.59,\"tax\":89.59,\"shipment\":20,\"expectedAt\":\"2025-01-09T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\",\"provider\":{\"id\":2,\"name\":\"Ebay\",\"address\":\"0000 online\",\"phoneNumber\":\"5125869601\",\"email\":\"\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"},\"waresBought\":[{\"id\":4,\"wareId\":4,\"orderId\":2,\"unitPrice\":150,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":4,\"name\":\"Versace Men's 4-Pc. Eros Eau de Toilette Gift Set\",\"type\":\"perfume\",\"tags\":[\"men\",\"4-pc\"],\"unitPrice\":176,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"sold\":[],\"stock\":5}},{\"id\":5,\"wareId\":5,\"orderId\":2,\"unitPrice\":10,\"amount\":10,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":5,\"name\":\"Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle\",\"type\":\"braclet\",\"tags\":[\"unisex\"],\"unitPrice\":14,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"sold\":[{\"amount\":2,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"ticketId\":1,\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"wareId\":5}],\"stock\":8}}]}"
+                    "value": "{\"id\":2,\"providerId\":2,\"cost\":959.59,\"tax\":89.59,\"shipment\":20,\"expectedAt\":\"2025-01-09T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\",\"provider\":{\"id\":2,\"name\":\"Ebay\",\"address\":\"0000 online\",\"phoneNumber\":\"5125869601\",\"email\":\"\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"},\"ordersWares\":[{\"id\":4,\"wareId\":4,\"orderId\":2,\"unitPrice\":150,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":4,\"name\":\"Versace Men's 4-Pc. Eros Eau de Toilette Gift Set\",\"type\":\"perfume\",\"tags\":[\"men\",\"4-pc\"],\"unitPrice\":176,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":5}},{\"id\":5,\"wareId\":5,\"orderId\":2,\"unitPrice\":10,\"amount\":10,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":5,\"name\":\"Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle\",\"type\":\"braclet\",\"tags\":[\"unisex\"],\"unitPrice\":14,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":8}}]}"
                   }
                 }
               }
@@ -537,7 +571,9 @@
             }
           }
         },
-        "tags": ["Orders"]
+        "tags": [
+          "Orders"
+        ]
       },
       "put": {
         "summary": "Update order",
@@ -598,7 +634,9 @@
             }
           }
         },
-        "tags": ["Orders"]
+        "tags": [
+          "Orders"
+        ]
       },
       "delete": {
         "summary": "Delete order",
@@ -630,7 +668,9 @@
             }
           }
         },
-        "tags": ["Orders"]
+        "tags": [
+          "Orders"
+        ]
       }
     },
     "/orders/search": {
@@ -644,7 +684,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ordersPostSearch"
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/ordersPostSearchDateString"
+                  },
+                  {
+                    "$ref": "#/components/schemas/ordersPostSearchDateObject"
+                  }
+                ]
               }
             }
           }
@@ -652,25 +699,30 @@
         "operationId": "",
         "responses": {
           "200": {
-            "description": "OK, returns order data with associated provider, waresBought, and expenses.",
+            "description": "OK, returns order data with associated provider, wares bought, and expenses.",
             "content": {
               "application/json": {
                 "examples": {
                   "With no request body input, this returns all orders ordered by order id descending": {
-                    "value": "[{\"id\":2,\"providerId\":2,\"cost\":959.59,\"tax\":89.59,\"shipment\":20,\"expectedAt\":\"2025-01-09T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\",\"provider\":{\"id\":2,\"name\":\"Ebay\",\"address\":\"0000 online\",\"phoneNumber\":\"5125869601\",\"email\":\"\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"},\"waresBought\":[{\"id\":4,\"wareId\":4,\"orderId\":2,\"unitPrice\":150,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":4,\"name\":\"Versace Men's 4-Pc. Eros Eau de Toilette Gift Set\",\"type\":\"perfume\",\"tags\":[\"men\",\"4-pc\"],\"unitPrice\":176,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"sold\":[],\"stock\":5}},{\"id\":5,\"wareId\":5,\"orderId\":2,\"unitPrice\":10,\"amount\":10,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":5,\"name\":\"Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle\",\"type\":\"braclet\",\"tags\":[\"unisex\"],\"unitPrice\":14,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"sold\":[{\"amount\":2,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"ticketId\":1,\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"wareId\":5}],\"stock\":8}}]},{\"id\":1,\"providerId\":1,\"cost\":3413.65,\"tax\":283.65,\"shipment\":50,\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"expectedAt\":\"2025-01-08T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"provider\":{\"id\":1,\"name\":\"Amazon\",\"address\":\"0000 online\",\"phoneNumber\":\"1632474734\",\"email\":\"derick_kertzmann@amazon.support.com\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"},\"waresBought\":[{\"id\":1,\"wareId\":1,\"orderId\":1,\"unitPrice\":145,\"amount\":10,\"returned\":10,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":1,\"name\":\"Loewe 001 Woman Perfume\",\"type\":\"perfume\",\"tags\":[\"women\",\"1-pc\"],\"unitPrice\":155,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"sold\":[{\"ticketId\":1,\"wareId\":1,\"amount\":1,\"returned\":1,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"},{\"ticketId\":3,\"wareId\":1,\"amount\":1,\"returned\":1,\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\"}],\"stock\":0}},{\"id\":2,\"wareId\":2,\"orderId\":1,\"unitPrice\":160,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":2,\"name\":\"DIOR 3-Pc. J'dore Eau de Parfum Gift Set\",\"type\":\"perfume\",\"tags\":[\"women\",\"3-pc\"],\"unitPrice\":178,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"sold\":[{\"amount\":1,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"ticketId\":1,\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"wareId\":2}],\"stock\":4}},{\"id\":3,\"wareId\":3,\"orderId\":1,\"unitPrice\":415,\"amount\":2,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":3,\"name\":\"The Leather Medium Tote Bag\",\"type\":\"bag\",\"tags\":[\"women\"],\"unitPrice\":450,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"sold\":[{\"amount\":1,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"ticketId\":2,\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"wareId\":3}],\"stock\":1}}]}]"
+                    "value": "[{\"id\":2,\"providerId\":2,\"cost\":959.59,\"tax\":89.59,\"shipment\":20,\"expectedAt\":\"2025-01-09T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\",\"provider\":{\"id\":2,\"name\":\"Ebay\",\"address\":\"0000 online\",\"phoneNumber\":\"5125869601\",\"email\":\"\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"},\"ordersWares\":[{\"id\":4,\"wareId\":4,\"orderId\":2,\"unitPrice\":150,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":4,\"name\":\"Versace Men's 4-Pc. Eros Eau de Toilette Gift Set\",\"type\":\"perfume\",\"tags\":[\"men\",\"4-pc\"],\"unitPrice\":176,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":5}},{\"id\":5,\"wareId\":5,\"orderId\":2,\"unitPrice\":10,\"amount\":10,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":5,\"name\":\"Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle\",\"type\":\"braclet\",\"tags\":[\"unisex\"],\"unitPrice\":14,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":8}}]},{\"id\":1,\"providerId\":1,\"cost\":3413.65,\"tax\":283.65,\"shipment\":50,\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"expectedAt\":\"2025-01-08T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"provider\":{\"id\":1,\"name\":\"Amazon\",\"address\":\"0000 online\",\"phoneNumber\":\"1632474734\",\"email\":\"derick_kertzmann@amazon.support.com\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"},\"ordersWares\":[{\"id\":1,\"wareId\":1,\"orderId\":1,\"unitPrice\":145,\"amount\":10,\"returned\":10,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":1,\"name\":\"Loewe 001 Woman Perfume\",\"type\":\"perfume\",\"tags\":[\"women\",\"1-pc\"],\"unitPrice\":155,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":0}},{\"id\":2,\"wareId\":2,\"orderId\":1,\"unitPrice\":160,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":2,\"name\":\"DIOR 3-Pc. J'dore Eau de Parfum Gift Set\",\"type\":\"perfume\",\"tags\":[\"women\",\"3-pc\"],\"unitPrice\":178,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":4}},{\"id\":3,\"wareId\":3,\"orderId\":1,\"unitPrice\":415,\"amount\":2,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":3,\"name\":\"The Leather Medium Tote Bag\",\"type\":\"bag\",\"tags\":[\"women\"],\"unitPrice\":450,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":1}}]}]"
                   },
                   "With one request body input of expectedAt equal to 2025-01-08, this returns all orders with a partial match": {
-                    "value": "[{\"id\":2,\"providerId\":2,\"cost\":959.59,\"tax\":89.59,\"shipment\":20,\"expectedAt\":\"2025-01-09T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\",\"provider\":{\"id\":2,\"name\":\"Ebay\",\"address\":\"0000 online\",\"phoneNumber\":\"5125869601\",\"email\":\"\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"},\"waresBought\":[{\"id\":4,\"wareId\":4,\"orderId\":2,\"unitPrice\":150,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":4,\"name\":\"Versace Men's 4-Pc. Eros Eau de Toilette Gift Set\",\"type\":\"perfume\",\"tags\":[\"men\",\"4-pc\"],\"unitPrice\":176,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"sold\":[],\"stock\":5}},{\"id\":5,\"wareId\":5,\"orderId\":2,\"unitPrice\":10,\"amount\":10,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":5,\"name\":\"Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle\",\"type\":\"braclet\",\"tags\":[\"unisex\"],\"unitPrice\":14,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"sold\":[{\"amount\":2,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"ticketId\":1,\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"wareId\":5}],\"stock\":8}}]},{\"id\":1,\"providerId\":1,\"cost\":3413.65,\"tax\":283.65,\"shipment\":50,\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"expectedAt\":\"2025-01-08T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"provider\":{\"id\":1,\"name\":\"Amazon\",\"address\":\"0000 online\",\"phoneNumber\":\"1632474734\",\"email\":\"derick_kertzmann@amazon.support.com\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"},\"waresBought\":[{\"id\":1,\"wareId\":1,\"orderId\":1,\"unitPrice\":145,\"amount\":10,\"returned\":10,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":1,\"name\":\"Loewe 001 Woman Perfume\",\"type\":\"perfume\",\"tags\":[\"women\",\"1-pc\"],\"unitPrice\":155,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"sold\":[{\"ticketId\":1,\"wareId\":1,\"amount\":1,\"returned\":1,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"},{\"ticketId\":3,\"wareId\":1,\"amount\":1,\"returned\":1,\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\"}],\"stock\":0}},{\"id\":2,\"wareId\":2,\"orderId\":1,\"unitPrice\":160,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":2,\"name\":\"DIOR 3-Pc. J'dore Eau de Parfum Gift Set\",\"type\":\"perfume\",\"tags\":[\"women\",\"3-pc\"],\"unitPrice\":178,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"sold\":[{\"amount\":1,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"ticketId\":1,\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"wareId\":2}],\"stock\":4}},{\"id\":3,\"wareId\":3,\"orderId\":1,\"unitPrice\":415,\"amount\":2,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":3,\"name\":\"The Leather Medium Tote Bag\",\"type\":\"bag\",\"tags\":[\"women\"],\"unitPrice\":450,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"sold\":[{\"amount\":1,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"ticketId\":2,\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"wareId\":3}],\"stock\":1}}]}]"
+                    "value": "[{\"id\":2,\"providerId\":2,\"cost\":959.59,\"tax\":89.59,\"shipment\":20,\"expectedAt\":\"2025-01-09T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\",\"provider\":{\"id\":2,\"name\":\"Ebay\",\"address\":\"0000 online\",\"phoneNumber\":\"5125869601\",\"email\":\"\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"},\"ordersWares\":[{\"id\":4,\"wareId\":4,\"orderId\":2,\"unitPrice\":150,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":4,\"name\":\"Versace Men's 4-Pc. Eros Eau de Toilette Gift Set\",\"type\":\"perfume\",\"tags\":[\"men\",\"4-pc\"],\"unitPrice\":176,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":5}},{\"id\":5,\"wareId\":5,\"orderId\":2,\"unitPrice\":10,\"amount\":10,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":5,\"name\":\"Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle\",\"type\":\"braclet\",\"tags\":[\"unisex\"],\"unitPrice\":14,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":8}}]},{\"id\":1,\"providerId\":1,\"cost\":3413.65,\"tax\":283.65,\"shipment\":50,\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"expectedAt\":\"2025-01-08T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"provider\":{\"id\":1,\"name\":\"Amazon\",\"address\":\"0000 online\",\"phoneNumber\":\"1632474734\",\"email\":\"derick_kertzmann@amazon.support.com\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"},\"ordersWares\":[{\"id\":1,\"wareId\":1,\"orderId\":1,\"unitPrice\":145,\"amount\":10,\"returned\":10,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":1,\"name\":\"Loewe 001 Woman Perfume\",\"type\":\"perfume\",\"tags\":[\"women\",\"1-pc\"],\"unitPrice\":155,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":0}},{\"id\":2,\"wareId\":2,\"orderId\":1,\"unitPrice\":160,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":2,\"name\":\"DIOR 3-Pc. J'dore Eau de Parfum Gift Set\",\"type\":\"perfume\",\"tags\":[\"women\",\"3-pc\"],\"unitPrice\":178,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":4}},{\"id\":3,\"wareId\":3,\"orderId\":1,\"unitPrice\":415,\"amount\":2,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":3,\"name\":\"The Leather Medium Tote Bag\",\"type\":\"bag\",\"tags\":[\"women\"],\"unitPrice\":450,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":1}}]}]"
                   },
                   "With more than one request body inputs ({\"providerId\":2,\"cost\":959.59,\"tax\":89.59,\"shipment\":20,\"expectedAt\":\"2025-01-02T00:00:00.000Z\",\"actualAt\":\"2025-01-02T00:00:00.000Z\",\"createdAt\":\"2025-01-11\",\"updatedAt\":\"2025-01-11\"}), this returns all orders that matches all the inputs": {
-                    "value": "{\"id\":2,\"providerId\":2,\"cost\":959.59,\"tax\":89.59,\"shipment\":20,\"expectedAt\":\"2025-01-09T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\",\"provider\":{\"id\":2,\"name\":\"Ebay\",\"address\":\"0000 online\",\"phoneNumber\":\"5125869601\",\"email\":\"\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"},\"waresBought\":[{\"id\":4,\"wareId\":4,\"orderId\":2,\"unitPrice\":150,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":4,\"name\":\"Versace Men's 4-Pc. Eros Eau de Toilette Gift Set\",\"type\":\"perfume\",\"tags\":[\"men\",\"4-pc\"],\"unitPrice\":176,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"sold\":[],\"stock\":5}},{\"id\":5,\"wareId\":5,\"orderId\":2,\"unitPrice\":10,\"amount\":10,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":5,\"name\":\"Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle\",\"type\":\"braclet\",\"tags\":[\"unisex\"],\"unitPrice\":14,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"sold\":[{\"amount\":2,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"ticketId\":1,\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"wareId\":5}],\"stock\":8}}]}"
+                    "value": "[{\"id\":2,\"providerId\":2,\"cost\":959.59,\"tax\":89.59,\"shipment\":20,\"expectedAt\":\"2025-01-09T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\",\"provider\":{\"id\":2,\"name\":\"Ebay\",\"address\":\"0000 online\",\"phoneNumber\":\"5125869601\",\"email\":\"\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"},\"ordersWares\":[{\"id\":4,\"wareId\":4,\"orderId\":2,\"unitPrice\":150,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":4,\"name\":\"Versace Men's 4-Pc. Eros Eau de Toilette Gift Set\",\"type\":\"perfume\",\"tags\":[\"men\",\"4-pc\"],\"unitPrice\":176,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":5}},{\"id\":5,\"wareId\":5,\"orderId\":2,\"unitPrice\":10,\"amount\":10,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":5,\"name\":\"Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle\",\"type\":\"braclet\",\"tags\":[\"unisex\"],\"unitPrice\":14,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":8}}]}]"
+                  },
+                  "With a date object input in the request body ({\"updatedAt\":{\"year\":\"2025\",\"month\":\"1\",\"day\":\"11\"}}), this returns all orders with an updatedAt with the same year, month, and day": {
+                    "value": "[{\"id\":2,\"providerId\":2,\"cost\":959.59,\"tax\":89.59,\"shipment\":20,\"expectedAt\":\"2025-01-09T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\",\"provider\":{\"id\":2,\"name\":\"Ebay\",\"address\":\"0000 online\",\"phoneNumber\":\"5125869601\",\"email\":\"\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"},\"ordersWares\":[{\"id\":4,\"wareId\":4,\"orderId\":2,\"unitPrice\":150,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":4,\"name\":\"Versace Men's 4-Pc. Eros Eau de Toilette Gift Set\",\"type\":\"perfume\",\"tags\":[\"men\",\"4-pc\"],\"unitPrice\":176,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":5}},{\"id\":5,\"wareId\":5,\"orderId\":2,\"unitPrice\":10,\"amount\":10,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ware\":{\"id\":5,\"name\":\"Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle\",\"type\":\"braclet\",\"tags\":[\"unisex\"],\"unitPrice\":14,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":8}}]}]"
                   }
                 }
               }
             }
           }
         },
-        "tags": ["Orders"]
+        "tags": [
+          "Orders"
+        ]
       }
     },
     "/orders": {
@@ -705,7 +757,9 @@
             }
           }
         },
-        "tags": ["Orders"]
+        "tags": [
+          "Orders"
+        ]
       }
     },
     "/orderswares/{orderId}/{wareId}": {
@@ -766,7 +820,9 @@
             }
           }
         },
-        "tags": ["OrdersWares"]
+        "tags": [
+          "OrdersWares"
+        ]
       },
       "put": {
         "summary": "Update ordersware",
@@ -830,7 +886,9 @@
             }
           }
         },
-        "tags": ["OrdersWares"]
+        "tags": [
+          "OrdersWares"
+        ]
       },
       "delete": {
         "summary": "Delete ordersware",
@@ -865,7 +923,9 @@
             }
           }
         },
-        "tags": ["OrdersWares"]
+        "tags": [
+          "OrdersWares"
+        ]
       }
     },
     "/orderswares/search": {
@@ -879,7 +939,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/orderswaresPostSearch"
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/orderswaresPostSearchDateString"
+                  },
+                  {
+                    "$ref": "#/components/schemas/orderswaresPostSearchDateObject"
+                  }
+                ]
               }
             }
           }
@@ -895,17 +962,22 @@
                     "value": "[{\"id\":5,\"wareId\":5,\"orderId\":2,\"unitPrice\":10,\"amount\":10,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"order\":{\"id\":2,\"providerId\":2,\"cost\":959.59,\"tax\":89.59,\"shipment\":20,\"expectedAt\":\"2025-01-09T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\"},\"ware\":{\"id\":5,\"name\":\"Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle\",\"type\":\"braclet\",\"tags\":[\"unisex\"],\"unitPrice\":14,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}},{\"id\":4,\"wareId\":4,\"orderId\":2,\"unitPrice\":150,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"order\":{\"id\":2,\"providerId\":2,\"cost\":959.59,\"tax\":89.59,\"shipment\":20,\"expectedAt\":\"2025-01-09T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\"},\"ware\":{\"id\":4,\"name\":\"Versace Men's 4-Pc. Eros Eau de Toilette Gift Set\",\"type\":\"perfume\",\"tags\":[\"men\",\"4-pc\"],\"unitPrice\":176,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}},{\"id\":3,\"wareId\":3,\"orderId\":1,\"unitPrice\":415,\"amount\":2,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"order\":{\"id\":1,\"providerId\":1,\"cost\":3413.65,\"tax\":283.65,\"shipment\":50,\"expectedAt\":\"2025-01-08T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"},\"ware\":{\"id\":3,\"name\":\"The Leather Medium Tote Bag\",\"type\":\"bag\",\"tags\":[\"women\"],\"unitPrice\":450,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}},{\"id\":2,\"wareId\":2,\"orderId\":1,\"unitPrice\":160,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"order\":{\"id\":1,\"providerId\":1,\"cost\":3413.65,\"tax\":283.65,\"shipment\":50,\"expectedAt\":\"2025-01-08T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"},\"ware\":{\"id\":2,\"name\":\"DIOR 3-Pc. J'dore Eau de Parfum Gift Set\",\"type\":\"perfume\",\"tags\":[\"women\",\"3-pc\"],\"unitPrice\":178,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}},{\"id\":1,\"wareId\":1,\"orderId\":1,\"unitPrice\":145,\"amount\":10,\"returned\":10,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"order\":{\"id\":1,\"providerId\":1,\"cost\":3413.65,\"tax\":283.65,\"shipment\":50,\"expectedAt\":\"2025-01-08T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"},\"ware\":{\"id\":1,\"name\":\"Loewe 001 Woman Perfume\",\"type\":\"perfume\",\"tags\":[\"women\",\"1-pc\"],\"unitPrice\":155,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}]"
                   },
                   "With one request body input of updatedAt equal to Mon Dec 09 2024 18:00:00 GMT-0600 (Central Standard Time), this returns all orderswares with a partial match": {
-                    "value": "{}"
+                    "value": "[]"
                   },
                   "With more than one request body inputs ({\"orderId\":1,\"wareId\":1,\"unitPrice\":145,\"amount\":10,\"returned\":10,\"createdAt\":\"2025-01-02\",\"updatedAt\":\"2025-01-02\"}), this returns all orderswares that matches all the inputs": {
                     "value": "{\"id\":1,\"wareId\":1,\"orderId\":1,\"unitPrice\":145,\"amount\":10,\"returned\":10,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"order\":{\"id\":1,\"providerId\":1,\"cost\":3413.65,\"tax\":283.65,\"shipment\":50,\"expectedAt\":\"2025-01-08T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"},\"ware\":{\"id\":1,\"name\":\"Loewe 001 Woman Perfume\",\"type\":\"perfume\",\"tags\":[\"women\",\"1-pc\"],\"unitPrice\":155,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}"
+                  },
+                  "With a date object input in the request body ({\"createdAt\":{\"year\":\"2024\"}}), this returns all orderswares that have createdAt with the same year": {
+                    "value": "[]"
                   }
                 }
               }
             }
           }
         },
-        "tags": ["OrdersWares"]
+        "tags": [
+          "OrdersWares"
+        ]
       }
     },
     "/orderswares": {
@@ -940,7 +1012,9 @@
             }
           }
         },
-        "tags": ["OrdersWares"]
+        "tags": [
+          "OrdersWares"
+        ]
       }
     },
     "/orderswares/{orderId}": {
@@ -1000,7 +1074,9 @@
             }
           }
         },
-        "tags": ["OrdersWares"]
+        "tags": [
+          "OrdersWares"
+        ]
       }
     },
     "/providers/{providerId}": {
@@ -1048,7 +1124,9 @@
             }
           }
         },
-        "tags": ["Providers"]
+        "tags": [
+          "Providers"
+        ]
       },
       "put": {
         "summary": "Update provider",
@@ -1109,7 +1187,9 @@
             }
           }
         },
-        "tags": ["Providers"]
+        "tags": [
+          "Providers"
+        ]
       },
       "delete": {
         "summary": "Delete provider",
@@ -1141,7 +1221,9 @@
             }
           }
         },
-        "tags": ["Providers"]
+        "tags": [
+          "Providers"
+        ]
       }
     },
     "/providers/search": {
@@ -1155,7 +1237,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/providersPostSearch"
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/providersPostSearchDateString"
+                  },
+                  {
+                    "$ref": "#/components/schemas/providersPostSearchDateObject"
+                  }
+                ]
               }
             }
           }
@@ -1174,14 +1263,19 @@
                     "value": "[{\"id\":2,\"name\":\"Ebay\",\"address\":\"0000 online\",\"phoneNumber\":\"5125869601\",\"email\":\"\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"orders\":[{\"id\":2,\"providerId\":2,\"cost\":959.59,\"tax\":89.59,\"shipment\":20,\"expectedAt\":\"2025-01-09T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\"}]},{\"id\":1,\"name\":\"Amazon\",\"address\":\"0000 online\",\"phoneNumber\":\"1632474734\",\"email\":\"derick_kertzmann@amazon.support.com\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"orders\":[{\"id\":1,\"providerId\":1,\"cost\":3413.65,\"tax\":283.65,\"shipment\":50,\"expectedAt\":\"2025-01-08T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}]}]"
                   },
                   "With more than one request body inputs ({\"name\":\"bay\",\"address\":\"0000\",\"phoneNumber\":\"5125869601\",\"email\":\"\",\"createdAt\":\"2025-01-11\",\"updatedAt\":\"2025-01-11\"}), this returns all providers that matches all the inputs": {
-                    "value": "{\"id\":2,\"name\":\"Ebay\",\"address\":\"0000 online\",\"phoneNumber\":\"5125869601\",\"email\":\"\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"orders\":[{\"id\":2,\"providerId\":2,\"cost\":959.59,\"tax\":89.59,\"shipment\":20,\"expectedAt\":\"2025-01-09T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\"}]}"
+                    "value": "[{\"id\":2,\"name\":\"Ebay\",\"address\":\"0000 online\",\"phoneNumber\":\"5125869601\",\"email\":\"\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"orders\":[{\"id\":2,\"providerId\":2,\"cost\":959.59,\"tax\":89.59,\"shipment\":20,\"expectedAt\":\"2025-01-09T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\"}]}]"
+                  },
+                  "With a date object input in the request body ({\"updatedAt\":{\"year\":\"2025\",\"month\":\"2\"}), this returns all providers that have updatedAt with the same year and month": {
+                    "value": "[]"
                   }
                 }
               }
             }
           }
         },
-        "tags": ["Providers"]
+        "tags": [
+          "Providers"
+        ]
       }
     },
     "/providers": {
@@ -1216,7 +1310,9 @@
             }
           }
         },
-        "tags": ["Providers"]
+        "tags": [
+          "Providers"
+        ]
       }
     },
     "/tickets/{ticketId}": {
@@ -1240,12 +1336,12 @@
         "operationId": "",
         "responses": {
           "200": {
-            "description": "OK, returns ticket data with associated payments, client, waresSold, and wares.",
+            "description": "OK, returns ticket data with associated transactions, client, wares sold, and wares.",
             "content": {
               "application/json": {
                 "examples": {
                   "Ticket found given ticket id": {
-                    "value": "{\"id\":2,\"clientId\":3,\"cost\":488.52,\"paymentPlan\":\"biweekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"paid\":200,\"owed\":288.52,\"waresSold\":[{\"ticketId\":2,\"wareId\":3,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":3,\"name\":\"The Leather Medium Tote Bag\",\"stock\":1,\"tags\":[\"women\"],\"type\":\"bag\",\"unitPrice\":450,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}],\"payments\":[{\"id\":4,\"ticketId\":2,\"orderId\":null,\"payment\":200,\"paymentType\":\"visa\",\"paidAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}],\"client\":{\"id\":3,\"workId\":2,\"fullname\":\"Kellen Paucek\",\"address\":\"1454 Sussex Court\",\"phoneNumber\":\"2543865553\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"work\":{\"id\":2,\"name\":\"Deckow and Sons\",\"address\":\"245 John Drive\",\"phoneNumber\":\"7644084620\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}}"
+                    "value": "{\"id\":2,\"clientId\":3,\"cost\":488.52,\"paymentPlan\":\"biweekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"paid\":200,\"owed\":288.52,\"waresTickets\":[{\"ticketId\":2,\"wareId\":3,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":3,\"name\":\"The Leather Medium Tote Bag\",\"stock\":1,\"tags\":[\"women\"],\"type\":\"bag\",\"unitPrice\":450,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}],\"transactions\":[{\"id\":4,\"ticketId\":2,\"orderId\":null,\"payment\":200,\"paymentType\":\"visa\",\"paidAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}],\"client\":{\"id\":3,\"workId\":2,\"fullname\":\"Kellen Paucek\",\"address\":\"1454 Sussex Court\",\"phoneNumber\":\"2543865553\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"work\":{\"id\":2,\"name\":\"Deckow and Sons\",\"address\":\"245 John Drive\",\"phoneNumber\":\"7644084620\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}}"
                   }
                 }
               }
@@ -1264,7 +1360,9 @@
             }
           }
         },
-        "tags": ["Tickets"]
+        "tags": [
+          "Tickets"
+        ]
       },
       "put": {
         "summary": "Update ticket",
@@ -1325,7 +1423,9 @@
             }
           }
         },
-        "tags": ["Tickets"]
+        "tags": [
+          "Tickets"
+        ]
       },
       "delete": {
         "summary": "Delete ticket",
@@ -1357,7 +1457,9 @@
             }
           }
         },
-        "tags": ["Tickets"]
+        "tags": [
+          "Tickets"
+        ]
       }
     },
     "/tickets/search": {
@@ -1371,7 +1473,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ticketsPostSearch"
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/ticketsPostSearchDateString"
+                  },
+                  {
+                    "$ref": "#/components/schemas/ticketsPostSearchDateObject"
+                  }
+                ]
               }
             }
           }
@@ -1379,25 +1488,30 @@
         "operationId": "",
         "responses": {
           "200": {
-            "description": "OK, returns ticket data with associated payments, client, waresSold, and wares.",
+            "description": "OK, returns ticket data with associated transactions, client, wares sold, and wares.",
             "content": {
               "application/json": {
                 "examples": {
                   "With no request body input, this returns all tickets ordered by ticket id descending": {
-                    "value": "[{\"id\":3,\"clientId\":4,\"cost\":168.27,\"paymentPlan\":\"lump sum\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"returned\":155,\"paid\":13.27,\"owed\":0,\"waresSold\":[{\"ticketId\":3,\"wareId\":1,\"amount\":1,\"returned\":1,\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"ware\":{\"id\":1,\"name\":\"Loewe 001 Woman Perfume\",\"stock\":0,\"tags\":[\"women\",\"1-pc\"],\"type\":\"perfume\",\"unitPrice\":155,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}],\"payments\":[{\"id\":7,\"ticketId\":3,\"orderId\":null,\"payment\":-155,\"paymentType\":\"cash app\",\"paidAt\":\"2025-01-17T00:00:00.000Z\",\"createdAt\":\"2025-01-17T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\"},{\"id\":5,\"ticketId\":3,\"orderId\":null,\"payment\":168.27,\"paymentType\":\"cash\",\"paidAt\":\"2025-01-13T00:00:00.000Z\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\"}],\"client\":{\"id\":4,\"workId\":3,\"fullname\":\"Madilyn Langosh\",\"address\":\"1571 Weekly Street\",\"phoneNumber\":\"2103424367\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"work\":{\"id\":3,\"name\":\"Lynch PLC\",\"address\":\"38 Lafayette St.\",\"phoneNumber\":\"9103623505\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\"}}},{\"id\":2,\"clientId\":3,\"cost\":488.52,\"paymentPlan\":\"biweekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"paid\":200,\"owed\":288.52,\"waresSold\":[{\"ticketId\":2,\"wareId\":3,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":3,\"name\":\"The Leather Medium Tote Bag\",\"stock\":1,\"tags\":[\"women\"],\"type\":\"bag\",\"unitPrice\":450,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}],\"payments\":[{\"id\":4,\"ticketId\":2,\"orderId\":null,\"payment\":200,\"paymentType\":\"visa\",\"paidAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}],\"client\":{\"id\":3,\"workId\":2,\"fullname\":\"Kellen Paucek\",\"address\":\"1454 Sussex Court\",\"phoneNumber\":\"2543865553\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"work\":{\"id\":2,\"name\":\"Deckow and Sons\",\"address\":\"245 John Drive\",\"phoneNumber\":\"7644084620\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}},{\"id\":1,\"clientId\":2,\"cost\":391.9,\"paymentPlan\":\"weekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":155,\"paid\":236.9,\"owed\":0,\"waresSold\":[{\"ticketId\":1,\"wareId\":5,\"amount\":2,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":5,\"name\":\"Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle\",\"stock\":8,\"tags\":[\"unisex\"],\"type\":\"braclet\",\"unitPrice\":14,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}},{\"ticketId\":1,\"wareId\":2,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":2,\"name\":\"DIOR 3-Pc. J'dore Eau de Parfum Gift Set\",\"stock\":4,\"tags\":[\"women\",\"3-pc\"],\"type\":\"perfume\",\"unitPrice\":178,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}},{\"ticketId\":1,\"wareId\":1,\"amount\":1,\"returned\":1,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":1,\"name\":\"Loewe 001 Woman Perfume\",\"stock\":0,\"tags\":[\"women\",\"1-pc\"],\"type\":\"perfume\",\"unitPrice\":155,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}],\"payments\":[{\"id\":6,\"ticketId\":1,\"orderId\":null,\"payment\":86.9,\"paymentType\":\"visa\",\"paidAt\":\"2025-01-16T00:00:00.000Z\",\"createdAt\":\"2025-01-16T00:00:00.000Z\",\"updatedAt\":\"2025-01-16T00:00:00.000Z\"},{\"id\":3,\"ticketId\":1,\"orderId\":null,\"payment\":150,\"paymentType\":\"cash app\",\"paidAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}],\"client\":{\"id\":2,\"workId\":1,\"fullname\":\"James Moe\",\"address\":\"1823 Steele Street\",\"phoneNumber\":\"9566347775\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"work\":{\"id\":1,\"name\":\"Hamill, Denesik and Davis\",\"address\":\"38 Galvin Ave.\",\"phoneNumber\":\"9075554011\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}}]"
+                    "value": "[{\"id\":3,\"clientId\":4,\"cost\":168.27,\"paymentPlan\":\"lump sum\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"returned\":155,\"paid\":13.27,\"owed\":0,\"waresTickets\":[{\"ticketId\":3,\"wareId\":1,\"amount\":1,\"returned\":1,\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"ware\":{\"id\":1,\"name\":\"Loewe 001 Woman Perfume\",\"stock\":0,\"tags\":[\"women\",\"1-pc\"],\"type\":\"perfume\",\"unitPrice\":155,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}],\"transactions\":[{\"id\":7,\"ticketId\":3,\"orderId\":null,\"payment\":-155,\"paymentType\":\"cash app\",\"paidAt\":\"2025-01-17T00:00:00.000Z\",\"createdAt\":\"2025-01-17T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\"},{\"id\":5,\"ticketId\":3,\"orderId\":null,\"payment\":168.27,\"paymentType\":\"cash\",\"paidAt\":\"2025-01-13T00:00:00.000Z\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\"}],\"client\":{\"id\":4,\"workId\":3,\"fullname\":\"Madilyn Langosh\",\"address\":\"1571 Weekly Street\",\"phoneNumber\":\"2103424367\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"work\":{\"id\":3,\"name\":\"Lynch PLC\",\"address\":\"38 Lafayette St.\",\"phoneNumber\":\"9103623505\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\"}}},{\"id\":2,\"clientId\":3,\"cost\":488.52,\"paymentPlan\":\"biweekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"paid\":200,\"owed\":288.52,\"waresTickets\":[{\"ticketId\":2,\"wareId\":3,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":3,\"name\":\"The Leather Medium Tote Bag\",\"stock\":1,\"tags\":[\"women\"],\"type\":\"bag\",\"unitPrice\":450,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}],\"transactions\":[{\"id\":4,\"ticketId\":2,\"orderId\":null,\"payment\":200,\"paymentType\":\"visa\",\"paidAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}],\"client\":{\"id\":3,\"workId\":2,\"fullname\":\"Kellen Paucek\",\"address\":\"1454 Sussex Court\",\"phoneNumber\":\"2543865553\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"work\":{\"id\":2,\"name\":\"Deckow and Sons\",\"address\":\"245 John Drive\",\"phoneNumber\":\"7644084620\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}},{\"id\":1,\"clientId\":2,\"cost\":391.9,\"paymentPlan\":\"weekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":155,\"paid\":236.9,\"owed\":0,\"waresTickets\":[{\"ticketId\":1,\"wareId\":5,\"amount\":2,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":5,\"name\":\"Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle\",\"stock\":8,\"tags\":[\"unisex\"],\"type\":\"braclet\",\"unitPrice\":14,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}},{\"ticketId\":1,\"wareId\":2,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":2,\"name\":\"DIOR 3-Pc. J'dore Eau de Parfum Gift Set\",\"stock\":4,\"tags\":[\"women\",\"3-pc\"],\"type\":\"perfume\",\"unitPrice\":178,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}},{\"ticketId\":1,\"wareId\":1,\"amount\":1,\"returned\":1,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":1,\"name\":\"Loewe 001 Woman Perfume\",\"stock\":0,\"tags\":[\"women\",\"1-pc\"],\"type\":\"perfume\",\"unitPrice\":155,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}],\"transactions\":[{\"id\":6,\"ticketId\":1,\"orderId\":null,\"payment\":86.9,\"paymentType\":\"visa\",\"paidAt\":\"2025-01-16T00:00:00.000Z\",\"createdAt\":\"2025-01-16T00:00:00.000Z\",\"updatedAt\":\"2025-01-16T00:00:00.000Z\"},{\"id\":3,\"ticketId\":1,\"orderId\":null,\"payment\":150,\"paymentType\":\"cash app\",\"paidAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}],\"client\":{\"id\":2,\"workId\":1,\"fullname\":\"James Moe\",\"address\":\"1823 Steele Street\",\"phoneNumber\":\"9566347775\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"work\":{\"id\":1,\"name\":\"Hamill, Denesik and Davis\",\"address\":\"38 Galvin Ave.\",\"phoneNumber\":\"9075554011\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}}]"
                   },
                   "With one request body input of description equal to , this returns all tickets with a partial match": {
-                    "value": "[{\"id\":3,\"clientId\":4,\"cost\":168.27,\"paymentPlan\":\"lump sum\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"returned\":155,\"paid\":13.27,\"owed\":0,\"waresSold\":[{\"ticketId\":3,\"wareId\":1,\"amount\":1,\"returned\":1,\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"ware\":{\"id\":1,\"name\":\"Loewe 001 Woman Perfume\",\"stock\":0,\"tags\":[\"women\",\"1-pc\"],\"type\":\"perfume\",\"unitPrice\":155,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}],\"payments\":[{\"id\":7,\"ticketId\":3,\"orderId\":null,\"payment\":-155,\"paymentType\":\"cash app\",\"paidAt\":\"2025-01-17T00:00:00.000Z\",\"createdAt\":\"2025-01-17T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\"},{\"id\":5,\"ticketId\":3,\"orderId\":null,\"payment\":168.27,\"paymentType\":\"cash\",\"paidAt\":\"2025-01-13T00:00:00.000Z\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\"}],\"client\":{\"id\":4,\"workId\":3,\"fullname\":\"Madilyn Langosh\",\"address\":\"1571 Weekly Street\",\"phoneNumber\":\"2103424367\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"work\":{\"id\":3,\"name\":\"Lynch PLC\",\"address\":\"38 Lafayette St.\",\"phoneNumber\":\"9103623505\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\"}}},{\"id\":2,\"clientId\":3,\"cost\":488.52,\"paymentPlan\":\"biweekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"paid\":200,\"owed\":288.52,\"waresSold\":[{\"ticketId\":2,\"wareId\":3,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":3,\"name\":\"The Leather Medium Tote Bag\",\"stock\":1,\"tags\":[\"women\"],\"type\":\"bag\",\"unitPrice\":450,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}],\"payments\":[{\"id\":4,\"ticketId\":2,\"orderId\":null,\"payment\":200,\"paymentType\":\"visa\",\"paidAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}],\"client\":{\"id\":3,\"workId\":2,\"fullname\":\"Kellen Paucek\",\"address\":\"1454 Sussex Court\",\"phoneNumber\":\"2543865553\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"work\":{\"id\":2,\"name\":\"Deckow and Sons\",\"address\":\"245 John Drive\",\"phoneNumber\":\"7644084620\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}},{\"id\":1,\"clientId\":2,\"cost\":391.9,\"paymentPlan\":\"weekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":155,\"paid\":236.9,\"owed\":0,\"waresSold\":[{\"ticketId\":1,\"wareId\":5,\"amount\":2,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":5,\"name\":\"Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle\",\"stock\":8,\"tags\":[\"unisex\"],\"type\":\"braclet\",\"unitPrice\":14,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}},{\"ticketId\":1,\"wareId\":2,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":2,\"name\":\"DIOR 3-Pc. J'dore Eau de Parfum Gift Set\",\"stock\":4,\"tags\":[\"women\",\"3-pc\"],\"type\":\"perfume\",\"unitPrice\":178,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}},{\"ticketId\":1,\"wareId\":1,\"amount\":1,\"returned\":1,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":1,\"name\":\"Loewe 001 Woman Perfume\",\"stock\":0,\"tags\":[\"women\",\"1-pc\"],\"type\":\"perfume\",\"unitPrice\":155,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}],\"payments\":[{\"id\":6,\"ticketId\":1,\"orderId\":null,\"payment\":86.9,\"paymentType\":\"visa\",\"paidAt\":\"2025-01-16T00:00:00.000Z\",\"createdAt\":\"2025-01-16T00:00:00.000Z\",\"updatedAt\":\"2025-01-16T00:00:00.000Z\"},{\"id\":3,\"ticketId\":1,\"orderId\":null,\"payment\":150,\"paymentType\":\"cash app\",\"paidAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}],\"client\":{\"id\":2,\"workId\":1,\"fullname\":\"James Moe\",\"address\":\"1823 Steele Street\",\"phoneNumber\":\"9566347775\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"work\":{\"id\":1,\"name\":\"Hamill, Denesik and Davis\",\"address\":\"38 Galvin Ave.\",\"phoneNumber\":\"9075554011\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}}]"
+                    "value": "[{\"id\":3,\"clientId\":4,\"cost\":168.27,\"paymentPlan\":\"lump sum\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"returned\":155,\"paid\":13.27,\"owed\":0,\"waresTickets\":[{\"ticketId\":3,\"wareId\":1,\"amount\":1,\"returned\":1,\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"ware\":{\"id\":1,\"name\":\"Loewe 001 Woman Perfume\",\"stock\":0,\"tags\":[\"women\",\"1-pc\"],\"type\":\"perfume\",\"unitPrice\":155,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}],\"transactions\":[{\"id\":7,\"ticketId\":3,\"orderId\":null,\"payment\":-155,\"paymentType\":\"cash app\",\"paidAt\":\"2025-01-17T00:00:00.000Z\",\"createdAt\":\"2025-01-17T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\"},{\"id\":5,\"ticketId\":3,\"orderId\":null,\"payment\":168.27,\"paymentType\":\"cash\",\"paidAt\":\"2025-01-13T00:00:00.000Z\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\"}],\"client\":{\"id\":4,\"workId\":3,\"fullname\":\"Madilyn Langosh\",\"address\":\"1571 Weekly Street\",\"phoneNumber\":\"2103424367\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"work\":{\"id\":3,\"name\":\"Lynch PLC\",\"address\":\"38 Lafayette St.\",\"phoneNumber\":\"9103623505\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\"}}},{\"id\":2,\"clientId\":3,\"cost\":488.52,\"paymentPlan\":\"biweekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"paid\":200,\"owed\":288.52,\"waresTickets\":[{\"ticketId\":2,\"wareId\":3,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":3,\"name\":\"The Leather Medium Tote Bag\",\"stock\":1,\"tags\":[\"women\"],\"type\":\"bag\",\"unitPrice\":450,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}],\"transactions\":[{\"id\":4,\"ticketId\":2,\"orderId\":null,\"payment\":200,\"paymentType\":\"visa\",\"paidAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}],\"client\":{\"id\":3,\"workId\":2,\"fullname\":\"Kellen Paucek\",\"address\":\"1454 Sussex Court\",\"phoneNumber\":\"2543865553\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"work\":{\"id\":2,\"name\":\"Deckow and Sons\",\"address\":\"245 John Drive\",\"phoneNumber\":\"7644084620\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}},{\"id\":1,\"clientId\":2,\"cost\":391.9,\"paymentPlan\":\"weekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":155,\"paid\":236.9,\"owed\":0,\"waresTickets\":[{\"ticketId\":1,\"wareId\":5,\"amount\":2,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":5,\"name\":\"Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle\",\"stock\":8,\"tags\":[\"unisex\"],\"type\":\"braclet\",\"unitPrice\":14,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}},{\"ticketId\":1,\"wareId\":2,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":2,\"name\":\"DIOR 3-Pc. J'dore Eau de Parfum Gift Set\",\"stock\":4,\"tags\":[\"women\",\"3-pc\"],\"type\":\"perfume\",\"unitPrice\":178,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}},{\"ticketId\":1,\"wareId\":1,\"amount\":1,\"returned\":1,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":1,\"name\":\"Loewe 001 Woman Perfume\",\"stock\":0,\"tags\":[\"women\",\"1-pc\"],\"type\":\"perfume\",\"unitPrice\":155,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}],\"transactions\":[{\"id\":6,\"ticketId\":1,\"orderId\":null,\"payment\":86.9,\"paymentType\":\"visa\",\"paidAt\":\"2025-01-16T00:00:00.000Z\",\"createdAt\":\"2025-01-16T00:00:00.000Z\",\"updatedAt\":\"2025-01-16T00:00:00.000Z\"},{\"id\":3,\"ticketId\":1,\"orderId\":null,\"payment\":150,\"paymentType\":\"cash app\",\"paidAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}],\"client\":{\"id\":2,\"workId\":1,\"fullname\":\"James Moe\",\"address\":\"1823 Steele Street\",\"phoneNumber\":\"9566347775\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"work\":{\"id\":1,\"name\":\"Hamill, Denesik and Davis\",\"address\":\"38 Galvin Ave.\",\"phoneNumber\":\"9075554011\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}}]"
                   },
                   "With more than one request body inputs ({\"clientId\":3,\"cost\":488.52,\"paymentPlan\":\"biweekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}), this returns all tickets that matches all the inputs": {
-                    "value": "{\"id\":2,\"clientId\":3,\"cost\":488.52,\"paymentPlan\":\"biweekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"paid\":200,\"owed\":288.52,\"waresSold\":[{\"ticketId\":2,\"wareId\":3,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":3,\"name\":\"The Leather Medium Tote Bag\",\"stock\":1,\"tags\":[\"women\"],\"type\":\"bag\",\"unitPrice\":450,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}],\"payments\":[{\"id\":4,\"ticketId\":2,\"orderId\":null,\"payment\":200,\"paymentType\":\"visa\",\"paidAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}],\"client\":{\"id\":3,\"workId\":2,\"fullname\":\"Kellen Paucek\",\"address\":\"1454 Sussex Court\",\"phoneNumber\":\"2543865553\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"work\":{\"id\":2,\"name\":\"Deckow and Sons\",\"address\":\"245 John Drive\",\"phoneNumber\":\"7644084620\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}}"
+                    "value": "[{\"id\":2,\"clientId\":3,\"cost\":488.52,\"paymentPlan\":\"biweekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"paid\":200,\"owed\":288.52,\"waresTickets\":[{\"ticketId\":2,\"wareId\":3,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":3,\"name\":\"The Leather Medium Tote Bag\",\"stock\":1,\"tags\":[\"women\"],\"type\":\"bag\",\"unitPrice\":450,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}],\"transactions\":[{\"id\":4,\"ticketId\":2,\"orderId\":null,\"payment\":200,\"paymentType\":\"visa\",\"paidAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}],\"client\":{\"id\":3,\"workId\":2,\"fullname\":\"Kellen Paucek\",\"address\":\"1454 Sussex Court\",\"phoneNumber\":\"2543865553\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"work\":{\"id\":2,\"name\":\"Deckow and Sons\",\"address\":\"245 John Drive\",\"phoneNumber\":\"7644084620\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}}]"
+                  },
+                  "With a date object input in the request body ({\"createdAt\":{\"year\":\"2025\",\"month\":\"1\",\"day\":\"9\",\"hour\":\"0\"}}), this returns all tickets that have a createdAt with the same year, month, day, and hour": {
+                    "value": "[{\"id\":2,\"clientId\":3,\"cost\":488.52,\"paymentPlan\":\"biweekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"paid\":200,\"owed\":288.52,\"waresTickets\":[{\"ticketId\":2,\"wareId\":3,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ware\":{\"id\":3,\"name\":\"The Leather Medium Tote Bag\",\"stock\":1,\"tags\":[\"women\"],\"type\":\"bag\",\"unitPrice\":450,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}],\"transactions\":[{\"id\":4,\"ticketId\":2,\"orderId\":null,\"payment\":200,\"paymentType\":\"visa\",\"paidAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}],\"client\":{\"id\":3,\"workId\":2,\"fullname\":\"Kellen Paucek\",\"address\":\"1454 Sussex Court\",\"phoneNumber\":\"2543865553\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"work\":{\"id\":2,\"name\":\"Deckow and Sons\",\"address\":\"245 John Drive\",\"phoneNumber\":\"7644084620\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}}}]"
                   }
                 }
               }
             }
           }
         },
-        "tags": ["Tickets"]
+        "tags": [
+          "Tickets"
+        ]
       }
     },
     "/tickets": {
@@ -1432,7 +1546,9 @@
             }
           }
         },
-        "tags": ["Tickets"]
+        "tags": [
+          "Tickets"
+        ]
       }
     },
     "/transactions/{transactionId}": {
@@ -1480,7 +1596,9 @@
             }
           }
         },
-        "tags": ["Transactions"]
+        "tags": [
+          "Transactions"
+        ]
       },
       "put": {
         "summary": "Update transaction",
@@ -1541,7 +1659,9 @@
             }
           }
         },
-        "tags": ["Transactions"]
+        "tags": [
+          "Transactions"
+        ]
       },
       "delete": {
         "summary": "Delete transaction",
@@ -1573,7 +1693,9 @@
             }
           }
         },
-        "tags": ["Transactions"]
+        "tags": [
+          "Transactions"
+        ]
       }
     },
     "/transactions/search": {
@@ -1587,7 +1709,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/transactionsPostSearch"
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/transactionsPostSearchDateString"
+                  },
+                  {
+                    "$ref": "#/components/schemas/transactionsPostSearchDateObject"
+                  }
+                ]
               }
             }
           }
@@ -1606,14 +1735,19 @@
                     "value": "[{\"id\":8,\"ticketId\":null,\"orderId\":1,\"payment\":1450,\"paymentType\":\"visa\",\"paidAt\":\"2025-01-17T00:00:00.000Z\",\"createdAt\":\"2025-01-17T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\",\"ticket\":null,\"order\":{\"id\":1,\"providerId\":1,\"cost\":3413.65,\"tax\":283.65,\"shipment\":50,\"expectedAt\":\"2025-01-08T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}},{\"id\":7,\"ticketId\":3,\"orderId\":null,\"payment\":-155,\"paymentType\":\"cash app\",\"paidAt\":\"2025-01-17T00:00:00.000Z\",\"createdAt\":\"2025-01-17T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\",\"ticket\":{\"id\":3,\"clientId\":4,\"cost\":168.27,\"paymentPlan\":\"lump sum\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"paid\":13.27,\"returned\":155,\"owed\":0},\"order\":null},{\"id\":6,\"ticketId\":1,\"orderId\":null,\"payment\":86.9,\"paymentType\":\"visa\",\"paidAt\":\"2025-01-16T00:00:00.000Z\",\"createdAt\":\"2025-01-16T00:00:00.000Z\",\"updatedAt\":\"2025-01-16T00:00:00.000Z\",\"ticket\":{\"id\":1,\"clientId\":2,\"cost\":391.9,\"paymentPlan\":\"weekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"paid\":236.9,\"returned\":155,\"owed\":0},\"order\":null},{\"id\":5,\"ticketId\":3,\"orderId\":null,\"payment\":168.27,\"paymentType\":\"cash\",\"paidAt\":\"2025-01-13T00:00:00.000Z\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"ticket\":{\"id\":3,\"clientId\":4,\"cost\":168.27,\"paymentPlan\":\"lump sum\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"paid\":13.27,\"returned\":155,\"owed\":0},\"order\":null},{\"id\":4,\"ticketId\":2,\"orderId\":null,\"payment\":200,\"paymentType\":\"visa\",\"paidAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ticket\":{\"id\":2,\"clientId\":3,\"cost\":488.52,\"paymentPlan\":\"biweekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"paid\":200,\"returned\":0,\"owed\":288.52},\"order\":null},{\"id\":3,\"ticketId\":1,\"orderId\":null,\"payment\":150,\"paymentType\":\"cash app\",\"paidAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ticket\":{\"id\":1,\"clientId\":2,\"cost\":391.9,\"paymentPlan\":\"weekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"paid\":236.9,\"returned\":155,\"owed\":0},\"order\":null},{\"id\":2,\"ticketId\":null,\"orderId\":2,\"payment\":959.59,\"paymentType\":\"visa\",\"paidAt\":\"2025-01-01T20:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ticket\":null,\"order\":{\"id\":2,\"providerId\":2,\"cost\":959.59,\"tax\":89.59,\"shipment\":20,\"expectedAt\":\"2025-01-09T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\"}},{\"id\":1,\"ticketId\":null,\"orderId\":1,\"payment\":3413.65,\"paymentType\":\"visa\",\"paidAt\":\"2025-01-01T20:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\",\"ticket\":null,\"order\":{\"id\":1,\"providerId\":1,\"cost\":3413.65,\"tax\":283.65,\"shipment\":50,\"expectedAt\":\"2025-01-08T00:00:00.000Z\",\"actualAt\":\"2025-01-09T00:00:00.000Z\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}}]"
                   },
                   "With more than one request body inputs ({\"ticketId\":3,\"payment\":-155,\"paymentType\":\"cash app\",\"paidAt\":\"2025-01-17\",\"createdAt\":\"2025-01-17\",\"updatedAt\":\"2025-01-17\"}), this returns all transactions that matches all the inputs": {
-                    "value": "{\"id\":7,\"ticketId\":3,\"orderId\":null,\"payment\":-155,\"paymentType\":\"cash app\",\"paidAt\":\"2025-01-17T00:00:00.000Z\",\"createdAt\":\"2025-01-17T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\",\"ticket\":{\"id\":3,\"clientId\":4,\"cost\":168.27,\"paymentPlan\":\"lump sum\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"paid\":13.27,\"returned\":155,\"owed\":0},\"order\":null}"
+                    "value": "[{\"id\":7,\"ticketId\":3,\"orderId\":null,\"payment\":-155,\"paymentType\":\"cash app\",\"paidAt\":\"2025-01-17T00:00:00.000Z\",\"createdAt\":\"2025-01-17T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\",\"ticket\":{\"id\":3,\"clientId\":4,\"cost\":168.27,\"paymentPlan\":\"lump sum\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"paid\":13.27,\"returned\":155,\"owed\":0},\"order\":null}]"
+                  },
+                  "With a date object input in the request body ({\"paidAt\":{\"year\":\"2025\",\"month\":\"1\",\"day\":\"17\"}}), this returns all transactions that have paidAt with the same year, month, and day": {
+                    "value": "[{\"id\":7,\"ticketId\":3,\"orderId\":null,\"payment\":-155,\"paymentType\":\"cash app\",\"paidAt\":\"2025-01-17T00:00:00.000Z\",\"createdAt\":\"2025-01-17T00:00:00.000Z\",\"updatedAt\":\"2025-01-17T00:00:00.000Z\",\"ticket\":{\"id\":3,\"clientId\":4,\"cost\":168.27,\"paymentPlan\":\"lump sum\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"paid\":13.27,\"returned\":155,\"owed\":0},\"order\":null}]"
                   }
                 }
               }
             }
           }
         },
-        "tags": ["Transactions"]
+        "tags": [
+          "Transactions"
+        ]
       }
     },
     "/transactions": {
@@ -1648,7 +1782,9 @@
             }
           }
         },
-        "tags": ["Transactions"]
+        "tags": [
+          "Transactions"
+        ]
       }
     },
     "/wares/{wareId}": {
@@ -1677,7 +1813,7 @@
               "application/json": {
                 "examples": {
                   "Ware found given ware id": {
-                    "value": "{\"id\":4,\"name\":\"Versace Men's 4-Pc. Eros Eau de Toilette Gift Set\",\"type\":\"perfume\",\"tags\":[\"men\",\"4-pc\"],\"unitPrice\":176,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":5,\"bought\":[{\"id\":4,\"wareId\":4,\"orderId\":2,\"unitPrice\":150,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}],\"sold\":[]}"
+                    "value": "{\"id\":4,\"name\":\"Versace Men's 4-Pc. Eros Eau de Toilette Gift Set\",\"type\":\"perfume\",\"tags\":[\"men\",\"4-pc\"],\"unitPrice\":176,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":5,\"ordersWares\":[{\"id\":4,\"wareId\":4,\"orderId\":2,\"unitPrice\":150,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}],\"waresTickets\":[]}"
                   }
                 }
               }
@@ -1696,7 +1832,9 @@
             }
           }
         },
-        "tags": ["Wares"]
+        "tags": [
+          "Wares"
+        ]
       },
       "put": {
         "summary": "Update ware",
@@ -1757,7 +1895,9 @@
             }
           }
         },
-        "tags": ["Wares"]
+        "tags": [
+          "Wares"
+        ]
       },
       "delete": {
         "summary": "Delete ware",
@@ -1789,7 +1929,9 @@
             }
           }
         },
-        "tags": ["Wares"]
+        "tags": [
+          "Wares"
+        ]
       }
     },
     "/wares/search": {
@@ -1803,7 +1945,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/waresPostSearch"
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/waresPostSearchDateString"
+                  },
+                  {
+                    "$ref": "#/components/schemas/waresPostSearchDateObject"
+                  }
+                ]
               }
             }
           }
@@ -1816,20 +1965,25 @@
               "application/json": {
                 "examples": {
                   "With no request body input, this returns all wares ordered by ware id descending": {
-                    "value": "[{\"id\":5,\"name\":\"Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle\",\"type\":\"braclet\",\"tags\":[\"unisex\"],\"unitPrice\":14,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":8,\"bought\":[{\"id\":5,\"wareId\":5,\"orderId\":2,\"unitPrice\":10,\"amount\":10,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}],\"sold\":[{\"wareId\":5,\"ticketId\":1,\"amount\":2,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}]},{\"id\":4,\"name\":\"Versace Men's 4-Pc. Eros Eau de Toilette Gift Set\",\"type\":\"perfume\",\"tags\":[\"men\",\"4-pc\"],\"unitPrice\":176,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":5,\"bought\":[{\"id\":4,\"wareId\":4,\"orderId\":2,\"unitPrice\":150,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}],\"sold\":[]},{\"id\":3,\"name\":\"The Leather Medium Tote Bag\",\"type\":\"bag\",\"tags\":[\"women\"],\"unitPrice\":450,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":1,\"bought\":[{\"id\":3,\"wareId\":3,\"orderId\":1,\"unitPrice\":415,\"amount\":2,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}],\"sold\":[{\"wareId\":3,\"ticketId\":2,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}]},{\"id\":2,\"name\":\"DIOR 3-Pc. J'dore Eau de Parfum Gift Set\",\"type\":\"perfume\",\"tags\":[\"women\",\"3-pc\"],\"unitPrice\":178,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":4,\"bought\":[{\"id\":2,\"wareId\":2,\"orderId\":1,\"unitPrice\":160,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}],\"sold\":[{\"wareId\":2,\"ticketId\":1,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}]},{\"id\":1,\"name\":\"Loewe 001 Woman Perfume\",\"type\":\"perfume\",\"tags\":[\"women\",\"1-pc\"],\"unitPrice\":155,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":0,\"bought\":[{\"id\":1,\"wareId\":1,\"orderId\":1,\"unitPrice\":145,\"amount\":10,\"returned\":10,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}],\"sold\":[{\"wareId\":1,\"ticketId\":3,\"amount\":1,\"returned\":1,\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\"},{\"wareId\":1,\"ticketId\":1,\"amount\":1,\"returned\":1,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}]}]"
+                    "value": "[{\"id\":5,\"name\":\"Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle\",\"type\":\"braclet\",\"tags\":[\"unisex\"],\"unitPrice\":14,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":8,\"ordersWares\":[{\"id\":5,\"wareId\":5,\"orderId\":2,\"unitPrice\":10,\"amount\":10,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}],\"waresTickets\":[{\"wareId\":5,\"ticketId\":1,\"amount\":2,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}]},{\"id\":4,\"name\":\"Versace Men's 4-Pc. Eros Eau de Toilette Gift Set\",\"type\":\"perfume\",\"tags\":[\"men\",\"4-pc\"],\"unitPrice\":176,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":5,\"ordersWares\":[{\"id\":4,\"wareId\":4,\"orderId\":2,\"unitPrice\":150,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}],\"waresTickets\":[]},{\"id\":3,\"name\":\"The Leather Medium Tote Bag\",\"type\":\"bag\",\"tags\":[\"women\"],\"unitPrice\":450,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":1,\"ordersWares\":[{\"id\":3,\"wareId\":3,\"orderId\":1,\"unitPrice\":415,\"amount\":2,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}],\"waresTickets\":[{\"wareId\":3,\"ticketId\":2,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}]},{\"id\":2,\"name\":\"DIOR 3-Pc. J'dore Eau de Parfum Gift Set\",\"type\":\"perfume\",\"tags\":[\"women\",\"3-pc\"],\"unitPrice\":178,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":4,\"ordersWares\":[{\"id\":2,\"wareId\":2,\"orderId\":1,\"unitPrice\":160,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}],\"waresTickets\":[{\"wareId\":2,\"ticketId\":1,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}]},{\"id\":1,\"name\":\"Loewe 001 Woman Perfume\",\"type\":\"perfume\",\"tags\":[\"women\",\"1-pc\"],\"unitPrice\":155,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":0,\"ordersWares\":[{\"id\":1,\"wareId\":1,\"orderId\":1,\"unitPrice\":145,\"amount\":10,\"returned\":10,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}],\"waresTickets\":[{\"wareId\":1,\"ticketId\":3,\"amount\":1,\"returned\":1,\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\"},{\"wareId\":1,\"ticketId\":1,\"amount\":1,\"returned\":1,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}]}]"
                   },
                   "With one request body input of name equal to versace, this returns all wares with a partial match": {
-                    "value": "{\"id\":4,\"name\":\"Versace Men's 4-Pc. Eros Eau de Toilette Gift Set\",\"type\":\"perfume\",\"tags\":[\"men\",\"4-pc\"],\"unitPrice\":176,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":5,\"bought\":[{\"id\":4,\"wareId\":4,\"orderId\":2,\"unitPrice\":150,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}],\"sold\":[]}"
+                    "value": "{\"id\":4,\"name\":\"Versace Men's 4-Pc. Eros Eau de Toilette Gift Set\",\"type\":\"perfume\",\"tags\":[\"men\",\"4-pc\"],\"unitPrice\":176,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":5,\"ordersWares\":[{\"id\":4,\"wareId\":4,\"orderId\":2,\"unitPrice\":150,\"amount\":5,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}],\"waresTickets\":[]}"
                   },
                   "With more than one request body inputs ({\"id\":5,\"name\":\"Eymi\",\"type\":\"brac\",\"tags\":[\"unisex\"],\"stock\":8,\"unitPrice\":14,\"createdAt\":\"2025-01-09\",\"updatedAt\":\"2025-01-09\"}), this returns all wares that matches all the inputs": {
-                    "value": "{\"id\":5,\"name\":\"Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle\",\"type\":\"braclet\",\"tags\":[\"unisex\"],\"unitPrice\":14,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":8,\"bought\":[{\"id\":5,\"wareId\":5,\"orderId\":2,\"unitPrice\":10,\"amount\":10,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}],\"sold\":[{\"wareId\":5,\"ticketId\":1,\"amount\":2,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}]}"
+                    "value": "[{\"id\":5,\"name\":\"Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle\",\"type\":\"braclet\",\"tags\":[\"unisex\"],\"unitPrice\":14,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":8,\"ordersWares\":[{\"id\":5,\"wareId\":5,\"orderId\":2,\"unitPrice\":10,\"amount\":10,\"returned\":0,\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}],\"waresTickets\":[{\"wareId\":5,\"ticketId\":1,\"amount\":2,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}]}]"
+                  },
+                  "With a date object input in the request body ({\"createdAt\":{\"year\":\"2024\"}}), this returns all wares that matches all the inputs": {
+                    "value": "[]"
                   }
                 }
               }
             }
           }
         },
-        "tags": ["Wares"]
+        "tags": [
+          "Wares"
+        ]
       }
     },
     "/wares": {
@@ -1864,7 +2018,9 @@
             }
           }
         },
-        "tags": ["Wares"]
+        "tags": [
+          "Wares"
+        ]
       }
     },
     "/warestickets/{ticketId}/{wareId}": {
@@ -1925,7 +2081,9 @@
             }
           }
         },
-        "tags": ["WaresTickets"]
+        "tags": [
+          "WaresTickets"
+        ]
       },
       "put": {
         "summary": "Update waresticket",
@@ -1989,7 +2147,9 @@
             }
           }
         },
-        "tags": ["WaresTickets"]
+        "tags": [
+          "WaresTickets"
+        ]
       },
       "delete": {
         "summary": "Delete waresticket",
@@ -2024,7 +2184,9 @@
             }
           }
         },
-        "tags": ["WaresTickets"]
+        "tags": [
+          "WaresTickets"
+        ]
       }
     },
     "/warestickets/search": {
@@ -2038,7 +2200,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/waresticketsPostSearch"
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/waresticketsPostSearchDateString"
+                  },
+                  {
+                    "$ref": "#/components/schemas/waresticketsPostSearchDateObject"
+                  }
+                ]
               }
             }
           }
@@ -2057,14 +2226,19 @@
                     "value": "[{\"wareId\":1,\"ticketId\":3,\"amount\":1,\"returned\":1,\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"ticket\":{\"id\":3,\"clientId\":4,\"cost\":168.27,\"paymentPlan\":\"lump sum\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"returned\":155,\"paid\":13.27,\"owed\":0},\"ware\":{\"id\":1,\"name\":\"Loewe 001 Woman Perfume\",\"type\":\"perfume\",\"tags\":[\"women\",\"1-pc\"],\"unitPrice\":155,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":0}},{\"wareId\":3,\"ticketId\":2,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ticket\":{\"id\":2,\"clientId\":3,\"cost\":488.52,\"paymentPlan\":\"biweekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":0,\"paid\":200,\"owed\":288.52},\"ware\":{\"id\":3,\"name\":\"The Leather Medium Tote Bag\",\"type\":\"bag\",\"tags\":[\"women\"],\"unitPrice\":450,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":1}},{\"wareId\":5,\"ticketId\":1,\"amount\":2,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ticket\":{\"id\":1,\"clientId\":2,\"cost\":391.9,\"paymentPlan\":\"weekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":155,\"paid\":236.9,\"owed\":0},\"ware\":{\"id\":5,\"name\":\"Eymi Unisex Leather Braclet with Infinity Sign Symbolic Love Fashion Braided Wristband Bangle\",\"type\":\"braclet\",\"tags\":[\"unisex\"],\"unitPrice\":14,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":8}},{\"wareId\":2,\"ticketId\":1,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ticket\":{\"id\":1,\"clientId\":2,\"cost\":391.9,\"paymentPlan\":\"weekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":155,\"paid\":236.9,\"owed\":0},\"ware\":{\"id\":2,\"name\":\"DIOR 3-Pc. J'dore Eau de Parfum Gift Set\",\"type\":\"perfume\",\"tags\":[\"women\",\"3-pc\"],\"unitPrice\":178,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":4}},{\"wareId\":1,\"ticketId\":1,\"amount\":1,\"returned\":1,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ticket\":{\"id\":1,\"clientId\":2,\"cost\":391.9,\"paymentPlan\":\"weekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":155,\"paid\":236.9,\"owed\":0},\"ware\":{\"id\":1,\"name\":\"Loewe 001 Woman Perfume\",\"type\":\"perfume\",\"tags\":[\"women\",\"1-pc\"],\"unitPrice\":155,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":0}}]"
                   },
                   "With more than one request body inputs ({\"ticketId\":1,\"wareId\":2,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09\",\"updatedAt\":\"2025-01-09\"}), this returns all warestickets that matches all the inputs": {
-                    "value": "{\"wareId\":2,\"ticketId\":1,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ticket\":{\"id\":1,\"clientId\":2,\"cost\":391.9,\"paymentPlan\":\"weekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":155,\"paid\":236.9,\"owed\":0},\"ware\":{\"id\":2,\"name\":\"DIOR 3-Pc. J'dore Eau de Parfum Gift Set\",\"type\":\"perfume\",\"tags\":[\"women\",\"3-pc\"],\"unitPrice\":178,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":4}}"
+                    "value": "[{\"wareId\":2,\"ticketId\":1,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ticket\":{\"id\":1,\"clientId\":2,\"cost\":391.9,\"paymentPlan\":\"weekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":155,\"paid\":236.9,\"owed\":0},\"ware\":{\"id\":2,\"name\":\"DIOR 3-Pc. J'dore Eau de Parfum Gift Set\",\"type\":\"perfume\",\"tags\":[\"women\",\"3-pc\"],\"unitPrice\":178,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":4}}]"
+                  },
+                  "With a date object input in the request body ({\"createdAt\":{\"year\":\"2025\",\"month\":\"1\",\"day\":\"9\"}}), this returns all warestickets that have createdAt with the same year, month, and day": {
+                    "value": "[{\"wareId\":2,\"ticketId\":1,\"amount\":1,\"returned\":0,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"ticket\":{\"id\":1,\"clientId\":2,\"cost\":391.9,\"paymentPlan\":\"weekly\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"returned\":155,\"paid\":236.9,\"owed\":0},\"ware\":{\"id\":2,\"name\":\"DIOR 3-Pc. J'dore Eau de Parfum Gift Set\",\"type\":\"perfume\",\"tags\":[\"women\",\"3-pc\"],\"unitPrice\":178,\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"stock\":4}}]"
                   }
                 }
               }
             }
           }
         },
-        "tags": ["WaresTickets"]
+        "tags": [
+          "WaresTickets"
+        ]
       }
     },
     "/warestickets": {
@@ -2099,7 +2273,9 @@
             }
           }
         },
-        "tags": ["WaresTickets"]
+        "tags": [
+          "WaresTickets"
+        ]
       }
     },
     "/warestickets/{ticketId}": {
@@ -2159,7 +2335,9 @@
             }
           }
         },
-        "tags": ["WaresTickets"]
+        "tags": [
+          "WaresTickets"
+        ]
       }
     },
     "/works/{workId}": {
@@ -2183,12 +2361,12 @@
         "operationId": "",
         "responses": {
           "200": {
-            "description": "OK, returns work data with associated employees.",
+            "description": "OK, returns work data with associated clients.",
             "content": {
               "application/json": {
                 "examples": {
                   "Work found given work id": {
-                    "value": "{\"id\":3,\"name\":\"Lynch PLC\",\"address\":\"38 Lafayette St.\",\"phoneNumber\":\"9103623505\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"employees\":[{\"id\":4,\"workId\":3,\"fullname\":\"Madilyn Langosh\",\"address\":\"1571 Weekly Street\",\"phoneNumber\":\"2103424367\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\"}]}"
+                    "value": "{\"id\":3,\"name\":\"Lynch PLC\",\"address\":\"38 Lafayette St.\",\"phoneNumber\":\"9103623505\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"clients\":[{\"id\":4,\"workId\":3,\"fullname\":\"Madilyn Langosh\",\"address\":\"1571 Weekly Street\",\"phoneNumber\":\"2103424367\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\"}]}"
                   }
                 }
               }
@@ -2207,7 +2385,9 @@
             }
           }
         },
-        "tags": ["Works"]
+        "tags": [
+          "Works"
+        ]
       },
       "put": {
         "summary": "Update work",
@@ -2268,7 +2448,9 @@
             }
           }
         },
-        "tags": ["Works"]
+        "tags": [
+          "Works"
+        ]
       },
       "delete": {
         "summary": "Delete work",
@@ -2300,7 +2482,9 @@
             }
           }
         },
-        "tags": ["Works"]
+        "tags": [
+          "Works"
+        ]
       }
     },
     "/works/search": {
@@ -2314,7 +2498,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/worksPostSearch"
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/worksPostSearchDateString"
+                  },
+                  {
+                    "$ref": "#/components/schemas/worksPostSearchDateObject"
+                  }
+                ]
               }
             }
           }
@@ -2322,25 +2513,30 @@
         "operationId": "",
         "responses": {
           "200": {
-            "description": "OK, returns work data with associated employees.",
+            "description": "OK, returns work data with associated clients.",
             "content": {
               "application/json": {
                 "examples": {
                   "With no request body input, this returns all works ordered by work id descending": {
-                    "value": "[{\"id\":3,\"name\":\"Lynch PLC\",\"address\":\"38 Lafayette St.\",\"phoneNumber\":\"9103623505\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"employees\":[{\"id\":4,\"workId\":3,\"fullname\":\"Madilyn Langosh\",\"address\":\"1571 Weekly Street\",\"phoneNumber\":\"2103424367\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\"}]},{\"id\":2,\"name\":\"Deckow and Sons\",\"address\":\"245 John Drive\",\"phoneNumber\":\"7644084620\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"employees\":[{\"id\":3,\"workId\":2,\"fullname\":\"Kellen Paucek\",\"address\":\"1454 Sussex Court\",\"phoneNumber\":\"2543865553\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}]},{\"id\":1,\"name\":\"Hamill, Denesik and Davis\",\"address\":\"38 Galvin Ave.\",\"phoneNumber\":\"9075554011\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"employees\":[{\"id\":2,\"workId\":1,\"fullname\":\"James Moe\",\"address\":\"1823 Steele Street\",\"phoneNumber\":\"9566347775\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"},{\"id\":1,\"workId\":1,\"fullname\":\"Defective\",\"address\":\"0000 Street\",\"phoneNumber\":\"0000000000\",\"description\":\"\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}]}]"
+                    "value": "[{\"id\":3,\"name\":\"Lynch PLC\",\"address\":\"38 Lafayette St.\",\"phoneNumber\":\"9103623505\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"clients\":[{\"id\":4,\"workId\":3,\"fullname\":\"Madilyn Langosh\",\"address\":\"1571 Weekly Street\",\"phoneNumber\":\"2103424367\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\"}]},{\"id\":2,\"name\":\"Deckow and Sons\",\"address\":\"245 John Drive\",\"phoneNumber\":\"7644084620\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"clients\":[{\"id\":3,\"workId\":2,\"fullname\":\"Kellen Paucek\",\"address\":\"1454 Sussex Court\",\"phoneNumber\":\"2543865553\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}]},{\"id\":1,\"name\":\"Hamill, Denesik and Davis\",\"address\":\"38 Galvin Ave.\",\"phoneNumber\":\"9075554011\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"clients\":[{\"id\":2,\"workId\":1,\"fullname\":\"James Moe\",\"address\":\"1823 Steele Street\",\"phoneNumber\":\"9566347775\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"},{\"id\":1,\"workId\":1,\"fullname\":\"Defective\",\"address\":\"0000 Street\",\"phoneNumber\":\"0000000000\",\"description\":\"\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}]}]"
                   },
                   "With one request body input of name equal to de, this returns all works with a partial match": {
-                    "value": "[{\"id\":3,\"name\":\"Lynch PLC\",\"address\":\"38 Lafayette St.\",\"phoneNumber\":\"9103623505\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"employees\":[{\"id\":4,\"workId\":3,\"fullname\":\"Madilyn Langosh\",\"address\":\"1571 Weekly Street\",\"phoneNumber\":\"2103424367\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\"}]},{\"id\":2,\"name\":\"Deckow and Sons\",\"address\":\"245 John Drive\",\"phoneNumber\":\"7644084620\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"employees\":[{\"id\":3,\"workId\":2,\"fullname\":\"Kellen Paucek\",\"address\":\"1454 Sussex Court\",\"phoneNumber\":\"2543865553\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}]},{\"id\":1,\"name\":\"Hamill, Denesik and Davis\",\"address\":\"38 Galvin Ave.\",\"phoneNumber\":\"9075554011\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"employees\":[{\"id\":2,\"workId\":1,\"fullname\":\"James Moe\",\"address\":\"1823 Steele Street\",\"phoneNumber\":\"9566347775\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"},{\"id\":1,\"workId\":1,\"fullname\":\"Defective\",\"address\":\"0000 Street\",\"phoneNumber\":\"0000000000\",\"description\":\"\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}]}]"
+                    "value": "[{\"id\":3,\"name\":\"Lynch PLC\",\"address\":\"38 Lafayette St.\",\"phoneNumber\":\"9103623505\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\",\"clients\":[{\"id\":4,\"workId\":3,\"fullname\":\"Madilyn Langosh\",\"address\":\"1571 Weekly Street\",\"phoneNumber\":\"2103424367\",\"description\":\"\",\"createdAt\":\"2025-01-13T00:00:00.000Z\",\"updatedAt\":\"2025-01-13T00:00:00.000Z\"}]},{\"id\":2,\"name\":\"Deckow and Sons\",\"address\":\"245 John Drive\",\"phoneNumber\":\"7644084620\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"clients\":[{\"id\":3,\"workId\":2,\"fullname\":\"Kellen Paucek\",\"address\":\"1454 Sussex Court\",\"phoneNumber\":\"2543865553\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"}]},{\"id\":1,\"name\":\"Hamill, Denesik and Davis\",\"address\":\"38 Galvin Ave.\",\"phoneNumber\":\"9075554011\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"clients\":[{\"id\":2,\"workId\":1,\"fullname\":\"James Moe\",\"address\":\"1823 Steele Street\",\"phoneNumber\":\"9566347775\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"},{\"id\":1,\"workId\":1,\"fullname\":\"Defective\",\"address\":\"0000 Street\",\"phoneNumber\":\"0000000000\",\"description\":\"\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}]}]"
                   },
                   "With more than one request body inputs ({\"name\":\"de\",\"address\":\"38\"}), this returns all works that matches all the inputs": {
-                    "value": "{\"id\":1,\"name\":\"Hamill, Denesik and Davis\",\"address\":\"38 Galvin Ave.\",\"phoneNumber\":\"9075554011\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"employees\":[{\"id\":2,\"workId\":1,\"fullname\":\"James Moe\",\"address\":\"1823 Steele Street\",\"phoneNumber\":\"9566347775\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"},{\"id\":1,\"workId\":1,\"fullname\":\"Defective\",\"address\":\"0000 Street\",\"phoneNumber\":\"0000000000\",\"description\":\"\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}]}"
+                    "value": "[{\"id\":1,\"name\":\"Hamill, Denesik and Davis\",\"address\":\"38 Galvin Ave.\",\"phoneNumber\":\"9075554011\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\",\"clients\":[{\"id\":2,\"workId\":1,\"fullname\":\"James Moe\",\"address\":\"1823 Steele Street\",\"phoneNumber\":\"9566347775\",\"description\":\"\",\"createdAt\":\"2025-01-09T00:00:00.000Z\",\"updatedAt\":\"2025-01-09T00:00:00.000Z\"},{\"id\":1,\"workId\":1,\"fullname\":\"Defective\",\"address\":\"0000 Street\",\"phoneNumber\":\"0000000000\",\"description\":\"\",\"createdAt\":\"2025-01-01T00:00:00.000Z\",\"updatedAt\":\"2025-01-01T00:00:00.000Z\"}]}]"
+                  },
+                  "With a date object input in the request body ({\"createdAt\":{\"year\":\"2026\"}}), this returns all works that have createdAt with same year": {
+                    "value": "[]"
                   }
                 }
               }
             }
           }
         },
-        "tags": ["Works"]
+        "tags": [
+          "Works"
+        ]
       }
     },
     "/works": {
@@ -2375,12 +2571,62 @@
             }
           }
         },
-        "tags": ["Works"]
+        "tags": [
+          "Works"
+        ]
       }
     }
   },
   "components": {
     "schemas": {
+      "timeStampString": {
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "dateObject": {
+        "type": "object",
+        "properties": {
+          "year": {
+            "type": "integer"
+          },
+          "month": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "day": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 31
+          },
+          "hour": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 23
+          }
+        },
+        "xml": {
+          "name": "Date object"
+        }
+      },
+      "timeStampObject": {
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "$ref": "#/components/schemas/dateObject"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/dateObject"
+          }
+        }
+      },
       "merchantCredentials": {
         "type": "object",
         "properties": {
@@ -2411,7 +2657,10 @@
             "type": "string"
           }
         },
-        "required": ["username", "password"],
+        "required": [
+          "username",
+          "password"
+        ],
         "xml": {
           "name": "Merchant Credentials and New Credentials"
         }
@@ -2462,16 +2711,36 @@
           },
           "description": {
             "type": "string"
-          },
-          "createdAt": {
-            "type": "string"
-          },
-          "updatedAt": {
-            "type": "string"
           }
         },
         "xml": {
           "name": "Searched client information"
+        }
+      },
+      "clientsPostSearchDateString": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/clientsPostSearch"
+          },
+          {
+            "$ref": "#/components/schemas/timeStampString"
+          }
+        ],
+        "xml": {
+          "name": "Searched client information with exact date"
+        }
+      },
+      "clientsPostSearchDateObject": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/clientsPostSearch"
+          },
+          {
+            "$ref": "#/components/schemas/timeStampObject"
+          }
+        ],
+        "xml": {
+          "name": "Searched client information with date within given date object"
         }
       },
       "clientsPost": {
@@ -2574,9 +2843,43 @@
           "updatedAt": {
             "type": "string"
           }
-        },
+        }
+      },
+      "ordersPostSearchDateString": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ordersPostSearch"
+          },
+          {
+            "$ref": "#/components/schemas/timeStampString"
+          }
+        ],
         "xml": {
-          "name": "Searched order information"
+          "name": "Searched order information with exact date"
+        }
+      },
+      "ordersPostSearchDateObject": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ordersPostSearch"
+          },
+          {
+            "$ref": "#/components/schemas/timeStampObject"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "expectedAt": {
+                "$ref": "#/components/schemas/dateObject"
+              },
+              "actualAt": {
+                "$ref": "#/components/schemas/dateObject"
+              }
+            }
+          }
+        ],
+        "xml": {
+          "name": "Searched order information with date within given date object"
         }
       },
       "ordersPost": {
@@ -2674,9 +2977,32 @@
           "updatedAt": {
             "type": "string"
           }
-        },
+        }
+      },
+      "orderswaresPostSearchDateString": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/orderswaresPostSearch"
+          },
+          {
+            "$ref": "#/components/schemas/timeStampString"
+          }
+        ],
         "xml": {
-          "name": "Searched ordersware information"
+          "name": "Searched ordersware information with exact date"
+        }
+      },
+      "orderswaresPostSearchDateObject": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/orderswaresPostSearch"
+          },
+          {
+            "$ref": "#/components/schemas/timeStampObject"
+          }
+        ],
+        "xml": {
+          "name": "Searched ordersware information with date within given date object"
         }
       },
       "orderswaresPost": {
@@ -2695,7 +3021,11 @@
             "minimum": 1
           }
         },
-        "required": ["unitPrice", "amount", "returned"],
+        "required": [
+          "unitPrice",
+          "amount",
+          "returned"
+        ],
         "xml": {
           "name": "New ordersware information"
         }
@@ -2749,9 +3079,32 @@
           "updatedAt": {
             "type": "string"
           }
-        },
+        }
+      },
+      "providersPostSearchDateString": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/providersPostSearch"
+          },
+          {
+            "$ref": "#/components/schemas/timeStampString"
+          }
+        ],
         "xml": {
-          "name": "Searched provider information"
+          "name": "Searched provider information with exact date"
+        }
+      },
+      "providersPostSearchDateObject": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/providersPostSearch"
+          },
+          {
+            "$ref": "#/components/schemas/timeStampObject"
+          }
+        ],
+        "xml": {
+          "name": "Searched provider information with date within given date object"
         }
       },
       "providersPost": {
@@ -2770,7 +3123,12 @@
             "type": "string"
           }
         },
-        "required": ["name", "address", "phoneNumber", "email"],
+        "required": [
+          "name",
+          "address",
+          "phoneNumber",
+          "email"
+        ],
         "xml": {
           "name": "New provider information"
         }
@@ -2828,9 +3186,32 @@
           "updatedAt": {
             "type": "string"
           }
-        },
+        }
+      },
+      "ticketsPostSearchDateString": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ticketsPostSearch"
+          },
+          {
+            "$ref": "#/components/schemas/timeStampString"
+          }
+        ],
         "xml": {
-          "name": "Searched ticket information"
+          "name": "Searched ticket information with exact date"
+        }
+      },
+      "ticketsPostSearchDateObject": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ticketsPostSearch"
+          },
+          {
+            "$ref": "#/components/schemas/timeStampObject"
+          }
+        ],
+        "xml": {
+          "name": "Searched ticket information with date within given date object"
         }
       },
       "ticketsPost": {
@@ -2851,7 +3232,12 @@
             "type": "string"
           }
         },
-        "required": ["clientId", "cost", "paymentPlan", "description"],
+        "required": [
+          "clientId",
+          "cost",
+          "paymentPlan",
+          "description"
+        ],
         "xml": {
           "name": "New ticket information"
         }
@@ -2917,9 +3303,40 @@
           "updatedAt": {
             "type": "string"
           }
-        },
+        }
+      },
+      "transactionsPostSearchDateString": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/transactionsPostSearch"
+          },
+          {
+            "$ref": "#/components/schemas/timeStampString"
+          }
+        ],
         "xml": {
-          "name": "Searched transaction information"
+          "name": "Searched transaction information with exact date"
+        }
+      },
+      "transactionsPostSearchDateObject": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/transactionsPostSearch"
+          },
+          {
+            "$ref": "#/components/schemas/timeStampObject"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "paidAt": {
+                "$ref": "#/components/schemas/dateObject"
+              }
+            }
+          }
+        ],
+        "xml": {
+          "name": "Searched transaction information with date within given date object"
         }
       },
       "transactionsPost": {
@@ -2944,7 +3361,13 @@
             "type": "string"
           }
         },
-        "required": ["ticketId", "orderId", "payment", "paymentType", "paidAt"],
+        "required": [
+          "ticketId",
+          "orderId",
+          "payment",
+          "paymentType",
+          "paidAt"
+        ],
         "xml": {
           "name": "New transaction information"
         }
@@ -3006,9 +3429,32 @@
           "updatedAt": {
             "type": "string"
           }
-        },
+        }
+      },
+      "waresPostSearchDateString": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/waresPostSearch"
+          },
+          {
+            "$ref": "#/components/schemas/timeStampString"
+          }
+        ],
         "xml": {
-          "name": "Searched ware information"
+          "name": "Searched ware information with exact date"
+        }
+      },
+      "waresPostSearchDateObject": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/waresPostSearch"
+          },
+          {
+            "$ref": "#/components/schemas/timeStampObject"
+          }
+        ],
+        "xml": {
+          "name": "Searched ware information with date within given date object"
         }
       },
       "waresPost": {
@@ -3031,7 +3477,12 @@
             "minimum": 0
           }
         },
-        "required": ["name", "type", "tags", "unitPrice"],
+        "required": [
+          "name",
+          "type",
+          "tags",
+          "unitPrice"
+        ],
         "xml": {
           "name": "New ware information"
         }
@@ -3085,9 +3536,32 @@
           "updatedAt": {
             "type": "string"
           }
-        },
+        }
+      },
+      "waresticketsPostSearchDateString": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/waresticketsPostSearch"
+          },
+          {
+            "$ref": "#/components/schemas/timeStampString"
+          }
+        ],
         "xml": {
-          "name": "Searched waresticket information"
+          "name": "Searched warestickets information with exact date"
+        }
+      },
+      "waresticketsPostSearchDateObject": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/waresticketsPostSearch"
+          },
+          {
+            "$ref": "#/components/schemas/timeStampObject"
+          }
+        ],
+        "xml": {
+          "name": "Searched warestickets information with date within given date object"
         }
       },
       "waresticketsPost": {
@@ -3102,7 +3576,10 @@
             "minimum": 1
           }
         },
-        "required": ["amount", "returned"],
+        "required": [
+          "amount",
+          "returned"
+        ],
         "xml": {
           "name": "New waresticket information"
         }
@@ -3150,9 +3627,32 @@
           "updatedAt": {
             "type": "string"
           }
-        },
+        }
+      },
+      "worksPostSearchDateString": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/worksPostSearch"
+          },
+          {
+            "$ref": "#/components/schemas/timeStampString"
+          }
+        ],
         "xml": {
-          "name": "Searched work information"
+          "name": "Searched work information with exact date"
+        }
+      },
+      "worksPostSearchDateObject": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/worksPostSearch"
+          },
+          {
+            "$ref": "#/components/schemas/timeStampObject"
+          }
+        ],
+        "xml": {
+          "name": "Searched work information with date within given date object"
         }
       },
       "worksPost": {
@@ -3168,7 +3668,11 @@
             "type": "string"
           }
         },
-        "required": ["name", "address", "phoneNumber"],
+        "required": [
+          "name",
+          "address",
+          "phoneNumber"
+        ],
         "xml": {
           "name": "New work information"
         }
